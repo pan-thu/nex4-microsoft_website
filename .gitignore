@@ -23,3 +23,6 @@ dist/
 
 # TypeScript cache
 *.tsbuildinfo
+
+# Mirrored Site
+ref/
