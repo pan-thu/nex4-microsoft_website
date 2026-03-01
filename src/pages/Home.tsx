@@ -1,9 +1,15 @@
+import { HeroSlider } from '@/components/home/HeroSlider';
+import { WhatWeDo } from '@/components/home/WhatWeDo';
+import { Testimonials } from '@/components/home/Testimonials';
+import { OurLocations } from '@/components/home/OurLocations';
+
 export function Home() {
   return (
     <div className="pt-[76px]">
-      <section className="min-h-[calc(100vh-76px)] flex items-center justify-center bg-black">
-        <p className="text-white/30 text-sm">Homepage</p>
-      </section>
+      <HeroSlider />
+      <WhatWeDo />
+      <Testimonials />
+      <OurLocations />
     </div>
   );
 }

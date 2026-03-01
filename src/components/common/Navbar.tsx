@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, startTransition } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -498,8 +498,10 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    setOpenMenu(null);
-    setMobileOpen(false);
+    startTransition(() => {
+      setOpenMenu(null);
+      setMobileOpen(false);
+    });
   }, [location]);
 
   const open = (key: MenuKey) => {
