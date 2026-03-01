@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
@@ -31,22 +31,33 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+// Defined at module scope so Framer Motion never sees a new reference.
+const testimonialVariants = {
+  enter: (d: number) => ({ x: d > 0 ? 40 : -40, opacity: 0 }),
+  center: { x: 0, opacity: 1, transition: { duration: 0.45, ease: 'easeOut' as const } },
+  exit: (d: number) => ({ x: d > 0 ? -40 : 40, opacity: 0, transition: { duration: 0.25 } }),
+};
+
 export function Testimonials() {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
-  const go = (next: number) => {
-    setDir(next > index ? 1 : -1);
+  const go = useCallback((next: number, direction: number) => {
+    setDir(direction);
     setIndex(next);
-  };
+  }, []);
 
-  const variants = {
-    enter: (d: number) => ({ x: d > 0 ? 40 : -40, opacity: 0 }),
-    center: { x: 0, opacity: 1, transition: { duration: 0.45, ease: 'easeOut' as const } },
-    exit: (d: number) => ({ x: d > 0 ? -40 : 40, opacity: 0, transition: { duration: 0.25 } }),
-  };
+  const goPrev = useCallback(
+    () => go((index - 1 + TESTIMONIALS.length) % TESTIMONIALS.length, -1),
+    [index, go],
+  );
+
+  const goNext = useCallback(
+    () => go((index + 1) % TESTIMONIALS.length, 1),
+    [index, go],
+  );
 
   return (
     <section className="bg-black py-24 border-t border-white/[0.05]">
@@ -71,7 +82,7 @@ export function Testimonials() {
               <motion.div
                 key={index}
                 custom={dir}
-                variants={variants}
+                variants={testimonialVariants}
                 initial="enter"
                 animate="center"
                 exit="exit"
@@ -92,7 +103,7 @@ export function Testimonials() {
 
           <div className="flex items-center gap-6 mt-12">
             <button
-              onClick={() => go((index - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)}
+              onClick={goPrev}
               className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white transition-colors duration-200"
               aria-label="Previous testimonial"
             >
@@ -100,10 +111,10 @@ export function Testimonials() {
               Prev
             </button>
             <div className="flex items-center gap-2">
-              {TESTIMONIALS.map((_, i) => (
+              {TESTIMONIALS.map((t, i) => (
                 <button
-                  key={i}
-                  onClick={() => go(i)}
+                  key={t.name}
+                  onClick={() => go(i, i > index ? 1 : -1)}
                   aria-label={`Go to testimonial ${i + 1}`}
                   className="transition-all duration-200"
                   style={{
@@ -116,7 +127,7 @@ export function Testimonials() {
               ))}
             </div>
             <button
-              onClick={() => go((index + 1) % TESTIMONIALS.length)}
+              onClick={goNext}
               className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white transition-colors duration-200"
               aria-label="Next testimonial"
             >

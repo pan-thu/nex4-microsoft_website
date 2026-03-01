@@ -46,6 +46,9 @@ function LocationCard({ loc, index }: { loc: Location; index: number }) {
         <img
           src={loc.image}
           alt={loc.alt}
+          loading="lazy"
+          width={600}
+          height={450}
           className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
         />
       </div>

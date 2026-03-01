@@ -47,10 +47,8 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-      className="group flex flex-col px-8 py-10 hover:bg-white/[0.03] transition-colors duration-300"
-      style={{
-        borderRight: index < CARDS.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
-      }}
+      className="group flex flex-col px-8 py-10 hover:bg-white/[0.03] transition-colors duration-300 [&:not(:last-child)]:border-b lg:[&:not(:last-child)]:border-b-0 md:even:[&:not(:last-child)]:border-r-0 lg:[&:not(:last-child)]:border-r"
+      style={{ borderColor: 'rgba(255,255,255,0.08)' }}
     >
       <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-white/30 mb-5">
         {card.category}

@@ -11,6 +11,7 @@ interface Slide {
   cta: string;
   ctaHref: string;
   image: string;
+  imageAlt: string;
 }
 
 const SLIDES: Slide[] = [
@@ -22,6 +23,7 @@ const SLIDES: Slide[] = [
     cta: 'Explore Workplace AI',
     ctaHref: '/services/workplace-ai',
     image: '/images/card-bg-3.png',
+    imageAlt: 'Abstract visualization of AI-powered workplace tools',
   },
   {
     eyebrow: 'Workplace Security',
@@ -31,6 +33,7 @@ const SLIDES: Slide[] = [
     cta: 'Explore Security',
     ctaHref: '/services/workplace-security',
     image: '/images/card-bg-2.png',
+    imageAlt: 'Visual representation of enterprise security and endpoint protection',
   },
   {
     eyebrow: 'Cloud Migration',
@@ -40,6 +43,7 @@ const SLIDES: Slide[] = [
     cta: 'Explore Cloud',
     ctaHref: '/services/cloud-migration',
     image: '/images/card-bg-4.png',
+    imageAlt: 'Cloud infrastructure and Azure migration pathway illustration',
   },
 ];
 
@@ -66,16 +70,22 @@ export function HeroSlider() {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
 
-  const go = useCallback(
-    (next: number) => {
-      setDir(next > index ? 1 : -1);
-      setIndex(next);
-    },
-    [index],
+  // Consolidate navigation into a single useCallback using functional setters
+  // to avoid stale closures and direction race conditions.
+  const go = useCallback((next: number, direction: number) => {
+    setDir(direction);
+    setIndex(next);
+  }, []);
+
+  const prev = useCallback(
+    () => go((index - 1 + SLIDES.length) % SLIDES.length, -1),
+    [index, go],
   );
 
-  const prev = () => go((index - 1 + SLIDES.length) % SLIDES.length);
-  const next = () => go((index + 1) % SLIDES.length);
+  const next = useCallback(
+    () => go((index + 1) % SLIDES.length, 1),
+    [index, go],
+  );
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -161,7 +171,7 @@ export function HeroSlider() {
             <motion.img
               key={index}
               src={slide.image}
-              alt=""
+              alt={slide.imageAlt}
               initial={{ opacity: 0, scale: 1.04 }}
               animate={{ opacity: 1, scale: 1, transition: { duration: 0.7, ease: 'easeOut' } }}
               exit={{ opacity: 0, transition: { duration: 0.3 } }}
