@@ -86,13 +86,13 @@ export function Footer() {
       {/* ── Top accent line ── */}
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(34,183,205,0.7) 35%, rgba(34,183,205,0.7) 65%, transparent 100%)' }}
+        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 35%, rgba(255,255,255,0.9) 65%, transparent 100%)' }}
       />
 
       {/* ── Ambient glows ── */}
-      <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[200px] rounded-full bg-[#22b7cd]/[0.07] blur-3xl" />
-      <div className="pointer-events-none absolute top-10 -left-20 w-[350px] h-[250px] rounded-full bg-[#22b7cd]/[0.05] blur-3xl" />
-      <div className="pointer-events-none absolute top-10 -right-20 w-[300px] h-[200px] rounded-full bg-[#0078d4]/[0.07] blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[200px] rounded-full bg-white/[0.03] blur-3xl" />
+      <div className="pointer-events-none absolute top-10 -left-20 w-[350px] h-[250px] rounded-full bg-white/[0.03] blur-3xl" />
+      <div className="pointer-events-none absolute top-10 -right-20 w-[300px] h-[200px] rounded-full bg-white/[0.03] blur-3xl" />
 
       {/* ── Main body ── */}
       <div className="relative max-w-[1240px] mx-auto px-10 pt-16 pb-12">
@@ -103,7 +103,7 @@ export function Footer() {
             <img src="/images/logo.png" alt="NEX4" className="h-8 w-auto object-contain mb-6" />
             <p
               className="text-[15px] font-semibold text-white mb-4 leading-snug"
-              style={{ borderLeft: '2px solid #22b7cd', paddingLeft: 12 }}
+              style={{ borderLeft: '2px solid rgba(255,255,255,0.9)', paddingLeft: 12 }}
             >
               Transformation.<br />Passion. Results.
             </p>
@@ -132,7 +132,7 @@ export function Footer() {
             </p>
             <Link
               to="/contact-us"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#22b7cd] hover:bg-[#1fa8bc] text-white text-[13px] font-medium transition-colors duration-150"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-white/90 text-black text-[13px] font-medium transition-colors duration-150"
             >
               Contact Us
             </Link>
