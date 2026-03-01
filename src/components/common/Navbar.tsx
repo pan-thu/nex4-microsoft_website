@@ -242,12 +242,12 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
         {/* Top accent line */}
         <div
           className="pointer-events-none absolute top-0 left-0 right-0 h-px"
-          style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(34,183,205,0.8) 30%, rgba(34,183,205,0.8) 70%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 30%, rgba(255,255,255,0.15) 70%, transparent 100%)' }}
         />
         {/* Ambient glow bleeding in from top-left */}
-        <div className="pointer-events-none absolute -top-20 -left-20 w-[400px] h-[300px] rounded-full bg-[#22b7cd]/[0.12] blur-3xl" />
+        <div className="pointer-events-none absolute -top-20 -left-20 w-[400px] h-[300px] rounded-full bg-white/[0.03] blur-3xl" />
         {/* Ambient glow bleeding in from bottom-right */}
-        <div className="pointer-events-none absolute -bottom-20 -right-20 w-[300px] h-[200px] rounded-full bg-[#0078d4]/[0.14] blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -right-20 w-[300px] h-[200px] rounded-full bg-white/[0.03] blur-3xl" />
 
         <div className="max-w-[1240px] mx-auto flex" style={{ minHeight: 380 }}>
 
@@ -270,7 +270,7 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
                     )}
                     style={
                       activeSectionId === section.id
-                        ? { borderLeft: '2px solid #22b7cd', paddingLeft: 10, background: 'rgba(255,255,255,0.04)' }
+                        ? { borderLeft: '2px solid rgba(255,255,255,0.9)', paddingLeft: 10, background: 'rgba(255,255,255,0.04)' }
                         : { borderLeft: '2px solid transparent', paddingLeft: 10 }
                     }
                   >
@@ -306,7 +306,7 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
                     )}
                     style={
                       activeSubId === link.id
-                        ? { borderLeft: '2px solid #22b7cd', paddingLeft: 10, background: 'rgba(255,255,255,0.04)' }
+                        ? { borderLeft: '2px solid rgba(255,255,255,0.9)', paddingLeft: 10, background: 'rgba(255,255,255,0.04)' }
                         : { borderLeft: '2px solid transparent', paddingLeft: 10 }
                     }
                   >
@@ -314,7 +314,7 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
                     <ArrowRight
                       size={13}
                       className={cn(
-                        'shrink-0 text-[#22b7cd] transition-all duration-150',
+                        'shrink-0 text-white transition-all duration-150',
                         activeSubId === link.id ? 'opacity-100' : 'opacity-0',
                       )}
                     />
@@ -360,11 +360,11 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
         {/* Top accent line */}
         <div
           className="pointer-events-none absolute top-0 left-0 right-0 h-px"
-          style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(34,183,205,0.8) 30%, rgba(34,183,205,0.8) 70%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 30%, rgba(255,255,255,0.15) 70%, transparent 100%)' }}
         />
         {/* Ambient glow */}
-        <div className="pointer-events-none absolute -top-20 -left-20 w-[400px] h-[300px] rounded-full bg-[#22b7cd]/[0.04] blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -right-20 w-[300px] h-[200px] rounded-full bg-[#0078d4]/[0.05] blur-3xl" />
+        <div className="pointer-events-none absolute -top-20 -left-20 w-[400px] h-[300px] rounded-full bg-white/[0.03] blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -right-20 w-[300px] h-[200px] rounded-full bg-white/[0.03] blur-3xl" />
 
         <div className="max-w-[1240px] mx-auto flex" style={{ minHeight: 380 }}>
 
@@ -385,7 +385,7 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
                     )}
                     style={
                       activeCatId === cat.id
-                        ? { borderLeft: '2px solid #22b7cd', paddingLeft: 10, background: 'rgba(255,255,255,0.04)' }
+                        ? { borderLeft: '2px solid rgba(255,255,255,0.9)', paddingLeft: 10, background: 'rgba(255,255,255,0.04)' }
                         : { borderLeft: '2px solid transparent', paddingLeft: 10 }
                     }
                   >
@@ -469,8 +469,8 @@ function NavLink({
     'relative flex items-center gap-1.5 px-4 py-2 text-[15px] transition-colors duration-150 select-none',
     'after:absolute after:bottom-0 after:left-4 after:right-4 after:h-[2px] after:transition-all after:duration-150',
     isActive
-      ? 'text-white after:bg-[#22b7cd] after:opacity-100'
-      : 'text-[#a0a0a8] hover:text-white after:bg-[#22b7cd] after:opacity-0 hover:after:opacity-100',
+      ? 'text-white after:bg-white after:opacity-100'
+      : 'text-[#a0a0a8] hover:text-white after:bg-white after:opacity-0 hover:after:opacity-100',
   );
 
   if (Tag === Link && to) {
@@ -520,14 +520,10 @@ export function Navbar() {
           : 'bg-black',
       )}
     >
-      {/* Ambient glow — radiates from the centre of the bar */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-[700px] h-[140px] rounded-full bg-[#22b7cd]/[0.18] blur-3xl" />
-      </div>
       {/* Bottom accent line */}
       <div
         className="pointer-events-none absolute bottom-0 left-0 right-0 h-px"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(34,183,205,0.7) 35%, rgba(34,183,205,0.7) 65%, transparent 100%)' }}
+        style={{ background: 'rgba(255,255,255,0.08)' }}
       />
       {/* ── Main bar ── */}
       <div className="max-w-[1240px] mx-auto px-10 flex items-center justify-between h-[76px]">
@@ -559,7 +555,7 @@ export function Navbar() {
           {/* Contact CTA */}
           <Link
             to="/contact-us"
-            className="ml-1 px-5 py-2.5 text-[14px] font-medium text-white bg-[#22b7cd] hover:bg-[#1fa8bc] transition-colors duration-150"
+            className="ml-1 px-5 py-2.5 text-[14px] font-medium text-black bg-white hover:bg-white/90 transition-colors duration-150"
           >
             Contact Us
           </Link>
@@ -662,7 +658,7 @@ export function Navbar() {
           <div className="p-6">
             <Link
               to="/contact-us"
-              className="flex justify-center px-6 py-3 text-[14px] font-medium text-white bg-[#22b7cd] hover:bg-[#1fa8bc] transition-colors"
+              className="flex justify-center px-6 py-3 text-[14px] font-medium text-black bg-white hover:bg-white/90 transition-colors"
             >
               Contact Us
             </Link>
