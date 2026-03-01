@@ -426,7 +426,7 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
             <div className="mt-5 px-3">
               <Link
                 to={`/${activeCat.id}`}
-                className="inline-flex items-center gap-2 text-[12px] font-medium text-white/30 hover:text-[#22b7cd] transition-colors duration-150"
+                className="inline-flex items-center gap-2 text-[12px] font-medium text-white/30 hover:text-white transition-colors duration-150"
               >
                 View all {activeCat.label}
                 <ArrowRight size={12} />
