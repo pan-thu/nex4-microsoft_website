@@ -4,36 +4,46 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface Card {
+  num: string;
   category: string;
   headline: string;
   body: string;
   href: string;
+  image: string;
 }
 
 const CARDS: Card[] = [
   {
+    num: '01',
     category: 'Workplace Security',
-    headline: 'We help you protect your business from every angle.',
+    headline: 'Workplace Security',
     body: 'Zero Trust frameworks, endpoint protection, and identity management — built for the modern hybrid workforce.',
     href: '/services/workplace-security',
+    image: '/images/card-bg-2.png',
   },
   {
+    num: '02',
     category: 'Workplace AI',
-    headline: 'We help you unlock real value with Microsoft Copilot.',
+    headline: 'Workplace AI',
     body: 'AI and data intelligence help your business adapt, innovate, and lead. From deployment to adoption.',
     href: '/services/workplace-ai',
+    image: '/images/card-bg-4.png',
   },
   {
+    num: '03',
     category: 'Workplace Automation',
-    headline: 'We help you automate work and free your people.',
+    headline: 'Workplace Automation',
     body: 'Intelligent Power Platform workflows connect your apps, data, and teams — eliminating repetitive manual processes.',
     href: '/services/workplace-automation',
+    image: '/images/card-bg-1.png',
   },
   {
+    num: '04',
     category: 'Cloud Migration',
-    headline: 'We help you move to Azure with confidence.',
+    headline: 'Cloud Migration',
     body: "Whether you're lifting-and-shifting or re-architecting, we guide every stage of your cloud journey.",
     href: '/services/cloud-migration',
+    image: '/images/card-bg-3.png',
   },
 ];
 
@@ -44,40 +54,62 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={inView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-      className="group relative flex flex-col px-8 py-10 overflow-hidden hover:bg-white/[0.03] transition-colors duration-300 [&:not(:last-child)]:border-b lg:[&:not(:last-child)]:border-b-0 md:even:[&:not(:last-child)]:border-r-0 lg:[&:not(:last-child)]:border-r"
-      style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+      className="group relative overflow-hidden min-h-[420px] cursor-pointer"
     >
-      {/* Top accent line — visible on hover */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 60%, transparent 100%)' }}
+      {/* Background image */}
+      <img
+        src={card.image}
+        alt={card.category}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.04]"
+        loading="lazy"
       />
 
-      {/* Faint background number */}
-      <span className="absolute bottom-4 right-6 text-[88px] font-bold leading-none select-none pointer-events-none"
-        style={{ color: 'rgba(255,255,255,0.03)' }}>
-        {String(index + 1).padStart(2, '0')}
-      </span>
+      {/* Permanent dark gradient overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.15) 100%)',
+        }}
+      />
+      {/* Extra dark layer that lifts on hover */}
+      <div className="absolute inset-0 bg-black/30 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
 
-      <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-white/30 mb-5">
-        {card.category}
-      </p>
-      <h3 className="text-[24px] font-semibold text-white leading-snug mb-5 flex-1">
-        {card.headline}
-      </h3>
-      <p className="text-[14px] text-white/50 leading-relaxed mb-8">
-        {card.body}
-      </p>
-      <Link
-        to={card.href}
-        className="inline-flex items-center gap-3 px-5 py-2.5 border border-white/15 text-white/60 text-[13px] font-medium rounded-full hover:border-white/50 hover:text-white transition-all duration-200 self-start group/btn"
-      >
-        Learn more
-        <ArrowRight size={14} className="group-hover/btn:translate-x-0.5 transition-transform duration-200" />
-      </Link>
+      {/* Top accent line — appears on hover */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.6), transparent)' }}
+      />
+
+      {/* Content — pinned to bottom */}
+      <div className="absolute inset-0 flex flex-col justify-end p-8">
+        {/* Eyebrow — always visible */}
+        <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-white/50 mb-2">
+          {card.num} — {card.category}
+        </p>
+
+        {/* Title — always visible */}
+        <h3 className="text-[32px] font-semibold text-white leading-tight mb-4">
+          {card.headline}
+        </h3>
+
+        {/* Description — hidden at rest, slides up on hover */}
+        <p className="text-[14px] text-white/70 leading-relaxed mb-5 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+          {card.body}
+        </p>
+
+        {/* CTA — hidden at rest, slides up on hover with slight extra delay */}
+        <Link
+          to={card.href}
+          className="inline-flex items-center gap-2 text-[13px] font-medium text-white opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 self-start"
+          style={{ transitionDelay: '60ms' }}
+        >
+          Learn more
+          <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+        </Link>
+      </div>
     </motion.div>
   );
 }
@@ -96,8 +128,7 @@ export function WhatWeDo() {
           backgroundSize: '32px 32px',
         }}
       />
-
-      {/* Faint radial fade at edges */}
+      {/* Radial fade at edges */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -106,14 +137,13 @@ export function WhatWeDo() {
       />
 
       <div className="relative max-w-[1240px] mx-auto px-10">
-
         {/* Two-column header */}
         <motion.div
           ref={headingRef}
           initial={{ opacity: 0, y: 20 }}
           animate={headingInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-16"
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12"
         >
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-semibold mb-3">
@@ -128,10 +158,8 @@ export function WhatWeDo() {
           </p>
         </motion.div>
 
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
-          style={{ border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2 }}
-        >
+        {/* 2×2 card grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {CARDS.map((card, i) => (
             <ServiceCard key={card.category} card={card} index={i} />
           ))}
