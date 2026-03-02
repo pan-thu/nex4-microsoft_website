@@ -22,8 +22,8 @@ const SLIDES: Slide[] = [
     headlinePost: '',
     cta: 'Explore Workplace AI',
     ctaHref: '/services/workplace-ai',
-    image: '/images/card-bg-3.png',
-    imageAlt: 'Abstract visualization of AI-powered workplace tools',
+    image: '/images/hero-1.png',
+    imageAlt: 'Abstract holographic visualization representing AI-powered workplace transformation',
   },
   {
     eyebrow: 'Workplace Security',
@@ -32,8 +32,8 @@ const SLIDES: Slide[] = [
     headlinePost: '',
     cta: 'Explore Security',
     ctaHref: '/services/workplace-security',
-    image: '/images/card-bg-2.png',
-    imageAlt: 'Visual representation of enterprise security and endpoint protection',
+    image: '/images/hero-2.png',
+    imageAlt: 'Dynamic light streams representing enterprise security and data protection',
   },
   {
     eyebrow: 'Cloud Migration',
@@ -42,8 +42,8 @@ const SLIDES: Slide[] = [
     headlinePost: '',
     cta: 'Explore Cloud',
     ctaHref: '/services/cloud-migration',
-    image: '/images/card-bg-4.png',
-    imageAlt: 'Cloud infrastructure and Azure migration pathway illustration',
+    image: '/images/hero-3.png',
+    imageAlt: 'Illuminated architecture representing a journey to cloud infrastructure',
   },
 ];
 
@@ -99,8 +99,8 @@ export function HeroSlider() {
   const pad = (n: number) => String(n).padStart(2, '0');
 
   return (
-    <section className="relative bg-black overflow-hidden" style={{ minHeight: 'calc(100vh - 76px)' }}>
-      <div className="max-w-[1240px] mx-auto px-10 h-full flex items-center" style={{ minHeight: 'calc(100vh - 76px)' }}>
+    <section className="relative bg-black overflow-hidden" style={{ minHeight: 680 }}>
+      <div className="max-w-[1240px] mx-auto px-10 h-full flex items-center" style={{ minHeight: 680 }}>
 
         {/* Left — text */}
         <div className="relative z-10 flex-1 pr-12 py-24">
@@ -164,7 +164,7 @@ export function HeroSlider() {
         </div>
 
         {/* Right — image */}
-        <div className="hidden lg:block relative w-[45%] shrink-0" style={{ height: 'calc(100vh - 76px)' }}>
+        <div className="hidden lg:block relative w-[45%] shrink-0" style={{ height: 680 }}>
           {/* Left fade */}
           <div className="absolute inset-y-0 left-0 w-40 z-10 bg-gradient-to-r from-black to-transparent" />
           <AnimatePresence mode="wait">

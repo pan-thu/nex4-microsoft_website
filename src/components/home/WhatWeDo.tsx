@@ -47,9 +47,21 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-      className="group flex flex-col px-8 py-10 hover:bg-white/[0.03] transition-colors duration-300 [&:not(:last-child)]:border-b lg:[&:not(:last-child)]:border-b-0 md:even:[&:not(:last-child)]:border-r-0 lg:[&:not(:last-child)]:border-r"
+      className="group relative flex flex-col px-8 py-10 overflow-hidden hover:bg-white/[0.03] transition-colors duration-300 [&:not(:last-child)]:border-b lg:[&:not(:last-child)]:border-b-0 md:even:[&:not(:last-child)]:border-r-0 lg:[&:not(:last-child)]:border-r"
       style={{ borderColor: 'rgba(255,255,255,0.08)' }}
     >
+      {/* Top accent line — visible on hover */}
+      <div
+        className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.1) 60%, transparent 100%)' }}
+      />
+
+      {/* Faint background number */}
+      <span className="absolute bottom-4 right-6 text-[88px] font-bold leading-none select-none pointer-events-none"
+        style={{ color: 'rgba(255,255,255,0.03)' }}>
+        {String(index + 1).padStart(2, '0')}
+      </span>
+
       <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-white/30 mb-5">
         {card.category}
       </p>
@@ -75,20 +87,44 @@ export function WhatWeDo() {
   const headingInView = useInView(headingRef, { once: true, margin: '-60px' });
 
   return (
-    <section className="bg-[#0a0a0a] py-24">
-      <div className="max-w-[1240px] mx-auto px-10">
+    <section className="relative bg-[#0a0a0a] py-24 overflow-hidden">
+      {/* Dot grid background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.045) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }}
+      />
+
+      {/* Faint radial fade at edges */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, #0a0a0a 100%)',
+        }}
+      />
+
+      <div className="relative max-w-[1240px] mx-auto px-10">
+
+        {/* Two-column header */}
         <motion.div
           ref={headingRef}
           initial={{ opacity: 0, y: 20 }}
           animate={headingInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-16"
         >
-          <h2 className="text-[42px] lg:text-[52px] font-semibold text-white mb-3">
-            What we do
-          </h2>
-          <p className="text-[15px] text-white/40">
-            Our core Microsoft solutions
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-semibold mb-3">
+              What we do
+            </p>
+            <h2 className="text-[42px] lg:text-[52px] font-semibold text-white leading-tight">
+              Our core Microsoft<br />solutions
+            </h2>
+          </div>
+          <p className="text-[14px] text-white/35 max-w-[260px] lg:text-right leading-relaxed">
+            Four practice areas. One trusted Microsoft partner across APAC.
           </p>
         </motion.div>
 

@@ -60,8 +60,28 @@ export function Testimonials() {
   );
 
   return (
-    <section className="bg-black py-24 border-t border-white/[0.05]">
-      <div className="max-w-[1240px] mx-auto px-10">
+    <section className="relative bg-[#050505] py-24 overflow-hidden border-t border-white/[0.05]">
+
+      {/* Background glow — soft white orb top-left */}
+      <div
+        className="absolute -top-40 -left-40 w-[560px] h-[560px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)',
+          filter: 'blur(40px)',
+        }}
+      />
+
+      {/* Decorative rotated square outline — bottom right */}
+      <div
+        className="absolute bottom-12 right-16 w-48 h-48 border border-white/[0.04] pointer-events-none"
+        style={{ transform: 'rotate(20deg)' }}
+      />
+      <div
+        className="absolute bottom-20 right-24 w-32 h-32 border border-white/[0.06] pointer-events-none"
+        style={{ transform: 'rotate(20deg)' }}
+      />
+
+      <div className="relative max-w-[1240px] mx-auto px-10">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
@@ -77,63 +97,94 @@ export function Testimonials() {
             </h2>
           </div>
 
-          <div className="max-w-[760px]">
-            <AnimatePresence mode="wait" custom={dir}>
-              <motion.div
-                key={index}
-                custom={dir}
-                variants={testimonialVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-              >
-                <div className="text-[80px] leading-none text-white/10 font-serif mb-4 select-none">
-                  &ldquo;
-                </div>
-                <p className="text-[20px] lg:text-[22px] text-white/80 leading-relaxed font-light mb-10">
-                  {TESTIMONIALS[index].quote}
-                </p>
-                <div className="border-t border-white/10 pt-6">
-                  <p className="text-[15px] font-semibold text-white">{TESTIMONIALS[index].name}</p>
-                  <p className="text-[13px] text-white/40 mt-0.5">{TESTIMONIALS[index].title}</p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          {/* Two-column layout: quote left, author/nav right on large screens */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-16 items-start">
 
-          <div className="flex items-center gap-6 mt-12">
-            <button
-              onClick={goPrev}
-              className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white transition-colors duration-200"
-              aria-label="Previous testimonial"
-            >
-              <ArrowLeft size={16} />
-              Prev
-            </button>
-            <div className="flex items-center gap-2">
-              {TESTIMONIALS.map((t, i) => (
-                <button
-                  key={t.name}
-                  onClick={() => go(i, i > index ? 1 : -1)}
-                  aria-label={`Go to testimonial ${i + 1}`}
-                  className="transition-all duration-200"
-                  style={{
-                    width: i === index ? 20 : 6,
-                    height: 6,
-                    borderRadius: 3,
-                    background: i === index ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.15)',
-                  }}
-                />
-              ))}
+            {/* Quote column */}
+            <div>
+              {/* Decorative opening mark */}
+              <div
+                className="text-[64px] leading-none font-serif mb-2 select-none"
+                style={{ color: 'rgba(255,255,255,0.08)' }}
+              >
+                &ldquo;
+              </div>
+
+              <AnimatePresence mode="wait" custom={dir}>
+                <motion.div
+                  key={index}
+                  custom={dir}
+                  variants={testimonialVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                >
+                  <p className="text-[20px] lg:text-[22px] text-white/80 leading-relaxed font-light mb-10">
+                    {TESTIMONIALS[index].quote}
+                  </p>
+                  <div
+                    className="pt-6"
+                    style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
+                  >
+                    <p className="text-[15px] font-semibold text-white">{TESTIMONIALS[index].name}</p>
+                    <p className="text-[13px] text-white/40 mt-0.5">{TESTIMONIALS[index].title}</p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
-            <button
-              onClick={goNext}
-              className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white transition-colors duration-200"
-              aria-label="Next testimonial"
-            >
-              Next
-              <ArrowRight size={16} />
-            </button>
+
+            {/* Right column: index label + navigation */}
+            <div className="flex flex-col justify-between h-full lg:pt-8">
+              {/* Large index display */}
+              <div className="mb-auto">
+                <span
+                  className="text-[72px] font-semibold leading-none"
+                  style={{ color: 'rgba(255,255,255,0.06)' }}
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="text-[18px] text-white/10 ml-1">
+                  / {String(TESTIMONIALS.length).padStart(2, '0')}
+                </span>
+              </div>
+
+              {/* Navigation controls */}
+              <div className="flex items-center gap-6 mt-10 lg:mt-0">
+                <button
+                  onClick={goPrev}
+                  className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white transition-colors duration-200"
+                  aria-label="Previous testimonial"
+                >
+                  <ArrowLeft size={16} />
+                  Prev
+                </button>
+                <div className="flex items-center gap-2">
+                  {TESTIMONIALS.map((t, i) => (
+                    <button
+                      key={t.name}
+                      onClick={() => go(i, i > index ? 1 : -1)}
+                      aria-label={`Go to testimonial ${i + 1}`}
+                      className="transition-all duration-200"
+                      style={{
+                        width: i === index ? 20 : 6,
+                        height: 6,
+                        borderRadius: 3,
+                        background: i === index ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.15)',
+                      }}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={goNext}
+                  className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white transition-colors duration-200"
+                  aria-label="Next testimonial"
+                >
+                  Next
+                  <ArrowRight size={16} />
+                </button>
+              </div>
+            </div>
+
           </div>
         </motion.div>
       </div>
