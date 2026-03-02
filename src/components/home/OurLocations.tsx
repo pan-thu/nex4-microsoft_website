@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Globe2 } from 'lucide-react';
 
 interface Location {
   country: string;
@@ -90,23 +89,24 @@ export function OurLocations() {
   return (
     <section className="relative bg-black py-24 overflow-hidden border-t border-white/[0.05]">
 
-      {/* Corner gradient — top right */}
+      {/* Subtle white gradient — top right */}
       <div
-        className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
+        className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at top right, rgba(255,255,255,0.05) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse at top right, rgba(255,255,255,0.04) 0%, transparent 60%)',
         }}
       />
 
-      {/* Corner gradient — bottom left */}
+      {/* Microsoft blue orb — bottom left (main decoration) */}
       <div
-        className="absolute bottom-0 left-0 w-[400px] h-[400px] pointer-events-none"
+        className="absolute -bottom-32 -left-32 w-[520px] h-[520px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at bottom left, rgba(255,255,255,0.03) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(0,120,212,0.16) 0%, transparent 65%)',
+          filter: 'blur(80px)',
         }}
       />
 
-      {/* Diagonal grid lines — decorative */}
+      {/* Diagonal grid lines */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
@@ -114,9 +114,19 @@ export function OurLocations() {
         }}
       />
 
-      {/* Large faint globe icon */}
-      <div className="absolute -top-16 -right-16 pointer-events-none opacity-[0.04]">
-        <Globe2 size={320} strokeWidth={0.5} className="text-white" />
+      {/* Concentric ring shapes — bottom left, above the orb */}
+      <div className="absolute bottom-12 left-12 pointer-events-none">
+        <div
+          className="w-40 h-40 rounded-full border border-[#0078D4]/20"
+        />
+        <div
+          className="absolute top-1/2 left-1/2 w-24 h-24 rounded-full border border-[#0078D4]/14"
+          style={{ transform: 'translate(-50%, -50%)' }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 w-10 h-10 rounded-full bg-[#0078D4]/12"
+          style={{ transform: 'translate(-50%, -50%)' }}
+        />
       </div>
 
       <div className="relative max-w-[1240px] mx-auto px-10">

@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight, Layers } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface Card {
@@ -133,17 +133,25 @@ export function WhatWeDo() {
         }}
       />
 
-      {/* Gradient spotlight — top right corner */}
+      {/* Microsoft blue orb — top right */}
       <div
-        className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full pointer-events-none"
+        className="absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(0,120,212,0.18) 0%, transparent 65%)',
+          filter: 'blur(72px)',
         }}
       />
 
-      {/* Large faint icon — top right */}
-      <div className="absolute top-8 right-8 pointer-events-none opacity-[0.035]">
-        <Layers size={220} strokeWidth={0.75} className="text-white" />
+      {/* Stacked offset squares — top right, sharp accent */}
+      <div className="absolute top-12 right-12 pointer-events-none">
+        <div
+          className="w-24 h-24 border border-white/[0.07]"
+          style={{ transform: 'rotate(12deg)' }}
+        />
+        <div
+          className="absolute inset-0 w-24 h-24 border border-[#0078D4]/20"
+          style={{ transform: 'rotate(28deg) translate(10px, 10px)' }}
+        />
       </div>
 
       <div className="relative max-w-[1240px] mx-auto px-10">

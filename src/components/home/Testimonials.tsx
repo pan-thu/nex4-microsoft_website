@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
-import { ArrowLeft, ArrowRight, MessageSquare } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface Testimonial {
   quote: string;
@@ -79,38 +79,40 @@ export function Testimonials() {
       onMouseLeave={() => setPaused(false)}
     >
 
-      {/* Background glow — soft white orb top-left */}
+      {/* Microsoft blue orb — top left */}
       <div
         className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 65%)',
-          filter: 'blur(60px)',
+          background: 'radial-gradient(circle, rgba(0,120,212,0.14) 0%, transparent 65%)',
+          filter: 'blur(80px)',
         }}
       />
 
-      {/* Second glow — bottom right */}
+      {/* Smaller warm accent orb — bottom right */}
       <div
-        className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full pointer-events-none"
+        className="absolute -bottom-32 -right-32 w-[400px] h-[400px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 65%)',
+          background: 'radial-gradient(circle, rgba(0,120,212,0.08) 0%, transparent 65%)',
           filter: 'blur(60px)',
         }}
       />
 
-      {/* Decorative rotated square outlines — bottom right */}
-      <div
-        className="absolute bottom-12 right-16 w-56 h-56 border border-white/[0.06] pointer-events-none"
-        style={{ transform: 'rotate(20deg)' }}
-      />
-      <div
-        className="absolute bottom-20 right-28 w-36 h-36 border border-white/[0.09] pointer-events-none"
-        style={{ transform: 'rotate(20deg)' }}
-      />
-
-      {/* Large faint icon — bottom right */}
-      <div className="absolute bottom-6 right-6 pointer-events-none opacity-[0.04]">
-        <MessageSquare size={180} strokeWidth={0.75} className="text-white" />
+      {/* Three stacked diagonal bars — bottom right */}
+      <div className="absolute bottom-16 right-16 pointer-events-none flex flex-col gap-3" style={{ transform: 'rotate(-30deg)' }}>
+        <div className="w-40 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="w-56 h-px bg-gradient-to-r from-transparent via-white/14 to-transparent" />
+        <div className="w-40 h-px bg-gradient-to-r from-transparent via-white/08 to-transparent" />
       </div>
+
+      {/* Rotated square outlines — bottom right */}
+      <div
+        className="absolute bottom-12 right-20 w-48 h-48 border border-white/[0.07] pointer-events-none"
+        style={{ transform: 'rotate(20deg)' }}
+      />
+      <div
+        className="absolute bottom-20 right-32 w-28 h-28 border border-[#0078D4]/15 pointer-events-none"
+        style={{ transform: 'rotate(20deg)' }}
+      />
 
       <div className="relative max-w-[1240px] mx-auto px-10">
         <motion.div
