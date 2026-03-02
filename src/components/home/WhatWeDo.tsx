@@ -52,7 +52,7 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
       initial={{ opacity: 0, scale: 0.97 }}
       animate={inView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-      className="group relative overflow-hidden min-h-[420px] cursor-pointer"
+      className="group relative overflow-hidden min-h-[560px] cursor-pointer"
     >
       {/* Background image */}
       <img
@@ -79,14 +79,14 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
       />
 
       {/* Content — pinned to bottom */}
-      <div className="absolute inset-0 flex flex-col justify-end p-8">
+      <div className="absolute inset-0 flex flex-col justify-end p-6">
         {/* Eyebrow — always visible */}
         <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-white/50 mb-2">
           {card.num} — {card.category}
         </p>
 
         {/* Title — always visible */}
-        <h3 className="text-[32px] font-semibold text-white leading-tight mb-4">
+        <h3 className="text-[24px] font-semibold text-white leading-tight mb-4">
           {card.category}
         </h3>
 
@@ -153,8 +153,8 @@ export function WhatWeDo() {
           </p>
         </motion.div>
 
-        {/* 2×2 card grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* 4-column horizontal row */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {CARDS.map((card, i) => (
             <ServiceCard key={card.category} card={card} index={i} />
           ))}
