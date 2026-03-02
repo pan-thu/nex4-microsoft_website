@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 interface Card {
   num: string;
   category: string;
-  headline: string;
   body: string;
   href: string;
   image: string;
@@ -16,7 +15,6 @@ const CARDS: Card[] = [
   {
     num: '01',
     category: 'Workplace Security',
-    headline: 'Workplace Security',
     body: 'Zero Trust frameworks, endpoint protection, and identity management — built for the modern hybrid workforce.',
     href: '/services/workplace-security',
     image: '/images/card-bg-2.png',
@@ -24,7 +22,6 @@ const CARDS: Card[] = [
   {
     num: '02',
     category: 'Workplace AI',
-    headline: 'Workplace AI',
     body: 'AI and data intelligence help your business adapt, innovate, and lead. From deployment to adoption.',
     href: '/services/workplace-ai',
     image: '/images/card-bg-4.png',
@@ -32,7 +29,6 @@ const CARDS: Card[] = [
   {
     num: '03',
     category: 'Workplace Automation',
-    headline: 'Workplace Automation',
     body: 'Intelligent Power Platform workflows connect your apps, data, and teams — eliminating repetitive manual processes.',
     href: '/services/workplace-automation',
     image: '/images/card-bg-1.png',
@@ -40,7 +36,6 @@ const CARDS: Card[] = [
   {
     num: '04',
     category: 'Cloud Migration',
-    headline: 'Cloud Migration',
     body: "Whether you're lifting-and-shifting or re-architecting, we guide every stage of your cloud journey.",
     href: '/services/cloud-migration',
     image: '/images/card-bg-3.png',
@@ -92,18 +87,18 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
 
         {/* Title — always visible */}
         <h3 className="text-[32px] font-semibold text-white leading-tight mb-4">
-          {card.headline}
+          {card.category}
         </h3>
 
-        {/* Description — hidden at rest, slides up on hover */}
-        <p className="text-[14px] text-white/70 leading-relaxed mb-5 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+        {/* Description — hidden at rest, slides up on hover/focus-within */}
+        <p className="text-[14px] text-white/70 leading-relaxed mb-5 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-500">
           {card.body}
         </p>
 
-        {/* CTA — hidden at rest, slides up on hover with slight extra delay */}
+        {/* CTA — hidden at rest, slides up on hover/focus-within with slight extra delay */}
         <Link
           to={card.href}
-          className="inline-flex items-center gap-2 text-[13px] font-medium text-white opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 self-start"
+          className="inline-flex items-center gap-2 text-[13px] font-medium text-white opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-500 self-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded-sm"
           style={{ transitionDelay: '60ms' }}
         >
           Learn more
