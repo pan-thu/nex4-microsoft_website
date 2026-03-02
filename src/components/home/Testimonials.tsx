@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MessageSquare } from 'lucide-react';
 
 interface Testimonial {
   quote: string;
@@ -38,9 +38,12 @@ const testimonialVariants = {
   exit: (d: number) => ({ x: d > 0 ? -40 : 40, opacity: 0, transition: { duration: 0.25 } }),
 };
 
+const INTERVAL_MS = 6000;
+
 export function Testimonials() {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
+  const [paused, setPaused] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
@@ -59,27 +62,55 @@ export function Testimonials() {
     [index, go],
   );
 
+  // Auto-advance; pauses on hover
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(() => {
+      setDir(1);
+      setIndex((i) => (i + 1) % TESTIMONIALS.length);
+    }, INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [paused]);
+
   return (
-    <section className="relative bg-[#050505] py-24 overflow-hidden border-t border-white/[0.05]">
+    <section
+      className="relative bg-[#050505] py-24 overflow-hidden border-t border-white/[0.05]"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
 
       {/* Background glow — soft white orb top-left */}
       <div
-        className="absolute -top-40 -left-40 w-[560px] h-[560px] rounded-full pointer-events-none"
+        className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%)',
-          filter: 'blur(40px)',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 65%)',
+          filter: 'blur(60px)',
         }}
       />
 
-      {/* Decorative rotated square outline — bottom right */}
+      {/* Second glow — bottom right */}
       <div
-        className="absolute bottom-12 right-16 w-48 h-48 border border-white/[0.04] pointer-events-none"
+        className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 65%)',
+          filter: 'blur(60px)',
+        }}
+      />
+
+      {/* Decorative rotated square outlines — bottom right */}
+      <div
+        className="absolute bottom-12 right-16 w-56 h-56 border border-white/[0.06] pointer-events-none"
         style={{ transform: 'rotate(20deg)' }}
       />
       <div
-        className="absolute bottom-20 right-24 w-32 h-32 border border-white/[0.06] pointer-events-none"
+        className="absolute bottom-20 right-28 w-36 h-36 border border-white/[0.09] pointer-events-none"
         style={{ transform: 'rotate(20deg)' }}
       />
+
+      {/* Large faint icon — bottom right */}
+      <div className="absolute bottom-6 right-6 pointer-events-none opacity-[0.04]">
+        <MessageSquare size={180} strokeWidth={0.75} className="text-white" />
+      </div>
 
       <div className="relative max-w-[1240px] mx-auto px-10">
         <motion.div

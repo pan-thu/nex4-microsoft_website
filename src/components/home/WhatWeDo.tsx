@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Layers } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface Card {
@@ -66,11 +66,11 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.1) 100%)',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.72) 45%, rgba(0,0,0,0.2) 100%)',
         }}
       />
       {/* Extra dark layer that lifts on hover */}
-      <div className="absolute inset-0 bg-black/25 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-black/35 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
 
       {/* Top accent line — appears on hover */}
       <div
@@ -132,6 +132,19 @@ export function WhatWeDo() {
           background: 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, #0a0a0a 100%)',
         }}
       />
+
+      {/* Gradient spotlight — top right corner */}
+      <div
+        className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%)',
+        }}
+      />
+
+      {/* Large faint icon — top right */}
+      <div className="absolute top-8 right-8 pointer-events-none opacity-[0.035]">
+        <Layers size={220} strokeWidth={0.75} className="text-white" />
+      </div>
 
       <div className="relative max-w-[1240px] mx-auto px-10">
         {/* Two-column header */}
