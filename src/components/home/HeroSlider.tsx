@@ -70,8 +70,6 @@ export function HeroSlider() {
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState(1);
 
-  // Consolidate navigation into a single useCallback using functional setters
-  // to avoid stale closures and direction race conditions.
   const go = useCallback((next: number, direction: number) => {
     setDir(direction);
     setIndex(next);
@@ -100,10 +98,34 @@ export function HeroSlider() {
 
   return (
     <section className="relative bg-black overflow-hidden" style={{ minHeight: 680 }}>
-      <div className="max-w-[1240px] mx-auto px-10 h-full flex items-center" style={{ minHeight: 680 }}>
 
-        {/* Left — text */}
-        <div className="relative z-10 flex-1 pr-12 py-24">
+      {/* Full-bleed background image */}
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={index}
+          src={slide.image}
+          alt={slide.imageAlt}
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1, transition: { duration: 0.7, ease: 'easeOut' } }}
+          exit={{ opacity: 0, transition: { duration: 0.3 } }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </AnimatePresence>
+
+      {/* Left-side gradient so text is legible over the image */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(to right, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 40%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0.1) 100%)',
+        }}
+      />
+
+      {/* Text content */}
+      <div
+        className="relative z-10 max-w-[1240px] mx-auto px-10 flex items-center"
+        style={{ minHeight: 680 }}
+      >
+        <div className="py-24 max-w-[600px]">
           <AnimatePresence mode="wait" custom={dir}>
             <motion.div
               key={index}
@@ -119,22 +141,22 @@ export function HeroSlider() {
               </p>
 
               {/* Headline */}
-              <h1 className="text-[52px] lg:text-[62px] font-light leading-[1.1] text-white mb-10 max-w-[580px]">
+              <h1 className="text-[52px] lg:text-[62px] font-light leading-[1.1] text-white mb-10">
                 {slide.headlinePre}{' '}
                 <span className="font-semibold text-white">{slide.headlineAccent}</span>
                 {slide.headlinePost && ' ' + slide.headlinePost}
               </h1>
 
-              {/* CTA */}
+              {/* CTA — arrow inline on the same line */}
               <Link
                 to={slide.ctaHref}
-                className="group inline-flex flex-col gap-2"
+                className="group inline-flex items-center gap-3"
               >
                 <span className="text-[14px] font-semibold text-white/70 group-hover:text-white transition-colors duration-200">
                   {slide.cta}
                 </span>
                 <ArrowRight
-                  size={18}
+                  size={16}
                   className="text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-200"
                 />
               </Link>
@@ -142,7 +164,7 @@ export function HeroSlider() {
           </AnimatePresence>
 
           {/* Controls */}
-          <div className="absolute bottom-12 left-0 flex items-center gap-4">
+          <div className="absolute bottom-12 left-10 flex items-center gap-4">
             <button
               onClick={prev}
               aria-label="Previous slide"
@@ -162,27 +184,9 @@ export function HeroSlider() {
             </span>
           </div>
         </div>
-
-        {/* Right — image */}
-        <div className="hidden lg:block relative w-[45%] shrink-0" style={{ height: 680 }}>
-          {/* Left fade */}
-          <div className="absolute inset-y-0 left-0 w-40 z-10 bg-gradient-to-r from-black to-transparent" />
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={index}
-              src={slide.image}
-              alt={slide.imageAlt}
-              initial={{ opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1, transition: { duration: 0.7, ease: 'easeOut' } }}
-              exit={{ opacity: 0, transition: { duration: 0.3 } }}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </AnimatePresence>
-        </div>
-
       </div>
 
-      {/* Progress bar — thin white line at bottom */}
+      {/* Progress bar */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-white/5">
         <motion.div
           key={index}

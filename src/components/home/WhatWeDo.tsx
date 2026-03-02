@@ -52,7 +52,7 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
       initial={{ opacity: 0, scale: 0.97 }}
       animate={inView ? { opacity: 1, scale: 1 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-      className="group relative overflow-hidden min-h-[560px] cursor-pointer"
+      className="group relative overflow-hidden min-h-[460px] cursor-pointer"
     >
       {/* Background image */}
       <img
@@ -66,11 +66,11 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.15) 100%)',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.1) 100%)',
         }}
       />
       {/* Extra dark layer that lifts on hover */}
-      <div className="absolute inset-0 bg-black/30 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-black/25 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
 
       {/* Top accent line — appears on hover */}
       <div
@@ -78,28 +78,30 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
         style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.6), transparent)' }}
       />
 
-      {/* Content — pinned to bottom */}
-      <div className="absolute inset-0 flex flex-col justify-end p-6">
-        {/* Eyebrow — always visible */}
+      {/* REST STATE: eyebrow + title pinned to the very bottom, no hidden items pushing them up */}
+      <div className="absolute inset-x-0 bottom-0 p-6 z-10 transition-opacity duration-300 group-hover:opacity-0 group-focus-within:opacity-0">
         <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-white/50 mb-2">
           {card.num} — {card.category}
         </p>
-
-        {/* Title — always visible */}
-        <h3 className="text-[24px] font-semibold text-white leading-tight mb-4">
+        <h3 className="text-[24px] font-semibold text-white leading-tight">
           {card.category}
         </h3>
+      </div>
 
-        {/* Description — hidden at rest, slides up on hover/focus-within */}
-        <p className="text-[14px] text-white/70 leading-relaxed mb-5 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-500">
+      {/* HOVER STATE: full panel slides up from below */}
+      <div className="absolute inset-x-0 bottom-0 p-6 z-20 translate-y-full group-hover:translate-y-0 group-focus-within:translate-y-0 transition-transform duration-500 ease-out">
+        <p className="text-[10px] uppercase tracking-[0.22em] font-semibold text-white/50 mb-2">
+          {card.num} — {card.category}
+        </p>
+        <h3 className="text-[24px] font-semibold text-white leading-tight mb-3">
+          {card.category}
+        </h3>
+        <p className="text-[13px] text-white/70 leading-relaxed mb-5">
           {card.body}
         </p>
-
-        {/* CTA — hidden at rest, slides up on hover/focus-within with slight extra delay */}
         <Link
           to={card.href}
-          className="inline-flex items-center gap-2 text-[13px] font-medium text-white opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-500 self-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded-sm"
-          style={{ transitionDelay: '60ms' }}
+          className="inline-flex items-center gap-2 text-[13px] font-medium text-white self-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded-sm"
         >
           Learn more
           <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
