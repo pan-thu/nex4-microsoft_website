@@ -26,3 +26,6 @@ dist/
 
 # Mirrored Site
 ref/
+
+# Git worktrees
+.worktrees/
