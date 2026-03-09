@@ -50,8 +50,16 @@ export interface RegistrationInput {
   country: string;
 }
 
+export type DateFilter = 'all' | 'week' | 'month' | 'quarter';
+
 export interface EventFilters {
   category?: EventCategory;
   type?: EventType;
   status?: EventStatus;
+}
+
+export interface UIFilters {
+  category?: EventCategory;
+  type?: EventType;
+  date: DateFilter;
 }
