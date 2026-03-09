@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { EventCard, FeaturedEventCard } from '@/components/events/EventCard';
+import { EventCard } from '@/components/events/EventCard';
 import { EventFilters } from '@/components/events/EventFilters';
 import { EventService } from '@/services/EventService';
 import type { Event, UIFilters } from '@/types/events';
 
 const EMPTY_FILTERS: UIFilters = { date: 'all' };
+const PAGE_SIZE = 9;
 
 function applyDateFilter(events: Event[], date: UIFilters['date']): Event[] {
   if (date === 'all') return events;
@@ -28,6 +29,7 @@ export function Events() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<UIFilters>(EMPTY_FILTERS);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
     setLoading(true);
@@ -37,7 +39,7 @@ export function Events() {
       ...(filters.category ? { category: filters.category } : {}),
       ...(filters.type     ? { type: filters.type }         : {}),
     })
-      .then(data => setUpcoming(data))
+      .then(data => { setUpcoming(data); setVisibleCount(PAGE_SIZE); })
       .catch(() => setError('Failed to load events. Please try again.'))
       .finally(() => setLoading(false));
   }, [filters.category, filters.type]);
@@ -47,18 +49,36 @@ export function Events() {
     [upcoming, filters.date],
   );
 
-  const [featured, ...rest] = filtered;
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
 
   return (
     <div className="min-h-screen bg-[#080808] text-white">
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden pt-[76px]">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600&q=80)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.12,
+          }}
+        />
+        {/* Dark gradient overlay — fades image into page bg */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(8,8,8,0.3) 0%, rgba(8,8,8,0.85) 100%)',
+          }}
+        />
         {/* Dot grid */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px)',
             backgroundSize: '28px 28px',
           }}
         />
@@ -66,7 +86,7 @@ export function Events() {
         <div
           className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full pointer-events-none"
           style={{
-            background: 'radial-gradient(circle, rgba(0,120,212,0.12) 0%, transparent 60%)',
+            background: 'radial-gradient(circle, rgba(0,120,212,0.15) 0%, transparent 60%)',
             filter: 'blur(80px)',
           }}
         />
@@ -88,14 +108,14 @@ export function Events() {
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 font-semibold mb-5">
+              <p className="text-[11px] uppercase tracking-[0.25em] text-white/30 font-semibold mb-5">
                 Events & Webinars
               </p>
-              <h1 className="text-[42px] lg:text-[56px] font-semibold leading-tight text-white mb-4 max-w-2xl">
+              <h1 className="text-[46px] lg:text-[62px] font-semibold leading-tight text-white mb-4 max-w-2xl">
                 Expand your knowledge.<br />
                 <span className="text-white/40 font-light">Connect with experts.</span>
               </h1>
-              <p className="text-[14px] text-white/35 max-w-xl leading-relaxed">
+              <p className="text-[16px] text-white/35 max-w-xl leading-relaxed">
                 Join NEX4 and Microsoft-led sessions on cloud, security, AI, and modern
                 workplace transformation — live across APAC.
               </p>
@@ -129,7 +149,7 @@ export function Events() {
         )}
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.05]">
+          <div className="grid gap-px bg-white/[0.05]" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))' }}>
             {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
@@ -143,40 +163,38 @@ export function Events() {
             </button>
           </div>
         ) : (
-          <div className="flex flex-col gap-px bg-white/[0.05]">
-            {/* Featured — first event */}
-            {featured && (
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
-              >
-                <FeaturedEventCard event={featured} />
-              </motion.div>
-            )}
+          <>
+            <motion.div
+              className="grid gap-px bg-white/[0.05]"
+              style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))' }}
+              initial="hidden"
+              animate="visible"
+              variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+            >
+              {visible.map(event => (
+                <motion.div
+                  key={event.id}
+                  variants={{
+                    hidden: { opacity: 0, y: 12 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+                  }}
+                >
+                  <EventCard event={event} />
+                </motion.div>
+              ))}
+            </motion.div>
 
-            {/* Grid */}
-            {rest.length > 0 && (
-              <motion.div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                initial="hidden"
-                animate="visible"
-                variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
-              >
-                {rest.map(event => (
-                  <motion.div
-                    key={event.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 12 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
-                    }}
-                  >
-                    <EventCard event={event} />
-                  </motion.div>
-                ))}
-              </motion.div>
+            {hasMore && (
+              <div className="mt-8 flex justify-center">
+                <button
+                  onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
+                  className="px-8 py-3 border border-white/[0.12] text-[12px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 transition-all duration-200"
+                >
+                  Load more events
+                </button>
+              </div>
             )}
-          </div>
+          </>
         )}
       </section>
 

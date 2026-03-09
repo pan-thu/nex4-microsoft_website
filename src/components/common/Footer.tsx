@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FaFacebookF, FaLinkedinIn, FaXTwitter } from 'react-icons/fa6';
+import { ASSETS } from '@/lib/assets';
 
 const SERVICES_TREE = [
   {
@@ -100,7 +101,7 @@ export function Footer() {
 
           {/* Brand */}
           <div>
-            <img src="/images/logo.png" alt="NEX4" className="h-8 w-auto object-contain mb-6" />
+            <img src={ASSETS.logo} alt="NEX4" className="h-8 w-auto object-contain mb-6" />
             <p
               className="text-[15px] font-semibold text-white mb-4 leading-snug"
               style={{ borderLeft: '2px solid rgba(255,255,255,0.9)', paddingLeft: 12 }}

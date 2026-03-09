@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, startTransition } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ASSETS } from '@/lib/assets';
@@ -346,6 +346,7 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
 function InsightsMegaMenu({ visible }: { visible: boolean }) {
   const [activeCatId, setActiveCatId] = useState(INSIGHTS_CATEGORIES[0].id);
   const activeCat = INSIGHTS_CATEGORIES.find((c) => c.id === activeCatId) ?? INSIGHTS_CATEGORIES[0];
+  const navigate = useNavigate();
 
   return (
     <div
@@ -380,6 +381,7 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
                 <li key={cat.id}>
                   <button
                     onMouseEnter={() => setActiveCatId(cat.id)}
+                    onClick={() => navigate('/' + cat.id)}
                     className={cn(
                       'w-full text-left flex items-center justify-between gap-3 px-3 py-3 transition-all duration-150',
                       activeCatId === cat.id ? 'text-white' : 'text-[#a0a0a8] hover:text-white',

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Navbar } from '@/components/common/Navbar';
 import { Footer } from '@/components/common/Footer';
 import { ScrollProgress } from '@/components/common/ScrollProgress';
@@ -11,10 +11,13 @@ import { AdminDashboard } from '@/pages/admin/AdminDashboard';
 import { ProtectedRoute } from '@/components/admin/ProtectedRoute';
 
 function App() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollProgress />
-      <Navbar />
+      {!isAdmin && <Navbar />}
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -24,8 +27,8 @@ function App() {
           <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>
       </main>
-      <Footer />
-      <BackToTop />
+      {!isAdmin && <Footer />}
+      {!isAdmin && <BackToTop />}
     </div>
   );
 }

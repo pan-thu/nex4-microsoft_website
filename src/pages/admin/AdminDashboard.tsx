@@ -66,6 +66,9 @@ export function AdminDashboard() {
               </NavLink>
             ))}
           </nav>
+          <p className="mt-auto px-1 text-[10px] text-white/15 leading-relaxed">
+            © {new Date().getFullYear()} NEX4 ICT Solutions.<br />All rights reserved.
+          </p>
         </aside>
 
         {/* Content */}
