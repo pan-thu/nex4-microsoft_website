@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ASSETS } from '@/lib/assets';
 
 interface Slide {
   eyebrow: string;
@@ -22,7 +23,7 @@ const SLIDES: Slide[] = [
     headlinePost: '',
     cta: 'Explore Workplace AI',
     ctaHref: '/services/workplace-ai',
-    image: '/images/hero-1.png',
+    image: ASSETS.hero1,
     imageAlt: 'Abstract holographic visualization representing AI-powered workplace transformation',
   },
   {
@@ -32,7 +33,7 @@ const SLIDES: Slide[] = [
     headlinePost: '',
     cta: 'Explore Security',
     ctaHref: '/services/workplace-security',
-    image: '/images/hero-2.png',
+    image: ASSETS.hero2,
     imageAlt: 'Dynamic light streams representing enterprise security and data protection',
   },
   {
@@ -42,7 +43,7 @@ const SLIDES: Slide[] = [
     headlinePost: '',
     cta: 'Explore Cloud',
     ctaHref: '/services/cloud-migration',
-    image: '/images/hero-3.png',
+    image: ASSETS.hero3,
     imageAlt: 'Illuminated architecture representing a journey to cloud infrastructure',
   },
 ];

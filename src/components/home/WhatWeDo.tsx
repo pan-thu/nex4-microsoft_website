@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ASSETS } from '@/lib/assets';
 
 interface Card {
   num: string;
@@ -17,28 +18,28 @@ const CARDS: Card[] = [
     category: 'Workplace Security',
     body: 'Zero Trust frameworks, endpoint protection, and identity management — built for the modern hybrid workforce.',
     href: '/services/workplace-security',
-    image: '/images/card-bg-2.png',
+    image: ASSETS.cardBg2,
   },
   {
     num: '02',
     category: 'Workplace AI',
     body: 'AI and data intelligence help your business adapt, innovate, and lead. From deployment to adoption.',
     href: '/services/workplace-ai',
-    image: '/images/card-bg-4.png',
+    image: ASSETS.cardBg4,
   },
   {
     num: '03',
     category: 'Workplace Automation',
     body: 'Intelligent Power Platform workflows connect your apps, data, and teams — eliminating repetitive manual processes.',
     href: '/services/workplace-automation',
-    image: '/images/card-bg-1.png',
+    image: ASSETS.cardBg1,
   },
   {
     num: '04',
     category: 'Cloud Migration',
     body: "Whether you're lifting-and-shifting or re-architecting, we guide every stage of your cloud journey.",
     href: '/services/cloud-migration',
-    image: '/images/card-bg-3.png',
+    image: ASSETS.cardBg3,
   },
 ];
 

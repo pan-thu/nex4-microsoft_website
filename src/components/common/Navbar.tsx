@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, startTransition } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ASSETS } from '@/lib/assets';
 
 // ─── Types & Data ──────────────────────────────────────────────────────────────
 
@@ -40,12 +41,12 @@ interface InsightCategory {
 }
 
 const IMG = {
-  c1: '/images/card-bg-1.png',
-  c2: '/images/card-bg-2.png',
-  c3: '/images/card-bg-3.png',
-  c4: '/images/card-bg-4.png',
-  i1: '/images/card-bg-insights-1.png',
-  i2: '/images/card-bg-insights-2.png',
+  c1: ASSETS.cardBg1,
+  c2: ASSETS.cardBg2,
+  c3: ASSETS.cardBg3,
+  c4: ASSETS.cardBg4,
+  i1: ASSETS.insightsBg1,
+  i2: ASSETS.insightsBg2,
 };
 
 const SERVICES_SECTIONS: Section[] = [
@@ -532,7 +533,7 @@ export function Navbar() {
 
         {/* Logo */}
         <Link to="/" className="shrink-0" onClick={() => setOpenMenu(null)}>
-          <img src="/images/logo.png" alt="NEX4" className="h-9 w-auto object-contain" />
+          <img src={ASSETS.logo} alt="NEX4" className="h-9 w-auto object-contain" />
         </Link>
 
         {/* Desktop nav */}
