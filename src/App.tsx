@@ -8,6 +8,7 @@ import { Events } from '@/pages/Events';
 import { EventRegistration } from '@/pages/EventRegistration';
 import { AdminLogin } from '@/pages/admin/AdminLogin';
 import { AdminDashboard } from '@/pages/admin/AdminDashboard';
+import { ProtectedRoute } from '@/components/admin/ProtectedRoute';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/events/:slug" element={<EventRegistration />} />
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/*" element={<AdminDashboard />} />
+          <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>
       </main>
       <Footer />
