@@ -8,7 +8,8 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     Auth.getSession().then(s => {
-      setAuthed(!!s);
+      const isAdmin = s?.user?.app_metadata?.role === 'admin';
+      setAuthed(isAdmin);
       setChecked(true);
     });
   }, []);
