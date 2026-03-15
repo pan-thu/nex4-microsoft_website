@@ -149,7 +149,7 @@ export function Events() {
         )}
 
         {loading ? (
-          <div className="grid gap-px bg-white/[0.05]" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))' }}>
+          <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))' }}>
             {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
@@ -165,7 +165,7 @@ export function Events() {
         ) : (
           <>
             <motion.div
-              className="grid gap-px bg-white/[0.05]"
+              className="grid gap-5"
               style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))' }}
               initial="hidden"
               animate="visible"

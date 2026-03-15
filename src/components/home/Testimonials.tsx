@@ -79,39 +79,37 @@ export function Testimonials() {
       onMouseLeave={() => setPaused(false)}
     >
 
-      {/* Microsoft blue orb — top left */}
+      {/* Blue + purple sweep — top left */}
       <div
-        className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full pointer-events-none"
+        className="absolute -top-40 -left-40 w-[700px] h-[600px] pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(0,120,212,0.14) 0%, transparent 65%)',
+          background: 'radial-gradient(ellipse at 30% 30%, rgba(0,120,212,0.26) 0%, rgba(104,33,122,0.18) 45%, transparent 70%)',
+          filter: 'blur(90px)',
+        }}
+      />
+
+      {/* Cyan orb — top right */}
+      <div
+        className="absolute -top-20 -right-20 w-[500px] h-[400px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at top right, rgba(0,188,242,0.2) 0%, rgba(0,120,212,0.12) 50%, transparent 70%)',
+          filter: 'blur(70px)',
+        }}
+      />
+
+      {/* Deep purple + blue — bottom right */}
+      <div
+        className="absolute -bottom-32 -right-32 w-[520px] h-[520px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(104,33,122,0.22) 0%, rgba(0,120,212,0.14) 50%, transparent 68%)',
           filter: 'blur(80px)',
         }}
       />
 
-      {/* Smaller warm accent orb — bottom right */}
+      {/* Thin colored accent line — bottom */}
       <div
-        className="absolute -bottom-32 -right-32 w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(0,120,212,0.08) 0%, transparent 65%)',
-          filter: 'blur(60px)',
-        }}
-      />
-
-      {/* Three stacked diagonal bars — bottom right */}
-      <div className="absolute bottom-16 right-16 pointer-events-none flex flex-col gap-3" style={{ transform: 'rotate(-30deg)' }}>
-        <div className="w-40 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        <div className="w-56 h-px bg-gradient-to-r from-transparent via-white/14 to-transparent" />
-        <div className="w-40 h-px bg-gradient-to-r from-transparent via-white/08 to-transparent" />
-      </div>
-
-      {/* Rotated square outlines — bottom right */}
-      <div
-        className="absolute bottom-12 right-20 w-48 h-48 border border-white/[0.07] pointer-events-none"
-        style={{ transform: 'rotate(20deg)' }}
-      />
-      <div
-        className="absolute bottom-20 right-32 w-28 h-28 border border-[#0078D4]/15 pointer-events-none"
-        style={{ transform: 'rotate(20deg)' }}
+        className="absolute bottom-0 left-0 right-0 h-[1px] pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(104,33,122,0.5) 25%, rgba(0,120,212,0.5) 60%, transparent 100%)' }}
       />
 
       <div className="relative max-w-[1240px] mx-auto px-10">

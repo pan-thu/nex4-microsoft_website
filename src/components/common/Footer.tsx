@@ -87,7 +87,7 @@ export function Footer() {
       {/* ── Top accent line ── */}
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 35%, rgba(255,255,255,0.9) 65%, transparent 100%)' }}
+        style={{ background: 'rgba(255,255,255,0.08)' }}
       />
 
       {/* ── Ambient glows ── */}

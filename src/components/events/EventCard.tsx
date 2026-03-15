@@ -24,7 +24,10 @@ export function EventCard({ event }: { event: Event }) {
   return (
     <Link
       to={`/events/${event.slug}`}
-      className="group flex flex-col bg-[#0a0a0a] border border-white/[0.08] hover:border-white/25 transition-all duration-300 hover:-translate-y-1"
+      className="group flex flex-col transition-all duration-300 hover:-translate-y-1"
+      style={{ background: 'linear-gradient(160deg, #071220 0%, #050c18 60%, #030810 100%)' }}
+      onMouseEnter={e => (e.currentTarget.style.background = 'linear-gradient(160deg, #0e2040 0%, #0a1830 60%, #071220 100%)')}
+      onMouseLeave={e => (e.currentTarget.style.background = 'linear-gradient(160deg, #071220 0%, #050c18 60%, #030810 100%)')}
     >
       {/* Image */}
       <div className="aspect-video overflow-hidden bg-white/5 relative">
@@ -51,7 +54,7 @@ export function EventCard({ event }: { event: Event }) {
       <div className="flex flex-col flex-1 p-5 gap-3">
         {/* Meta row */}
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/30 border border-white/10 px-2 py-0.5">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/30 border border-white/10 rounded-full px-3 py-0.5">
             {TYPE_LABEL[event.type]}
           </span>
           {date && (

@@ -87,47 +87,40 @@ export function OurLocations() {
   const headingInView = useInView(headingRef, { once: true, margin: '-60px' });
 
   return (
-    <section className="relative bg-black py-24 overflow-hidden border-t border-white/[0.05]">
+    <section className="relative bg-black py-24 overflow-hidden">
 
-      {/* Subtle white gradient — top right */}
+      {/* Blue + cyan sweep — top right */}
       <div
-        className="absolute top-0 right-0 w-[500px] h-[500px] pointer-events-none"
+        className="absolute -top-24 -right-24 w-[620px] h-[560px] pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at top right, rgba(255,255,255,0.04) 0%, transparent 60%)',
-        }}
-      />
-
-      {/* Microsoft blue orb — bottom left (main decoration) */}
-      <div
-        className="absolute -bottom-32 -left-32 w-[520px] h-[520px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(0,120,212,0.16) 0%, transparent 65%)',
+          background: 'radial-gradient(ellipse at top right, rgba(0,188,242,0.22) 0%, rgba(0,120,212,0.18) 40%, transparent 68%)',
           filter: 'blur(80px)',
         }}
       />
 
-      {/* Diagonal grid lines */}
+      {/* Purple + blue — bottom left */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        className="absolute -bottom-32 -left-32 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 0px, rgba(255,255,255,0.5) 1px, transparent 1px, transparent 80px)',
+          background: 'radial-gradient(circle, rgba(104,33,122,0.24) 0%, rgba(0,120,212,0.18) 50%, transparent 68%)',
+          filter: 'blur(90px)',
         }}
       />
 
-      {/* Concentric ring shapes — bottom left, above the orb */}
-      <div className="absolute bottom-12 left-12 pointer-events-none">
-        <div
-          className="w-40 h-40 rounded-full border border-[#0078D4]/20"
-        />
-        <div
-          className="absolute top-1/2 left-1/2 w-24 h-24 rounded-full border border-[#0078D4]/14"
-          style={{ transform: 'translate(-50%, -50%)' }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 w-10 h-10 rounded-full bg-[#0078D4]/12"
-          style={{ transform: 'translate(-50%, -50%)' }}
-        />
-      </div>
+      {/* Mid-section cyan orb */}
+      <div
+        className="absolute top-1/2 left-1/3 w-[400px] h-[300px] -translate-y-1/2 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse, rgba(0,188,242,0.1) 0%, transparent 65%)',
+          filter: 'blur(60px)',
+        }}
+      />
+
+      {/* Colored top border accent */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(0,120,212,0.45) 35%, rgba(0,188,242,0.35) 65%, transparent 100%)' }}
+      />
 
       <div className="relative max-w-[1240px] mx-auto px-10">
 

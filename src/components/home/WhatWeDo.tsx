@@ -134,26 +134,38 @@ export function WhatWeDo() {
         }}
       />
 
-      {/* Microsoft blue orb — top right */}
+      {/* Blue + purple orb cluster — top right */}
       <div
-        className="absolute -top-24 -right-24 w-[480px] h-[480px] rounded-full pointer-events-none"
+        className="absolute -top-32 -right-32 w-[640px] h-[640px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(0,120,212,0.18) 0%, transparent 65%)',
-          filter: 'blur(72px)',
+          background: 'radial-gradient(circle at 40% 40%, rgba(0,120,212,0.32) 0%, rgba(104,33,122,0.18) 45%, transparent 70%)',
+          filter: 'blur(80px)',
         }}
       />
 
-      {/* Stacked offset squares — top right, sharp accent */}
-      <div className="absolute top-12 right-12 pointer-events-none">
-        <div
-          className="w-24 h-24 border border-white/[0.07]"
-          style={{ transform: 'rotate(12deg)' }}
-        />
-        <div
-          className="absolute inset-0 w-24 h-24 border border-[#0078D4]/20"
-          style={{ transform: 'rotate(28deg) translate(10px, 10px)' }}
-        />
-      </div>
+      {/* Cyan accent orb — top center-right */}
+      <div
+        className="absolute -top-10 right-[28%] w-[320px] h-[320px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(0,188,242,0.18) 0%, transparent 65%)',
+          filter: 'blur(60px)',
+        }}
+      />
+
+      {/* Purple blob — bottom left */}
+      <div
+        className="absolute -bottom-20 -left-20 w-[420px] h-[420px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(104,33,122,0.16) 0%, rgba(0,120,212,0.10) 55%, transparent 70%)',
+          filter: 'blur(70px)',
+        }}
+      />
+
+      {/* Diagonal colored band */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
+        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(0,120,212,0.4) 30%, rgba(0,188,242,0.3) 60%, transparent 100%)' }}
+      />
 
       <div className="relative max-w-[1240px] mx-auto px-10">
         {/* Two-column header */}
