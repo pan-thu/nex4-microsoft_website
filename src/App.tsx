@@ -6,6 +6,12 @@ import { BackToTop } from '@/components/common/BackToTop';
 import { Home } from '@/pages/Home';
 import { Events } from '@/pages/Events';
 import { EventRegistration } from '@/pages/EventRegistration';
+import { WorkplaceProductivity } from '@/pages/services/WorkplaceProductivity';
+import { WorkplaceSecurity } from '@/pages/services/WorkplaceSecurity';
+import { WorkplaceAI } from '@/pages/services/WorkplaceAI';
+import { WorkplaceAutomation } from '@/pages/services/WorkplaceAutomation';
+import { WorkplaceBackup } from '@/pages/services/WorkplaceBackup';
+import { CloudMigration } from '@/pages/services/CloudMigration';
 import { AdminLogin } from '@/pages/admin/AdminLogin';
 import { AdminDashboard } from '@/pages/admin/AdminDashboard';
 import { ProtectedRoute } from '@/components/admin/ProtectedRoute';
@@ -23,6 +29,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:slug" element={<EventRegistration />} />
+          <Route path="/services/workplace-productivity" element={<WorkplaceProductivity />} />
+          <Route path="/services/workplace-security" element={<WorkplaceSecurity />} />
+          <Route path="/services/workplace-ai" element={<WorkplaceAI />} />
+          <Route path="/services/workplace-automation" element={<WorkplaceAutomation />} />
+          <Route path="/services/workplace-backup" element={<WorkplaceBackup />} />
+          <Route path="/services/cloud-migration" element={<CloudMigration />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>
