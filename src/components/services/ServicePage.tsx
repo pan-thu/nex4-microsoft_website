@@ -1,41 +1,106 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronRight } from 'lucide-react';
+import useEmblaCarousel from 'embla-carousel-react';
+import { cn } from '@/lib/utils';
 import type { ServiceData } from '@/data/services';
+
+// ── Constants ─────────────────────────────────────────────────────────────────
+
+const TOC_ITEMS = [
+  { label: 'Overview',     id: 'overview'     },
+  { label: 'Benefits',     id: 'benefits'     },
+  { label: 'Capabilities', id: 'capabilities' },
+  { label: 'Technologies', id: 'technologies' },
+  { label: 'Outcomes',     id: 'outcomes'     },
+  { label: 'Case Studies', id: 'case-studies' },
+  { label: 'Get Started',  id: 'get-started'  },
+] as const;
+
+// 76px navbar + 48px TOC bar
+const SCROLL_OFFSET = 124;
+
+// ── Table of Contents ─────────────────────────────────────────────────────────
+
+function TableOfContents() {
+  const [active, setActive] = useState<string>('overview');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: '-15% 0px -75% 0px' },
+    );
+
+    TOC_ITEMS.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="sticky top-[76px] z-40 bg-[#080808]/96 backdrop-blur-md border-b border-white/[0.07]">
+      <div className="max-w-[1240px] mx-auto px-10">
+        <nav className="flex items-center overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+          {TOC_ITEMS.map(({ label, id }) => (
+            <button
+              key={id}
+              onClick={() => scrollTo(id)}
+              className={cn(
+                'shrink-0 px-5 py-[14px] text-[12px] font-medium tracking-wide whitespace-nowrap transition-colors duration-150 border-b-2 -mb-px',
+                active === id
+                  ? 'text-white border-white/55'
+                  : 'text-white/30 hover:text-white/58 border-transparent',
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+      </div>
+    </div>
+  );
+}
 
 // ── Hero ──────────────────────────────────────────────────────────────────────
 
 function Hero({ data }: { data: ServiceData }) {
   return (
-    <section
-      className="relative bg-black overflow-hidden"
-      style={{ minHeight: 760 }}
-    >
-      {/* Hero image */}
+    <section className="relative bg-black overflow-hidden" style={{ minHeight: 760 }}>
       <img
         src={data.heroImage}
         alt={data.title}
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* Dark overlay — strong left, fades right */}
+      {/* Strong left-to-right gradient */}
       <div
         className="absolute inset-0"
         style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.76) 42%, rgba(0,0,0,0.38) 72%, rgba(0,0,0,0.12) 100%)' }}
       />
-      {/* Bottom-up darkening for readability */}
       <div
         className="absolute inset-0"
         style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 45%)' }}
       />
 
-      {/* Purple orb — top right */}
+      {/* Purple orb top-right */}
       <div
         className="absolute -top-24 -right-24 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(104,33,122,0.24) 0%, rgba(0,120,212,0.16) 50%, transparent 70%)', filter: 'blur(90px)' }}
       />
-      {/* Cyan orb — mid right */}
+      {/* Cyan orb mid-right */}
       <div
         className="absolute top-1/2 right-1/4 w-[380px] h-[380px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(0,188,242,0.13) 0%, transparent 65%)', filter: 'blur(65px)' }}
@@ -49,28 +114,24 @@ function Hero({ data }: { data: ServiceData }) {
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 mb-10">
           <Link to="/" className="text-[11px] text-white/30 hover:text-white/55 transition-colors">Home</Link>
-          <ChevronRight size={11} className="text-white/18" />
+          <ChevronRight size={11} className="text-white/20" />
           <span className="text-[11px] text-white/30">Services</span>
-          <ChevronRight size={11} className="text-white/18" />
+          <ChevronRight size={11} className="text-white/20" />
           <span className="text-[11px] text-white/45">{data.category}</span>
         </nav>
 
-        {/* Eyebrow */}
         <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-white/35 mb-5">
           {data.category}
         </p>
 
-        {/* Headline — light weight with one semibold break */}
         <h1 className="text-[44px] lg:text-[58px] font-light leading-[1.08] text-white max-w-[700px] mb-7">
           {data.title}
         </h1>
 
-        {/* Tagline */}
-        <p className="text-[16px] text-white/52 leading-relaxed max-w-[520px] mb-10">
+        <p className="text-[16px] text-white/50 leading-relaxed max-w-[520px] mb-10">
           {data.tagline}
         </p>
 
-        {/* CTAs */}
         <div className="flex flex-wrap items-center gap-4">
           <Link
             to="/contact-us"
@@ -81,7 +142,7 @@ function Hero({ data }: { data: ServiceData }) {
           </Link>
           <Link
             to="/services"
-            className="inline-flex items-center gap-2 text-[14px] text-white/45 hover:text-white/80 transition-colors duration-200"
+            className="inline-flex items-center gap-2 text-[14px] text-white/40 hover:text-white/75 transition-colors duration-200"
           >
             All Services
             <ArrowRight size={13} />
@@ -99,13 +160,11 @@ function Overview({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <section className="relative bg-[#080808] py-24 overflow-hidden">
-      {/* Blue→cyan top accent line */}
+    <section id="overview" className="relative bg-[#080808] py-24 overflow-hidden scroll-mt-[124px]">
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
         style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(0,120,212,0.45) 35%, rgba(0,188,242,0.30) 65%, transparent 100%)' }}
       />
-      {/* Dot grid */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '32px 32px' }}
@@ -123,7 +182,6 @@ function Overview({ data }: { data: ServiceData }) {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.55 }}
         >
-          {/* Left: heading */}
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-4">Overview</p>
             <h2 className="text-[34px] lg:text-[42px] font-semibold text-white leading-tight">
@@ -131,8 +189,6 @@ function Overview({ data }: { data: ServiceData }) {
             </h2>
             <div className="mt-8 h-px bg-white/[0.08]" />
           </div>
-
-          {/* Right: paragraphs */}
           <div className="lg:pt-14">
             <p className="text-[16px] text-white/58 leading-relaxed mb-6">{data.overviewParagraphs[0]}</p>
             <p className="text-[15px] text-white/38 leading-relaxed">{data.overviewParagraphs[1]}</p>
@@ -150,13 +206,11 @@ function Benefits({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <section className="relative bg-[#050505] py-24 overflow-hidden border-t border-white/[0.05]">
-      {/* Purple + blue blob — top left */}
+    <section id="benefits" className="relative bg-[#050505] py-24 overflow-hidden border-t border-white/[0.05] scroll-mt-[124px]">
       <div
         className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(104,33,122,0.18) 0%, rgba(0,120,212,0.10) 55%, transparent 70%)', filter: 'blur(80px)' }}
       />
-      {/* Blue orb — mid right */}
       <div
         className="absolute top-1/2 -right-24 w-[440px] h-[440px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(0,120,212,0.20) 0%, transparent 65%)', filter: 'blur(70px)' }}
@@ -174,7 +228,7 @@ function Benefits({ data }: { data: ServiceData }) {
           <h2 className="text-[32px] lg:text-[40px] font-semibold text-white">Why Choose NEX4</h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
           {data.benefits.map((benefit, i) => {
             const Icon = benefit.icon;
             return (
@@ -206,8 +260,7 @@ function Capabilities({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <section className="relative bg-[#0a0a0a] py-24 overflow-hidden">
-      {/* Dot grid */}
+    <section id="capabilities" className="relative bg-[#0a0a0a] py-24 overflow-hidden scroll-mt-[124px]">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '32px 32px' }}
@@ -220,8 +273,8 @@ function Capabilities({ data }: { data: ServiceData }) {
       <div className="relative max-w-[1240px] mx-auto px-10">
         <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-16 lg:gap-28">
 
-          {/* Sticky heading column */}
-          <div className="lg:sticky lg:top-28 self-start">
+          {/* Sticky heading — offset for navbar + TOC */}
+          <div className="lg:sticky lg:top-[132px] self-start">
             <motion.div
               ref={ref}
               initial={{ opacity: 0, y: 20 }}
@@ -258,7 +311,6 @@ function Capabilities({ data }: { data: ServiceData }) {
               </motion.div>
             ))}
           </div>
-
         </div>
       </div>
     </section>
@@ -272,7 +324,7 @@ function Technologies({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <section className="relative bg-[#050505] py-20 border-t border-white/[0.05]">
+    <section id="technologies" className="relative bg-[#050505] py-20 border-t border-white/[0.05] scroll-mt-[124px]">
       <div className="max-w-[1240px] mx-auto px-10">
         <motion.div
           ref={ref}
@@ -285,7 +337,6 @@ function Technologies({ data }: { data: ServiceData }) {
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-1">Technologies</p>
             <h3 className="text-[22px] font-semibold text-white">We work with</h3>
           </div>
-
           <div className="flex flex-wrap gap-3">
             {data.technologies.map((tech, i) => (
               <motion.span
@@ -305,15 +356,14 @@ function Technologies({ data }: { data: ServiceData }) {
   );
 }
 
-// ── Stats ─────────────────────────────────────────────────────────────────────
+// ── Stats (Outcomes) ──────────────────────────────────────────────────────────
 
 function Stats({ data }: { data: ServiceData }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section className="relative bg-black py-24 overflow-hidden border-t border-white/[0.05]">
-      {/* Centered blue+purple gradient blob */}
+    <section id="outcomes" className="relative bg-black py-24 overflow-hidden border-t border-white/[0.05] scroll-mt-[124px]">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,120,212,0.13) 0%, rgba(104,33,122,0.09) 45%, transparent 70%)', filter: 'blur(60px)' }}
@@ -349,81 +399,121 @@ function Stats({ data }: { data: ServiceData }) {
   );
 }
 
-// ── Related Services ──────────────────────────────────────────────────────────
+// ── Case Studies ──────────────────────────────────────────────────────────────
 
-function Related({ data }: { data: ServiceData }) {
+function CaseStudies({ data }: { data: ServiceData }) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', containScroll: 'trimSnaps', dragFree: true });
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
+  const update = useCallback(() => {
+    if (!emblaApi) return;
+    setCanPrev(emblaApi.canScrollPrev());
+    setCanNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on('select', update);
+    emblaApi.on('reInit', update);
+    update();
+  }, [emblaApi, update]);
+
   return (
-    <section className="relative bg-[#080808] py-24 border-t border-white/[0.05]">
+    <section id="case-studies" className="relative bg-[#080808] py-24 border-t border-white/[0.05] scroll-mt-[124px]">
       <div className="max-w-[1240px] mx-auto px-10">
 
+        {/* Header row */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-6"
+          className="flex items-end justify-between mb-12"
         >
           <div>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-2">Related Services</p>
-            <h2 className="text-[30px] lg:text-[36px] font-semibold text-white">You might also need</h2>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-2">Case Studies</p>
+            <h2 className="text-[30px] lg:text-[36px] font-semibold text-white">Delivered results</h2>
           </div>
-          <Link
-            to="/"
-            className="text-[13px] text-white/35 hover:text-white/70 transition-colors duration-200 inline-flex items-center gap-1.5 shrink-0"
-          >
-            View all services <ArrowRight size={13} />
-          </Link>
+
+          {/* Arrow controls */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => emblaApi?.scrollPrev()}
+              disabled={!canPrev}
+              aria-label="Previous"
+              className={cn(
+                'w-10 h-10 flex items-center justify-center border transition-all duration-200',
+                canPrev
+                  ? 'border-white/20 text-white/55 hover:border-white/45 hover:text-white'
+                  : 'border-white/[0.07] text-white/18 cursor-not-allowed',
+              )}
+            >
+              <ArrowLeft size={16} />
+            </button>
+            <button
+              onClick={() => emblaApi?.scrollNext()}
+              disabled={!canNext}
+              aria-label="Next"
+              className={cn(
+                'w-10 h-10 flex items-center justify-center border transition-all duration-200',
+                canNext
+                  ? 'border-white/20 text-white/55 hover:border-white/45 hover:text-white'
+                  : 'border-white/[0.07] text-white/18 cursor-not-allowed',
+              )}
+            >
+              <ArrowRight size={16} />
+            </button>
+          </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {data.related.map((rel, i) => (
-            <motion.div
-              key={rel.slug}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.45, delay: 0.1 + i * 0.10 }}
-              className="group relative overflow-hidden cursor-pointer"
-              style={{ minHeight: 300 }}
-            >
-              <Link to={`/services/${rel.slug}`} className="block h-full">
+        {/* Embla viewport */}
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-4">
+            {data.caseStudies.map((cs) => (
+              <div
+                key={cs.client + cs.title}
+                className="flex-[0_0_calc(33.333%-11px)] min-w-0 group relative overflow-hidden cursor-pointer"
+                style={{ minHeight: 420 }}
+              >
                 <img
-                  src={rel.image}
-                  alt={rel.title}
+                  src={cs.image}
+                  alt={cs.client}
                   loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                 />
-                {/* Base gradient */}
+
+                {/* Base overlay */}
                 <div
                   className="absolute inset-0"
-                  style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.65) 45%, rgba(0,0,0,0.22) 100%)' }}
+                  style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.68) 48%, rgba(0,0,0,0.22) 100%)' }}
                 />
                 {/* Extra dark lifted on hover */}
-                <div className="absolute inset-0 bg-black/32 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
-                {/* Blue accent line appears on hover */}
+                <div className="absolute inset-0 bg-black/30 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
+
+                {/* Blue top accent on hover */}
                 <div
                   className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ background: 'linear-gradient(90deg, rgba(0,120,212,0.9), rgba(0,188,242,0.5), transparent)' }}
                 />
 
-                {/* Rest state */}
-                <div className="absolute inset-x-0 bottom-0 p-6 group-hover:opacity-0 transition-opacity duration-300">
-                  <h3 className="text-[19px] font-semibold text-white">{rel.title}</h3>
-                </div>
-
-                {/* Hover state */}
-                <div className="absolute inset-x-0 bottom-0 p-6 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 ease-out">
-                  <h3 className="text-[19px] font-semibold text-white mb-2">{rel.title}</h3>
-                  <p className="text-[13px] text-white/55 leading-relaxed mb-4">{rel.tagline}</p>
-                  <span className="inline-flex items-center gap-1.5 text-[12px] text-white/60">
-                    Learn more <ArrowRight size={12} />
+                {/* Card content */}
+                <div className="absolute inset-x-0 bottom-0 p-6">
+                  <p className="text-[9px] uppercase tracking-[0.18em] font-semibold text-white/30 mb-1">{cs.industry}</p>
+                  <p className="text-[11px] text-white/45 mb-3 font-medium">{cs.client}</p>
+                  <h3 className="text-[15px] font-semibold text-white leading-snug mb-3 line-clamp-2">{cs.title}</h3>
+                  <p className="text-[13px] text-white/45 leading-relaxed mb-4 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {cs.description}
+                  </p>
+                  <span className="inline-flex items-center gap-1.5 text-[12px] text-white/40 group-hover:text-white/72 transition-colors duration-200">
+                    Read the story <ArrowRight size={12} />
                   </span>
                 </div>
-              </Link>
-            </motion.div>
-          ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -437,8 +527,7 @@ function CTA({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section className="relative bg-black py-28 overflow-hidden">
-      {/* Large centered gradient blob — strongest colour moment on the page */}
+    <section id="get-started" className="relative bg-black py-28 overflow-hidden scroll-mt-[124px]">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: 'radial-gradient(ellipse 75% 90% at 50% 50%, rgba(0,120,212,0.22) 0%, rgba(104,33,122,0.16) 48%, transparent 72%)', filter: 'blur(80px)' }}
@@ -477,12 +566,13 @@ export function ServicePage({ data }: { data: ServiceData }) {
   return (
     <div className="pt-[76px]">
       <Hero data={data} />
+      <TableOfContents />
       <Overview data={data} />
       <Benefits data={data} />
       <Capabilities data={data} />
       <Technologies data={data} />
       <Stats data={data} />
-      <Related data={data} />
+      <CaseStudies data={data} />
       <CTA data={data} />
     </div>
   );

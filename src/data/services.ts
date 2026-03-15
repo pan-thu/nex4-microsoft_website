@@ -33,6 +33,14 @@ export interface ServiceRelated {
   image: string;
 }
 
+export interface CaseStudy {
+  client: string;
+  industry: string;
+  title: string;
+  description: string;
+  image: string;
+}
+
 export interface ServiceData {
   slug: string;
   category: string;
@@ -49,6 +57,7 @@ export interface ServiceData {
   ctaHeadline: string;
   ctaBody: string;
   related: [ServiceRelated, ServiceRelated, ServiceRelated];
+  caseStudies: [CaseStudy, CaseStudy, CaseStudy];
 }
 
 export const SERVICES: Record<string, ServiceData> = {
@@ -90,6 +99,11 @@ export const SERVICES: Record<string, ServiceData> = {
       { title: 'Workplace Automation', slug: 'workplace-automation', tagline: 'Automate repetitive processes across your M365 environment.', image: ASSETS.cardBg1 },
       { title: 'Workplace Security', slug: 'workplace-security', tagline: 'Secure the productivity environment you have built.', image: ASSETS.cardBg2 },
     ],
+    caseStudies: [
+      { client: 'Regional Law Firm, Yangon', industry: 'Legal', title: 'Cutting internal email by 35% with Microsoft Teams governance', description: 'A 450-user legal practice replaced siloed email workflows with structured Teams channels and SharePoint document libraries — reducing internal email volume in the first quarter.', image: ASSETS.hero1 },
+      { client: 'APAC Retail Group', industry: 'Retail', title: 'SharePoint intranet replaces ageing file server for 1,200 staff', description: 'We designed and deployed a SharePoint Online intranet giving every employee role-appropriate access to documents, news, and tools from any device, anywhere.', image: ASSETS.cardBg2 },
+      { client: 'Pacific Financial Services', industry: 'Financial Services', title: 'Viva Insights reveals hidden productivity gaps across senior leadership', description: 'Collaboration pattern analysis using Microsoft Viva Insights helped leadership restructure meeting cadences and protect deep-work time across the organisation.', image: ASSETS.cardBg4 },
+    ],
   },
 
   'workplace-security': {
@@ -130,6 +144,11 @@ export const SERVICES: Record<string, ServiceData> = {
       { title: 'Workplace AI', slug: 'workplace-ai', tagline: 'AI-powered threat intelligence with Microsoft Security Copilot.', image: ASSETS.cardBg4 },
       { title: 'Cloud Migration', slug: 'cloud-migration', tagline: 'Secure your Azure environment from day one.', image: ASSETS.cardBg3 },
     ],
+    caseStudies: [
+      { client: 'Myanmar Banking Corp', industry: 'Financial Services', title: 'Zero Trust deployment halts credential-based attack before any data loss', description: 'Following a phishing incident, we deployed Entra ID with risk-based conditional access and MFA. A subsequent attack was automatically blocked before reaching any sensitive system.', image: ASSETS.hero2 },
+      { client: 'SEA Healthcare Provider', industry: 'Healthcare', title: 'Defender for Endpoint and Purview securing 800 clinical staff across 6 sites', description: 'A regional healthcare provider needed to meet updated data protection requirements. We deployed Defender for Endpoint and Purview data classification across all clinical devices and data sources.', image: ASSETS.cardBg3 },
+      { client: 'Cambodia Government Agency', industry: 'Public Sector', title: 'Microsoft Sentinel reduces mean time to detect from 72 hours to under 1 hour', description: 'A government agency was operating without centralised threat visibility. We deployed Sentinel with custom analytics rules and automated playbooks, dramatically cutting detection time.', image: ASSETS.cardBg1 },
+    ],
   },
 
   'workplace-ai': {
@@ -168,6 +187,11 @@ export const SERVICES: Record<string, ServiceData> = {
       { title: 'Workplace Productivity', slug: 'workplace-productivity', tagline: 'The M365 foundation that Copilot runs on.', image: ASSETS.cardBg1 },
       { title: 'Workplace Automation', slug: 'workplace-automation', tagline: 'Combine AI with Power Platform for intelligent automation.', image: ASSETS.cardBg1 },
       { title: 'Cloud Migration', slug: 'cloud-migration', tagline: 'Move to Azure — where enterprise AI lives.', image: ASSETS.cardBg3 },
+    ],
+    caseStudies: [
+      { client: 'Professional Services Firm, APAC', industry: 'Consulting', title: 'M365 Copilot saves 2.5 hours per user per week across 800-person firm', description: 'A structured Copilot rollout with role-specific use cases and champion training achieved 85% weekly active usage within 60 days of launch — far above industry average.', image: ASSETS.hero1 },
+      { client: 'Regional Bank, Thailand', industry: 'Financial Services', title: 'Azure OpenAI automates loan document review, cutting processing time by 60%', description: 'We built a custom document intelligence solution using Azure OpenAI and Azure AI Document Intelligence, integrated with the bank\'s existing loan origination system.', image: ASSETS.cardBg4 },
+      { client: 'APAC Manufacturer', industry: 'Manufacturing', title: 'Copilot Studio agent deflects 40% of HR queries without human intervention', description: 'A custom HR agent built in Copilot Studio, grounded on SharePoint policy documents, handles repetitive employee queries and intelligently escalates complex cases to HR staff.', image: ASSETS.cardBg2 },
     ],
   },
 
@@ -208,6 +232,11 @@ export const SERVICES: Record<string, ServiceData> = {
       { title: 'Workplace Productivity', slug: 'workplace-productivity', tagline: 'The M365 platform your automations run on.', image: ASSETS.cardBg1 },
       { title: 'Cloud Migration', slug: 'cloud-migration', tagline: 'Move the data your automations depend on to Azure.', image: ASSETS.cardBg3 },
     ],
+    caseStudies: [
+      { client: 'Regional Bank, Myanmar', industry: 'Financial Services', title: 'Loan approval processing time cut from 5 days to 36 hours with Power Automate', description: 'Manual approval chains spanning five teams and three systems were replaced with a single automated workflow, reducing processing time by 70% without any changes to the core banking system.', image: ASSETS.cardBg3 },
+      { client: 'Property Developer, Phnom Penh', industry: 'Real Estate', title: 'Power Apps replaces 12 manual spreadsheet processes across project management teams', description: 'We built a suite of low-code apps for site reporting, contractor management, and budget tracking — giving every project manager real-time visibility from any device.', image: ASSETS.cardBg1 },
+      { client: 'Insurance Company, Bangkok', industry: 'Insurance', title: 'Power BI dashboard replaces 40-page weekly report package for executive leadership', description: 'Senior leadership now reviews live operational metrics in a single Power BI dashboard instead of waiting for end-of-week compiled reports, enabling faster and better-informed decisions.', image: ASSETS.cardBg4 },
+    ],
   },
 
   'workplace-backup': {
@@ -246,6 +275,11 @@ export const SERVICES: Record<string, ServiceData> = {
       { title: 'Workplace Security', slug: 'workplace-security', tagline: 'Prevent the incidents that trigger recovery scenarios.', image: ASSETS.cardBg2 },
       { title: 'Cloud Migration', slug: 'cloud-migration', tagline: 'Extend data protection to your Azure workloads.', image: ASSETS.cardBg3 },
       { title: 'Workplace Productivity', slug: 'workplace-productivity', tagline: 'The M365 environment your backup strategy protects.', image: ASSETS.cardBg1 },
+    ],
+    caseStudies: [
+      { client: 'Legal Firm, Singapore', industry: 'Legal', title: 'M365 Backup deployed within 48 hours following a near-miss ransomware event', description: 'After detecting lateral movement on their network, a 300-user law firm engaged NEX4 for emergency backup deployment. Full M365 coverage with immutable storage was achieved in under two days.', image: ASSETS.hero2 },
+      { client: 'APAC Education Provider', industry: 'Education', title: 'Veeam for M365 delivers 7-year retention for student record compliance requirements', description: 'A university\'s accreditation requirements mandated long-term data retention beyond native M365 capabilities. We deployed Veeam with compliant archive policies across all workloads.', image: ASSETS.cardBg2 },
+      { client: 'Bangkok Healthcare Network', industry: 'Healthcare', title: 'Scheduled DR testing reveals three unprotected workloads — remediated before incident', description: 'Disaster recovery testing as part of NEX4\'s managed backup service identified misconfigured backup policies on three critical workloads, all remediated before any data loss event occurred.', image: ASSETS.cardBg3 },
     ],
   },
 
@@ -286,6 +320,11 @@ export const SERVICES: Record<string, ServiceData> = {
       { title: 'Workplace Security', slug: 'workplace-security', tagline: 'Secure your Azure environment with Zero Trust principles.', image: ASSETS.cardBg2 },
       { title: 'Workplace AI', slug: 'workplace-ai', tagline: 'Azure is the platform for enterprise AI — we make it ready.', image: ASSETS.cardBg4 },
       { title: 'Workplace Backup', slug: 'workplace-backup', tagline: 'Protect Azure workloads with cloud-native backup.', image: ASSETS.cardBg1 },
+    ],
+    caseStudies: [
+      { client: 'Myanmar Telecom', industry: 'Telecommunications', title: '120 on-premises servers migrated to Azure in 4 months with zero production downtime', description: 'A structured Azure migration using the Cloud Adoption Framework moved all production workloads in phased waves, with each server validated against performance baselines before the next phase began.', image: ASSETS.hero3 },
+      { client: 'Financial Group, Thailand', industry: 'Financial Services', title: 'Azure Landing Zone establishes governance foundation enabling 99.9% uptime SLA', description: 'Before migrating a single workload, we designed and deployed an enterprise-grade Azure Landing Zone with hub-spoke networking, Azure Firewall, and full policy enforcement — giving the team confidence before cutover.', image: ASSETS.cardBg2 },
+      { client: 'Royal Group, Cambodia', industry: 'Conglomerate', title: 'Azure Arc delivers consistent governance across 60% cloud, 40% on-premises estate', description: 'A large Cambodian conglomerate that could not fully move to the cloud used Azure Arc to manage on-premises servers with the same policy and monitoring tools as their Azure workloads.', image: ASSETS.cardBg1 },
     ],
   },
 };
