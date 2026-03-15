@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronRight, ChevronLeft } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { cn } from '@/lib/utils';
 import { ASSETS } from '@/lib/assets';
@@ -16,7 +16,6 @@ const TOC_ITEMS = [
   { label: 'Technologies', id: 'technologies' },
   { label: 'Outcomes',     id: 'outcomes'     },
   { label: 'Case Studies', id: 'case-studies' },
-  { label: 'Get Started',  id: 'get-started'  },
 ] as const;
 
 // Cycling background images for capability panels
@@ -41,7 +40,7 @@ function SideTableOfContents() {
       },
       { rootMargin: '-15% 0px -75% 0px' },
     );
-    TOC_ITEMS.forEach(({ id }) => {
+    [...TOC_ITEMS.map(({ id }) => id), 'get-started'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -55,21 +54,18 @@ function SideTableOfContents() {
   };
 
   return (
-    <aside className="hidden lg:block w-[220px] shrink-0">
-      <div
-        className="sticky top-[76px] flex flex-col py-10 border-r border-white/[0.06] bg-[#080808]"
-        style={{ height: 'calc(100vh - 76px)', overflowY: 'auto' }}
-      >
-        <nav className="flex flex-col gap-0.5 px-6 flex-1">
+    <aside className="hidden lg:block w-[260px] shrink-0">
+      <div className="sticky top-[76px] flex flex-col pt-14 pb-10 pl-10 pr-4">
+        <nav className="flex flex-col gap-0.5">
           {TOC_ITEMS.map(({ label, id }) => (
             <button
               key={id}
               onClick={() => scrollTo(id)}
               className={cn(
-                'text-left px-3 py-2.5 text-[13px] font-medium transition-all duration-150',
+                'text-left px-3 py-2 text-[13px] font-medium transition-all duration-150',
                 active === id
-                  ? 'bg-white text-black'
-                  : 'text-white/35 hover:text-white/65 hover:bg-white/[0.04]',
+                  ? 'border border-white/50 text-white'
+                  : 'text-white/35 hover:text-white/65 border border-transparent',
               )}
             >
               {label}
@@ -77,18 +73,19 @@ function SideTableOfContents() {
           ))}
         </nav>
 
-        {/* Divider */}
-        <div className="mx-6 my-6 h-px bg-white/[0.08]" />
+        <div className="mt-8 mb-4 h-px bg-white/[0.08]" />
 
-        {/* Talk to us */}
-        <div className="px-6">
-          <Link
-            to="/contact-us"
-            className="px-3 py-2.5 text-[13px] text-white/35 hover:text-white/65 transition-colors block"
-          >
-            Talk to us
-          </Link>
-        </div>
+        <button
+          onClick={() => scrollTo('get-started')}
+          className={cn(
+            'text-left px-3 py-2 text-[13px] font-medium transition-all duration-150',
+            active === 'get-started'
+              ? 'border border-white/50 text-white'
+              : 'text-white/35 hover:text-white/65 border border-transparent',
+          )}
+        >
+          Get Started
+        </button>
       </div>
     </aside>
   );
@@ -144,15 +141,8 @@ function Overview({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <section id="overview" className="relative bg-[#080808] py-24 overflow-hidden scroll-mt-[96px]">
-      <div className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(0,120,212,0.45) 35%, rgba(0,188,242,0.30) 65%, transparent 100%)' }} />
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 70% 70% at 50% 50%, transparent 40%, #080808 100%)' }} />
-
-      <div className="relative max-w-[1240px] mx-auto px-10">
+    <section id="overview" className="py-24 scroll-mt-[96px]">
+      <div className="max-w-[1240px] mx-auto px-10">
         <motion.div
           ref={ref}
           className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start"
@@ -182,13 +172,8 @@ function Benefits({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <section id="benefits" className="relative bg-[#050505] py-24 overflow-hidden border-t border-white/[0.05] scroll-mt-[96px]">
-      <div className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(104,33,122,0.18) 0%, rgba(0,120,212,0.10) 55%, transparent 70%)', filter: 'blur(80px)' }} />
-      <div className="absolute top-1/2 -right-24 w-[440px] h-[440px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(0,120,212,0.20) 0%, transparent 65%)', filter: 'blur(70px)' }} />
-
-      <div className="relative max-w-[1240px] mx-auto px-10">
+    <section id="benefits" className="py-24 border-t border-white/[0.05] scroll-mt-[96px]">
+      <div className="max-w-[1240px] mx-auto px-10">
         <motion.div ref={ref} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="mb-16">
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-3">Key Benefits</p>
           <h2 className="text-[32px] lg:text-[40px] font-semibold text-white">Why Choose NEX4</h2>
@@ -214,26 +199,37 @@ function Benefits({ data }: { data: ServiceData }) {
   );
 }
 
-// ── Capabilities (tabbed panel) ───────────────────────────────────────────────
+// ── Capabilities (tabbed panel with hover reveal) ─────────────────────────────
 
 function Capabilities({ data }: { data: ServiceData }) {
   const [activeTab, setActiveTab] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
+  const tabBarRef = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
   const cap = data.capabilities[activeTab];
   const bgImage = CAP_IMAGES[activeTab % CAP_IMAGES.length];
 
+  useEffect(() => {
+    const bar = tabBarRef.current;
+    if (!bar) return;
+    const btn = bar.children[activeTab] as HTMLElement;
+    if (!btn) return;
+    const barRect = bar.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+    const btnLeft = btnRect.left - barRect.left + bar.scrollLeft;
+    const btnRight = btnLeft + btn.offsetWidth;
+    if (btnRight > bar.scrollLeft + bar.clientWidth) {
+      bar.scrollTo({ left: btnRight - bar.clientWidth + 24, behavior: 'smooth' });
+    } else if (btnLeft < bar.scrollLeft) {
+      bar.scrollTo({ left: btnLeft - 24, behavior: 'smooth' });
+    }
+  }, [activeTab]);
+
   return (
-    <section id="capabilities" className="relative bg-[#0a0a0a] py-24 overflow-hidden scroll-mt-[96px]">
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 70% 70% at 50% 50%, transparent 40%, #0a0a0a 100%)' }} />
+    <section id="capabilities" className="py-24 border-t border-white/[0.05] scroll-mt-[96px]">
+      <div className="px-10">
 
-      <div className="relative px-10">
-
-        {/* Section header */}
         <motion.div ref={ref} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}
           className="max-w-[1240px] mx-auto mb-12">
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-3">Capabilities</p>
@@ -242,29 +238,30 @@ function Capabilities({ data }: { data: ServiceData }) {
 
         {/* Tab bar */}
         <div className="max-w-[1240px] mx-auto">
-          <div
-            className="flex overflow-x-auto border-b border-white/[0.08]"
-            style={{ scrollbarWidth: 'none' }}
-          >
-            {data.capabilities.map((c, i) => (
-              <button
-                key={c.title}
-                onClick={() => setActiveTab(i)}
-                className={cn(
-                  'shrink-0 px-5 py-3.5 text-[13px] font-medium whitespace-nowrap border-b-2 -mb-px transition-all duration-150',
-                  activeTab === i
-                    ? 'text-white border-white/55'
-                    : 'text-white/30 border-transparent hover:text-white/58',
-                )}
-              >
-                {c.title}
-              </button>
-            ))}
+          <div className="flex items-end gap-2 border-b border-white/[0.08]">
+            <button onClick={() => tabBarRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
+              className="shrink-0 pb-3 text-white/30 hover:text-white/70 transition-colors duration-150">
+              <ChevronLeft size={16} />
+            </button>
+            <div ref={tabBarRef} className="flex flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {data.capabilities.map((c, i) => (
+                <button key={c.title} onClick={() => setActiveTab(i)}
+                  className={cn('shrink-0 px-5 py-3.5 text-[13px] font-medium whitespace-nowrap border-b-2 -mb-px transition-all duration-150',
+                    activeTab === i ? 'text-white border-white/55' : 'text-white/30 border-transparent hover:text-white/58')}>
+                  {c.title}
+                </button>
+              ))}
+            </div>
+            <button onClick={() => tabBarRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
+              className="shrink-0 pb-3 text-white/30 hover:text-white/70 transition-colors duration-150">
+              <ChevronRight size={16} />
+            </button>
           </div>
         </div>
 
-        {/* Active panel — full bleed width relative to outer px-10 */}
-        <div className="max-w-[1240px] mx-auto mt-0">
+        {/* Panel card with hover reveal */}
+        <div className="max-w-[1240px] mx-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -275,37 +272,23 @@ function Capabilities({ data }: { data: ServiceData }) {
               className="relative overflow-hidden"
               style={{ minHeight: 420 }}
             >
-              {/* Background image */}
-              <img
-                src={bgImage}
-                alt={cap.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              <img src={bgImage} alt={cap.title} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0"
+                style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.84) 36%, rgba(0,0,0,0.45) 62%, rgba(0,0,0,0.14) 100%)' }} />
 
-              {/* Strong left-to-right dark overlay — text sits on the dark left */}
-              <div
-                className="absolute inset-0"
-                style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.84) 36%, rgba(0,0,0,0.45) 62%, rgba(0,0,0,0.14) 100%)' }}
-              />
-
-              {/* Content — left-pinned text */}
-              <div className="relative z-10 max-w-[520px] p-12 lg:p-14">
+              {/* Content — bottom left */}
+              <div className="absolute inset-x-0 bottom-0 z-10 p-12 lg:p-14 max-w-[520px]">
                 <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/28 mb-5">
                   {String(activeTab + 1).padStart(2, '0')} / {String(data.capabilities.length).padStart(2, '0')}
                 </p>
                 <h3 className="text-[26px] lg:text-[32px] font-semibold text-white leading-snug mb-6">
                   {cap.title}
                 </h3>
-                <p className="text-[15px] text-white/55 leading-relaxed">
-                  {cap.body}
-                </p>
+                <p className="text-[15px] text-white/55 leading-relaxed">{cap.body}</p>
               </div>
 
-              {/* Blue accent line at bottom */}
-              <div
-                className="absolute bottom-0 left-0 right-0 h-[2px]"
-                style={{ background: 'linear-gradient(90deg, rgba(0,120,212,0.9), rgba(0,188,242,0.5), transparent 60%)' }}
-              />
+              <div className="absolute bottom-0 left-0 right-0 h-[2px]"
+                style={{ background: 'linear-gradient(90deg, rgba(0,120,212,0.9), rgba(0,188,242,0.5), transparent 60%)' }} />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -322,7 +305,7 @@ function Technologies({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <section id="technologies" className="relative bg-[#050505] py-20 border-t border-white/[0.05] scroll-mt-[96px]">
+    <section id="technologies" className="py-20 border-t border-white/[0.05] scroll-mt-[96px]">
       <div className="max-w-[1240px] mx-auto px-10">
         <motion.div ref={ref} initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}
           className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-20">
@@ -351,11 +334,8 @@ function Stats({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="outcomes" className="relative bg-black py-24 overflow-hidden border-t border-white/[0.05] scroll-mt-[96px]">
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 80% 70% at 50% 50%, rgba(0,120,212,0.13) 0%, rgba(104,33,122,0.09) 45%, transparent 70%)', filter: 'blur(60px)' }} />
-
-      <div className="relative max-w-[1240px] mx-auto px-10">
+    <section id="outcomes" className="py-24 border-t border-white/[0.05] scroll-mt-[96px]">
+      <div className="max-w-[1240px] mx-auto px-10">
         <motion.div ref={ref} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.55 }}
           className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
           {data.stats.map((stat) => (
@@ -396,7 +376,7 @@ function CaseStudies({ data }: { data: ServiceData }) {
   }, [emblaApi, update]);
 
   return (
-    <section id="case-studies" className="relative bg-[#080808] py-24 border-t border-white/[0.05] scroll-mt-[96px]">
+    <section id="case-studies" className="py-24 border-t border-white/[0.05] scroll-mt-[96px]">
       <div className="max-w-[1240px] mx-auto px-10">
         <motion.div ref={ref} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}
           className="flex items-end justify-between mb-12">
@@ -421,25 +401,30 @@ function CaseStudies({ data }: { data: ServiceData }) {
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex gap-4">
             {data.caseStudies.map((cs) => (
-              <div key={cs.client + cs.title}
-                className="flex-[0_0_calc(33.333%-11px)] min-w-0 group relative overflow-hidden cursor-pointer"
-                style={{ minHeight: 420 }}>
-                <img src={cs.image} alt={cs.client} loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.68) 48%, rgba(0,0,0,0.22) 100%)' }} />
-                <div className="absolute inset-0 bg-black/30 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
-                <div className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: 'linear-gradient(90deg, rgba(0,120,212,0.9), rgba(0,188,242,0.5), transparent)' }} />
-                <div className="absolute inset-x-0 bottom-0 p-6">
-                  <p className="text-[9px] uppercase tracking-[0.18em] font-semibold text-white/30 mb-1">{cs.industry}</p>
-                  <p className="text-[11px] text-white/45 mb-3 font-medium">{cs.client}</p>
-                  <h3 className="text-[15px] font-semibold text-white leading-snug mb-3 line-clamp-2">{cs.title}</h3>
-                  <p className="text-[13px] text-white/45 leading-relaxed mb-4 line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {cs.description}
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 text-[12px] text-white/40 group-hover:text-white/72 transition-colors duration-200">
-                    Read the story <ArrowRight size={12} />
-                  </span>
+              <div key={cs.client + cs.title} className="group flex-[0_0_calc(33.333%-11px)] min-w-0 relative overflow-hidden cursor-pointer" style={{ minHeight: 460 }}>
+                {/* Image */}
+                <img src={cs.image} alt={cs.client} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.04]" />
+
+                {/* Permanent gradient */}
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.72) 45%, rgba(0,0,0,0.2) 100%)' }} />
+                {/* Extra dark layer that lifts on hover */}
+                <div className="absolute inset-0 bg-black/35 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
+
+                {/* Top accent line */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.6), transparent)' }} />
+
+                {/* REST STATE: industry + client + title pinned to bottom */}
+                <div className="absolute inset-x-0 bottom-0 p-6 z-10 transition-opacity duration-300 group-hover:opacity-0">
+                  <p className="text-[9px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.industry} — {cs.client}</p>
+                  <h3 className="text-[18px] font-semibold text-white leading-snug line-clamp-2">{cs.title}</h3>
+                </div>
+
+                {/* HOVER STATE: full panel slides up from below */}
+                <div className="absolute inset-x-0 bottom-0 p-6 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                  <p className="text-[9px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.industry} — {cs.client}</p>
+                  <h3 className="text-[18px] font-semibold text-white leading-snug mb-3">{cs.title}</h3>
+                  <p className="text-[13px] text-white/70 leading-relaxed mb-5 line-clamp-3">{cs.description}</p>
+                  <span className="inline-flex items-center gap-2 text-[13px] font-medium text-white">Read the story <ArrowRight size={14} /></span>
                 </div>
               </div>
             ))}
@@ -457,11 +442,8 @@ function CTA({ data }: { data: ServiceData }) {
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="get-started" className="relative bg-black py-28 overflow-hidden scroll-mt-[96px]">
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 75% 90% at 50% 50%, rgba(0,120,212,0.22) 0%, rgba(104,33,122,0.16) 48%, transparent 72%)', filter: 'blur(80px)' }} />
-
-      <div className="relative z-10 max-w-[1240px] mx-auto px-10 text-center">
+    <section id="get-started" className="py-28 border-t border-white/[0.05] scroll-mt-[96px]">
+      <div className="max-w-[1240px] mx-auto px-10 text-center">
         <motion.div ref={ref} initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.55 }}>
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-semibold mb-6">Get Started</p>
           <h2 className="text-[38px] lg:text-[50px] font-light text-white mb-6 leading-tight max-w-[680px] mx-auto">{data.ctaHeadline}</h2>
@@ -479,11 +461,24 @@ function CTA({ data }: { data: ServiceData }) {
 
 export function ServicePage({ data }: { data: ServiceData }) {
   return (
-    <div className="pt-[76px]">
+    <div className="pt-[76px] bg-[#080808] relative">
+      {/* Page-wide decorative gradient blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+        <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(0,120,212,0.12) 0%, transparent 65%)', filter: 'blur(100px)' }} />
+        <div className="absolute top-[40%] right-[8%] w-[500px] h-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(104,33,122,0.14) 0%, transparent 65%)', filter: 'blur(90px)' }} />
+        <div className="absolute top-[70%] left-[30%] w-[700px] h-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(0,188,242,0.07) 0%, transparent 65%)', filter: 'blur(110px)' }} />
+        <div className="absolute bottom-[5%] right-[20%] w-[450px] h-[450px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(0,120,212,0.10) 0%, transparent 65%)', filter: 'blur(80px)' }} />
+      </div>
+
+      <div className="relative" style={{ zIndex: 1 }}>
       <Hero data={data} />
 
-      {/* Two-column layout: side TOC + main content */}
-      <div className="flex">
+      {/* Two-column layout: TOC + content, centered */}
+      <div className="max-w-[1400px] mx-auto flex">
         <SideTableOfContents />
 
         <main className="flex-1 min-w-0">
@@ -495,6 +490,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
           <CaseStudies data={data} />
           <CTA data={data} />
         </main>
+      </div>
       </div>
     </div>
   );
