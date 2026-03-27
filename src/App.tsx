@@ -21,7 +21,7 @@ function App() {
   const isAdmin = location.pathname.startsWith('/admin');
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#060606]">
       <ScrollProgress />
       {!isAdmin && <Navbar />}
       <main className="flex-grow">

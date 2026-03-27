@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { AnimatePresence, motion, useInView } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Testimonial {
   quote: string;
@@ -74,43 +74,13 @@ export function Testimonials() {
 
   return (
     <section
-      className="relative bg-[#050505] py-24 overflow-hidden border-t border-white/[0.05]"
+      className="relative py-24 overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-
-      {/* Blue + purple sweep — top left */}
-      <div
-        className="absolute -top-40 -left-40 w-[700px] h-[600px] pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at 30% 30%, rgba(0,120,212,0.26) 0%, rgba(104,33,122,0.18) 45%, transparent 70%)',
-          filter: 'blur(90px)',
-        }}
-      />
-
-      {/* Cyan orb — top right */}
-      <div
-        className="absolute -top-20 -right-20 w-[500px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at top right, rgba(0,188,242,0.2) 0%, rgba(0,120,212,0.12) 50%, transparent 70%)',
-          filter: 'blur(70px)',
-        }}
-      />
-
-      {/* Deep purple + blue — bottom right */}
-      <div
-        className="absolute -bottom-32 -right-32 w-[520px] h-[520px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(104,33,122,0.22) 0%, rgba(0,120,212,0.14) 50%, transparent 68%)',
-          filter: 'blur(80px)',
-        }}
-      />
-
-      {/* Thin colored accent line — bottom */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-[1px] pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(104,33,122,0.5) 25%, rgba(0,120,212,0.5) 60%, transparent 100%)' }}
-      />
+      <div className="max-w-[1240px] mx-auto px-10">
+        <div className="h-px mb-24" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.03) 60%, transparent 100%)' }} />
+      </div>
 
       <div className="relative max-w-[1240px] mx-auto px-10">
         <motion.div
@@ -124,7 +94,7 @@ export function Testimonials() {
               Testimonials
             </p>
             <h2 className="text-[38px] lg:text-[46px] font-semibold text-white">
-              What they think of us
+              What they think of <span className="gradient-text">us</span>
             </h2>
           </div>
 
@@ -150,13 +120,10 @@ export function Testimonials() {
                   animate="center"
                   exit="exit"
                 >
-                  <p className="text-[20px] lg:text-[22px] text-white/80 leading-relaxed font-light mb-10">
+                  <p className="text-[20px] lg:text-[22px] text-white/80 leading-relaxed font-light mb-4">
                     {TESTIMONIALS[index].quote}
                   </p>
-                  <div
-                    className="pt-6"
-                    style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
-                  >
+                  <div className="pt-6">
                     <p className="text-[15px] font-semibold text-white">{TESTIMONIALS[index].name}</p>
                     <p className="text-[13px] text-white/40 mt-0.5">{TESTIMONIALS[index].title}</p>
                   </div>
@@ -183,10 +150,10 @@ export function Testimonials() {
               <div className="flex items-center gap-6 mt-10 lg:mt-0">
                 <button
                   onClick={goPrev}
-                  className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white transition-colors duration-200"
+                  className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white hover:scale-[1.1] transition-all duration-200"
                   aria-label="Previous testimonial"
                 >
-                  <ArrowLeft size={16} />
+                  <ChevronLeft size={16} />
                   Prev
                 </button>
                 <div className="flex items-center gap-2">
@@ -207,11 +174,11 @@ export function Testimonials() {
                 </div>
                 <button
                   onClick={goNext}
-                  className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white transition-colors duration-200"
+                  className="flex items-center gap-2 text-[13px] text-white/40 hover:text-white hover:scale-[1.1] transition-all duration-200"
                   aria-label="Next testimonial"
                 >
                   Next
-                  <ArrowRight size={16} />
+                  <ChevronRight size={16} />
                 </button>
               </div>
             </div>

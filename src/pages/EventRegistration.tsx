@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, Tag } from 'lucide-react';
 import { EventService } from '@/services/EventService';
 import { RegistrationForm } from '@/components/events/RegistrationForm';
 import { KeyTakeaways } from '@/components/events/KeyTakeaways';
+import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
 import { CATEGORY_SHORT, TYPE_LABEL } from '@/lib/eventConstants';
 import type { Event } from '@/types/events';
 
@@ -17,7 +18,7 @@ function formatDateLong(iso: string | null) {
 
 function LoadingSkeleton() {
   return (
-    <div className="min-h-screen bg-[#080808] pt-[76px]">
+    <div className="min-h-screen bg-[#060606] pt-[76px]">
       <div className="h-72 bg-white/[0.03] animate-pulse" />
       <div className="max-w-[1240px] mx-auto px-10 py-14 grid lg:grid-cols-[1fr_400px] gap-12">
         <div className="space-y-5">
@@ -50,7 +51,7 @@ export function EventRegistration() {
 
   if (notFound || !event) {
     return (
-      <div className="min-h-screen bg-[#080808] text-white pt-[76px] flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-[#060606] text-white pt-[76px] flex flex-col items-center justify-center gap-4">
         <p className="text-[10px] uppercase tracking-[0.2em] text-white/25">404</p>
         <h2 className="text-2xl font-semibold text-white">Event not found.</h2>
         <Link
@@ -66,7 +67,8 @@ export function EventRegistration() {
   const dateStr = formatDateLong(event.event_date);
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white">
+    <div className="min-h-screen bg-[#060606] text-white relative">
+      <BackgroundBlobs />
 
       {/* ── Hero banner ──────────────────────────────────────────────────── */}
       <div className="relative pt-[76px] overflow-hidden">
@@ -106,10 +108,10 @@ export function EventRegistration() {
           <div className="absolute bottom-0 left-0 right-0 max-w-[1240px] mx-auto px-10 pb-8">
             {/* Badges */}
             <div className="flex gap-2 mb-4">
-              <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/15 px-2 py-0.5">
+              <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/15 rounded-full px-2.5 py-0.5">
                 {TYPE_LABEL[event.type]}
               </span>
-              <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/10 px-2 py-0.5">
+              <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/10 rounded-full px-2.5 py-0.5">
                 {CATEGORY_SHORT[event.category]}
               </span>
             </div>
@@ -182,7 +184,7 @@ export function EventRegistration() {
               <div>
                 <p className="text-[11px] text-white/50 leading-relaxed">
                   This session is delivered in partnership with{' '}
-                  <span className="text-white/70 font-medium">Microsoft</span>.
+                  <span className="gradient-text font-medium">Microsoft</span>.
                   Content reflects current Microsoft technology and roadmaps.
                 </p>
               </div>

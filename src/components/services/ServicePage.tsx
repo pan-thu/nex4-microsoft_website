@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { cn } from '@/lib/utils';
 import { ASSETS } from '@/lib/assets';
+import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
 import type { ServiceData } from '@/data/services';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -62,7 +63,7 @@ function SideTableOfContents() {
               key={id}
               onClick={() => scrollTo(id)}
               className={cn(
-                'text-left px-3 py-2 text-[13px] font-medium transition-all duration-150',
+                'text-left px-3 py-2 text-[13px] font-medium transition-all duration-150 rounded-full',
                 active === id
                   ? 'border border-white/50 text-white'
                   : 'text-white/35 hover:text-white/65 border border-transparent',
@@ -78,7 +79,7 @@ function SideTableOfContents() {
         <button
           onClick={() => scrollTo('get-started')}
           className={cn(
-            'text-left px-3 py-2 text-[13px] font-medium transition-all duration-150',
+            'text-left px-3 py-2 text-[13px] font-medium transition-all duration-150 rounded-full',
             active === 'get-started'
               ? 'border border-white/50 text-white'
               : 'text-white/35 hover:text-white/65 border border-transparent',
@@ -122,11 +123,11 @@ function Hero({ data }: { data: ServiceData }) {
         <p className="text-[16px] text-white/50 leading-relaxed max-w-[520px] mb-10">{data.tagline}</p>
 
         <div className="flex flex-wrap items-center gap-4">
-          <Link to="/contact-us" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black text-[14px] font-medium hover:bg-white/90 transition-colors duration-150">
-            Talk to Our Team <ArrowRight size={14} />
+          <Link to="/contact-us" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black text-[14px] font-medium rounded-full hover:bg-white/90 hover:scale-[1.04] transition-all duration-150">
+            Talk to Our Team <ChevronRight size={14} />
           </Link>
           <Link to="/services" className="inline-flex items-center gap-2 text-[14px] text-white/40 hover:text-white/75 transition-colors duration-200">
-            All Services <ArrowRight size={13} />
+            All Services <ChevronRight size={13} />
           </Link>
         </div>
       </div>
@@ -153,7 +154,6 @@ function Overview({ data }: { data: ServiceData }) {
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-4">Overview</p>
             <h2 className="text-[34px] lg:text-[42px] font-semibold text-white leading-tight">{data.overviewHeading}</h2>
-            <div className="mt-8 h-px bg-white/[0.08]" />
           </div>
           <div className="lg:pt-14">
             <p className="text-[16px] text-white/58 leading-relaxed mb-6">{data.overviewParagraphs[0]}</p>
@@ -176,17 +176,17 @@ function Benefits({ data }: { data: ServiceData }) {
       <div className="max-w-[1240px] mx-auto px-10">
         <motion.div ref={ref} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="mb-16">
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-3">Key Benefits</p>
-          <h2 className="text-[32px] lg:text-[40px] font-semibold text-white">Why Choose NEX4</h2>
+          <h2 className="text-[32px] lg:text-[40px] font-semibold text-white">Why Choose <span className="gradient-text">NEX4</span></h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
+        <div className="grid grid-cols-1 md:grid-cols-3">
           {data.benefits.map((benefit, i) => {
             const Icon = benefit.icon;
             return (
               <motion.div key={benefit.title} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 + i * 0.12 }}
                 className="px-0 md:px-10 py-10 first:md:pl-0 last:md:pr-0">
-                <div className="mb-6 w-12 h-12 flex items-center justify-center border border-white/[0.08]">
-                  <Icon size={22} className="text-white/55" />
+                <div className="mb-6 w-12 h-12 flex items-center justify-center">
+                  <Icon size={30} className="text-white/55" />
                 </div>
                 <h3 className="text-[17px] font-semibold text-white mb-3 leading-snug">{benefit.title}</h3>
                 <p className="text-[14px] text-white/45 leading-relaxed">{benefit.body}</p>
@@ -240,7 +240,7 @@ function Capabilities({ data }: { data: ServiceData }) {
         <div className="max-w-[1240px] mx-auto">
           <div className="flex items-end gap-2 border-b border-white/[0.08]">
             <button onClick={() => tabBarRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
-              className="shrink-0 pb-3 text-white/30 hover:text-white/70 transition-colors duration-150">
+              className="shrink-0 pb-3 text-white/30 hover:text-white/70 hover:scale-[1.15] transition-all duration-150">
               <ChevronLeft size={16} />
             </button>
             <div ref={tabBarRef} className="flex flex-1 overflow-x-auto [&::-webkit-scrollbar]:hidden"
@@ -254,7 +254,7 @@ function Capabilities({ data }: { data: ServiceData }) {
               ))}
             </div>
             <button onClick={() => tabBarRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
-              className="shrink-0 pb-3 text-white/30 hover:text-white/70 transition-colors duration-150">
+              className="shrink-0 pb-3 text-white/30 hover:text-white/70 hover:scale-[1.15] transition-all duration-150">
               <ChevronRight size={16} />
             </button>
           </div>
@@ -311,12 +311,12 @@ function Technologies({ data }: { data: ServiceData }) {
           className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-20">
           <div className="shrink-0">
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-1">Technologies</p>
-            <h3 className="text-[22px] font-semibold text-white">We work with</h3>
+            <h3 className="text-[22px] font-semibold text-white">We work <span className="gradient-text">with</span></h3>
           </div>
           <div className="flex flex-wrap gap-3">
             {data.technologies.map((tech, i) => (
               <motion.span key={tech} initial={{ opacity: 0, scale: 0.95 }} animate={inView ? { opacity: 1, scale: 1 } : {}} transition={{ duration: 0.3, delay: 0.15 + i * 0.05 }}
-                className="px-4 py-2 border border-white/[0.10] text-[13px] text-white/45 hover:border-white/22 hover:text-white/75 transition-all duration-200">
+                className="px-4 py-2 border border-white/[0.10] rounded-full text-[13px] text-white/45 hover:border-white/22 hover:text-white/75 transition-all duration-200">
                 {tech}
               </motion.span>
             ))}
@@ -337,7 +337,7 @@ function Stats({ data }: { data: ServiceData }) {
     <section id="outcomes" className="py-24 border-t border-white/[0.05] scroll-mt-[96px]">
       <div className="max-w-[1240px] mx-auto px-10">
         <motion.div ref={ref} initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.55 }}
-          className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.06]">
+          className="grid grid-cols-1 md:grid-cols-3">
           {data.stats.map((stat) => (
             <div key={stat.label} className="px-0 md:px-12 py-14 md:py-16 text-center first:md:pl-0 last:md:pr-0">
               <p className="leading-none text-white mb-4 tabular-nums">
@@ -382,18 +382,18 @@ function CaseStudies({ data }: { data: ServiceData }) {
           className="flex items-end justify-between mb-12">
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-white/28 font-semibold mb-2">Case Studies</p>
-            <h2 className="text-[30px] lg:text-[36px] font-semibold text-white">Delivered results</h2>
+            <h2 className="text-[30px] lg:text-[36px] font-semibold text-white">Delivered <span className="gradient-text">results</span></h2>
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => emblaApi?.scrollPrev()} disabled={!canPrev} aria-label="Previous"
               className={cn('w-10 h-10 flex items-center justify-center border transition-all duration-200',
-                canPrev ? 'border-white/20 text-white/55 hover:border-white/45 hover:text-white' : 'border-white/[0.07] text-white/18 cursor-not-allowed')}>
-              <ArrowLeft size={16} />
+                canPrev ? 'border-white/20 text-white/55 hover:border-white/45 hover:text-white hover:scale-[1.1]' : 'border-white/[0.07] text-white/18 cursor-not-allowed')}>
+              <ChevronLeft size={16} />
             </button>
             <button onClick={() => emblaApi?.scrollNext()} disabled={!canNext} aria-label="Next"
               className={cn('w-10 h-10 flex items-center justify-center border transition-all duration-200',
-                canNext ? 'border-white/20 text-white/55 hover:border-white/45 hover:text-white' : 'border-white/[0.07] text-white/18 cursor-not-allowed')}>
-              <ArrowRight size={16} />
+                canNext ? 'border-white/20 text-white/55 hover:border-white/45 hover:text-white hover:scale-[1.1]' : 'border-white/[0.07] text-white/18 cursor-not-allowed')}>
+              <ChevronRight size={16} />
             </button>
           </div>
         </motion.div>
@@ -424,7 +424,7 @@ function CaseStudies({ data }: { data: ServiceData }) {
                   <p className="text-[9px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.industry} — {cs.client}</p>
                   <h3 className="text-[18px] font-semibold text-white leading-snug mb-3">{cs.title}</h3>
                   <p className="text-[13px] text-white/70 leading-relaxed mb-5 line-clamp-3">{cs.description}</p>
-                  <span className="inline-flex items-center gap-2 text-[13px] font-medium text-white">Read the story <ArrowRight size={14} /></span>
+                  <span className="inline-flex items-center gap-2 text-[13px] font-medium text-white">Read the story <ChevronRight size={14} /></span>
                 </div>
               </div>
             ))}
@@ -448,8 +448,8 @@ function CTA({ data }: { data: ServiceData }) {
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 font-semibold mb-6">Get Started</p>
           <h2 className="text-[38px] lg:text-[50px] font-light text-white mb-6 leading-tight max-w-[680px] mx-auto">{data.ctaHeadline}</h2>
           <p className="text-[16px] text-white/45 mb-10 max-w-[480px] mx-auto leading-relaxed">{data.ctaBody}</p>
-          <Link to="/contact-us" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black text-[15px] font-medium hover:bg-white/90 transition-colors duration-150">
-            Talk to Our Team <ArrowRight size={16} />
+          <Link to="/contact-us" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black text-[15px] font-medium rounded-full hover:bg-white/90 hover:scale-[1.04] transition-all duration-150">
+            Talk to Our Team <ChevronRight size={16} />
           </Link>
         </motion.div>
       </div>
@@ -461,18 +461,8 @@ function CTA({ data }: { data: ServiceData }) {
 
 export function ServicePage({ data }: { data: ServiceData }) {
   return (
-    <div className="pt-[76px] bg-[#080808] relative">
-      {/* Page-wide decorative gradient blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(0,120,212,0.12) 0%, transparent 65%)', filter: 'blur(100px)' }} />
-        <div className="absolute top-[40%] right-[8%] w-[500px] h-[500px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(104,33,122,0.14) 0%, transparent 65%)', filter: 'blur(90px)' }} />
-        <div className="absolute top-[70%] left-[30%] w-[700px] h-[500px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(0,188,242,0.07) 0%, transparent 65%)', filter: 'blur(110px)' }} />
-        <div className="absolute bottom-[5%] right-[20%] w-[450px] h-[450px] rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(0,120,212,0.10) 0%, transparent 65%)', filter: 'blur(80px)' }} />
-      </div>
+    <div className="pt-[76px] bg-[#060606] relative">
+      <BackgroundBlobs />
 
       <div className="relative" style={{ zIndex: 1 }}>
       <Hero data={data} />

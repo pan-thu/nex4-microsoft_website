@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { EventCard } from '@/components/events/EventCard';
 import { EventFilters } from '@/components/events/EventFilters';
 import { EventService } from '@/services/EventService';
+import { ASSETS } from '@/lib/assets';
+import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
 import type { Event, UIFilters } from '@/types/events';
 
 const EMPTY_FILTERS: UIFilters = { date: 'all' };
@@ -53,7 +55,8 @@ export function Events() {
   const hasMore = visibleCount < filtered.length;
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white">
+    <div className="min-h-screen text-white relative">
+      <BackgroundBlobs />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden pt-[76px]">
@@ -61,7 +64,7 @@ export function Events() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600&q=80)',
+            backgroundImage: `url(${ASSETS.scene4})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.12,
@@ -71,7 +74,7 @@ export function Events() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'linear-gradient(to bottom, rgba(8,8,8,0.3) 0%, rgba(8,8,8,0.85) 100%)',
+            background: 'linear-gradient(to bottom, rgba(6,6,6,0.3) 0%, rgba(6,6,6,0.85) 100%)',
           }}
         />
         {/* Dot grid */}
@@ -112,8 +115,8 @@ export function Events() {
                 Events & Webinars
               </p>
               <h1 className="text-[46px] lg:text-[62px] font-semibold leading-tight text-white mb-4 max-w-2xl">
-                Expand your knowledge.<br />
-                <span className="text-white/40 font-light">Connect with experts.</span>
+                Expand your <span className="gradient-text">knowledge.</span><br />
+                <span className="font-light">Connect with <span className="gradient-text">experts.</span></span>
               </h1>
               <p className="text-[16px] text-white/35 max-w-xl leading-relaxed">
                 Join NEX4 and Microsoft-led sessions on cloud, security, AI, and modern
@@ -125,7 +128,7 @@ export function Events() {
       </section>
 
       {/* ── Sticky filter bar ─────────────────────────────────────────────── */}
-      <div className="sticky top-[76px] z-20 border-y border-white/[0.07] bg-[#080808]/90 backdrop-blur-md">
+      <div className="sticky top-[76px] z-20 border-y border-white/[0.07] backdrop-blur-md">
         <div className="max-w-[1240px] mx-auto px-10 py-4">
           <EventFilters filters={filters} onChange={setFilters} />
         </div>

@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ASSETS } from '@/lib/assets';
 
@@ -102,10 +102,10 @@ function ServiceCard({ card, index }: { card: Card; index: number }) {
         </p>
         <Link
           to={card.href}
-          className="inline-flex items-center gap-2 text-[13px] font-medium text-white self-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded-sm"
+          className="inline-flex items-center gap-2 text-[13px] font-medium text-white self-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded-sm hover:scale-[1.04] transition-transform duration-200"
         >
           Learn more
-          <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+          <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform duration-200" />
         </Link>
       </div>
     </motion.div>
@@ -117,56 +117,7 @@ export function WhatWeDo() {
   const headingInView = useInView(headingRef, { once: true, margin: '-60px' });
 
   return (
-    <section className="relative bg-[#0a0a0a] py-24 overflow-hidden">
-      {/* Dot grid background */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(rgba(255,255,255,0.045) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-        }}
-      />
-      {/* Radial fade at edges */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, #0a0a0a 100%)',
-        }}
-      />
-
-      {/* Blue + purple orb cluster — top right */}
-      <div
-        className="absolute -top-32 -right-32 w-[640px] h-[640px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at 40% 40%, rgba(0,120,212,0.32) 0%, rgba(104,33,122,0.18) 45%, transparent 70%)',
-          filter: 'blur(80px)',
-        }}
-      />
-
-      {/* Cyan accent orb — top center-right */}
-      <div
-        className="absolute -top-10 right-[28%] w-[320px] h-[320px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(0,188,242,0.18) 0%, transparent 65%)',
-          filter: 'blur(60px)',
-        }}
-      />
-
-      {/* Purple blob — bottom left */}
-      <div
-        className="absolute -bottom-20 -left-20 w-[420px] h-[420px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(104,33,122,0.16) 0%, rgba(0,120,212,0.10) 55%, transparent 70%)',
-          filter: 'blur(70px)',
-        }}
-      />
-
-      {/* Diagonal colored band */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(0,120,212,0.4) 30%, rgba(0,188,242,0.3) 60%, transparent 100%)' }}
-      />
-
+    <section className="relative py-24 overflow-hidden">
       <div className="relative max-w-[1240px] mx-auto px-10">
         {/* Two-column header */}
         <motion.div
@@ -181,7 +132,7 @@ export function WhatWeDo() {
               What we do
             </p>
             <h2 className="text-[42px] lg:text-[52px] font-semibold text-white leading-tight">
-              Our core Microsoft<br />solutions
+              Our core Microsoft<br /><span className="gradient-text">solutions</span>
             </h2>
           </div>
           <p className="text-[14px] text-white/35 max-w-[260px] lg:text-right leading-relaxed">

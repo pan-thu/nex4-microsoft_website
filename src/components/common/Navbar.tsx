@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, startTransition } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ChevronDown, ChevronRight, ArrowRight } from 'lucide-react';
+import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ASSETS } from '@/lib/assets';
 
@@ -197,7 +197,7 @@ function StoryCard({ card }: { card: StoryCard }) {
         <p className="text-white/50 text-[12px] leading-relaxed mb-4 line-clamp-2">{card.body}</p>
         <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-white/50 group-hover:text-white transition-colors duration-200">
           Read more
-          <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+          <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
         </span>
       </div>
     </Link>
@@ -312,7 +312,7 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
                     }
                   >
                     <span className="text-[14px]">{link.label}</span>
-                    <ArrowRight
+                    <ChevronRight
                       size={13}
                       className={cn(
                         'shrink-0 text-white transition-all duration-150',
@@ -432,7 +432,7 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
                 className="inline-flex items-center gap-2 text-[12px] font-medium text-white/30 hover:text-white transition-colors duration-150"
               >
                 View all {activeCat.label}
-                <ArrowRight size={12} />
+                <ChevronRight size={12} />
               </Link>
             </div>
           </div>
@@ -554,16 +554,7 @@ export function Navbar() {
 
           <NavLink as={Link} to="/careers">Careers</NavLink>
 
-          {/* Divider */}
-          <div className="w-px h-5 bg-white/10 mx-3" />
-
-          {/* Contact CTA */}
-          <Link
-            to="/contact-us"
-            className="ml-1 px-5 py-2.5 text-[14px] font-medium text-black bg-white hover:bg-white/90 transition-colors duration-150"
-          >
-            Contact Us
-          </Link>
+          <NavLink as={Link} to="/contact-us">Contact Us</NavLink>
         </nav>
 
         {/* Mobile toggle */}
@@ -660,14 +651,13 @@ export function Navbar() {
           >
             Careers
           </Link>
-          <div className="p-6">
-            <Link
-              to="/contact-us"
-              className="flex justify-center px-6 py-3 text-[14px] font-medium text-black bg-white hover:bg-white/90 transition-colors"
-            >
-              Contact Us
-            </Link>
-          </div>
+          <Link
+            to="/contact-us"
+            className="flex px-8 py-4 text-[14px] text-[#a0a0a8] hover:text-white transition-colors"
+            style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+          >
+            Contact Us
+          </Link>
         </div>
       )}
     </header>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { ArrowRight, ArrowLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ASSETS } from '@/lib/assets';
 
@@ -144,19 +144,19 @@ export function HeroSlider() {
               {/* Headline */}
               <h1 className="text-[52px] lg:text-[62px] font-light leading-[1.1] text-white mb-10">
                 {slide.headlinePre}{' '}
-                <span className="font-semibold text-white">{slide.headlineAccent}</span>
+                <span className="font-semibold gradient-text">{slide.headlineAccent}</span>
                 {slide.headlinePost && ' ' + slide.headlinePost}
               </h1>
 
               {/* CTA — arrow inline on the same line */}
               <Link
                 to={slide.ctaHref}
-                className="group inline-flex items-center gap-3"
+                className="group inline-flex items-center gap-3 hover:scale-[1.04] transition-transform duration-200"
               >
                 <span className="text-[14px] font-semibold text-white/70 group-hover:text-white transition-colors duration-200">
                   {slide.cta}
                 </span>
-                <ArrowRight
+                <ChevronRight
                   size={16}
                   className="text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-200"
                 />

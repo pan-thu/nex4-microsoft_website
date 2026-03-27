@@ -87,40 +87,10 @@ export function OurLocations() {
   const headingInView = useInView(headingRef, { once: true, margin: '-60px' });
 
   return (
-    <section className="relative bg-black py-24 overflow-hidden">
-
-      {/* Blue + cyan sweep — top right */}
-      <div
-        className="absolute -top-24 -right-24 w-[620px] h-[560px] pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at top right, rgba(0,188,242,0.22) 0%, rgba(0,120,212,0.18) 40%, transparent 68%)',
-          filter: 'blur(80px)',
-        }}
-      />
-
-      {/* Purple + blue — bottom left */}
-      <div
-        className="absolute -bottom-32 -left-32 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(104,33,122,0.24) 0%, rgba(0,120,212,0.18) 50%, transparent 68%)',
-          filter: 'blur(90px)',
-        }}
-      />
-
-      {/* Mid-section cyan orb */}
-      <div
-        className="absolute top-1/2 left-1/3 w-[400px] h-[300px] -translate-y-1/2 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse, rgba(0,188,242,0.1) 0%, transparent 65%)',
-          filter: 'blur(60px)',
-        }}
-      />
-
-      {/* Colored top border accent */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[1px] pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(0,120,212,0.45) 35%, rgba(0,188,242,0.35) 65%, transparent 100%)' }}
-      />
+    <section className="relative py-24 overflow-hidden">
+      <div className="max-w-[1240px] mx-auto px-10">
+        <div className="h-px mb-24" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.03) 60%, transparent 100%)' }} />
+      </div>
 
       <div className="relative max-w-[1240px] mx-auto px-10">
 
@@ -132,7 +102,7 @@ export function OurLocations() {
             transition={{ duration: 0.5 }}
           >
             <h2 className="text-[60px] lg:text-[80px] font-light leading-[0.95] text-white">
-              Our<br />Locations
+              Our<br /><span className="gradient-text">Locations</span>
             </h2>
           </motion.div>
 
@@ -157,10 +127,6 @@ export function OurLocations() {
           ))}
         </div>
 
-        <div
-          className="mt-20 h-px"
-          style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.03) 60%, transparent 100%)' }}
-        />
       </div>
     </section>
   );

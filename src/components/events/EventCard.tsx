@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { CATEGORY_SHORT, TYPE_LABEL } from '@/lib/eventConstants';
 import type { Event } from '@/types/events';
 
@@ -75,7 +75,7 @@ export function EventCard({ event }: { event: Event }) {
         {/* CTA */}
         <div className="mt-auto pt-3 border-t border-white/[0.06] flex items-center gap-1.5 text-[13px] text-white/40 group-hover:text-white/70 transition-colors">
           Register
-          <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
+          <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
         </div>
       </div>
     </Link>

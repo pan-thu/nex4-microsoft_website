@@ -24,11 +24,11 @@ export function KeyTakeaways({ items }: { items: KeyTakeaway[] }) {
         {items.map((item, i) => {
           const Icon = ICON_MAP[item.icon] ?? Brain;
           return (
-            <div key={i} className="flex gap-4 items-start group">
-              <div className="shrink-0 w-10 h-10 border border-white/10 flex items-center justify-center group-hover:border-white/25 transition-colors duration-300">
-                <Icon size={16} className="text-white/40 group-hover:text-white/70 transition-colors duration-300" />
+            <div key={i} className="flex gap-4 items-center group">
+              <div className="shrink-0 flex items-center justify-center">
+                <Icon size={20} className="text-white/40 group-hover:text-white/70 transition-colors duration-300" />
               </div>
-              <p className="text-[13px] text-white/50 leading-relaxed pt-0.5">{item.text}</p>
+              <p className="text-[13px] text-white/50 leading-relaxed">{item.text}</p>
             </div>
           );
         })}

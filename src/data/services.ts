@@ -156,7 +156,7 @@ export const SERVICES: Record<string, ServiceData> = {
     category: 'Digital Workplace',
     title: 'Put AI to Work Across Your Organisation',
     tagline: 'From Microsoft 365 Copilot to custom Azure AI solutions, NEX4 guides every stage of your enterprise AI journey — strategy, deployment, and adoption.',
-    heroImage: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1600&q=80&fit=crop',
+    heroImage: ASSETS.scene1,
     overviewHeading: 'AI That Creates Real Business Value',
     overviewParagraphs: [
       'Deploying AI is no longer a competitive advantage — it is an operational imperative. But most organisations struggle to move from pilot to production. NEX4 closes the gap between AI potential and business reality by combining Microsoft\'s AI platform with structured deployment methodology and deep change management expertise.',
@@ -200,7 +200,7 @@ export const SERVICES: Record<string, ServiceData> = {
     category: 'Digital Workplace',
     title: 'Automate the Work That Slows Your Business Down',
     tagline: 'Power Platform, Power Automate, and intelligent workflows — designed, built, and maintained by NEX4 so your teams can focus on the work that matters.',
-    heroImage: 'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?w=1600&q=80&fit=crop',
+    heroImage: ASSETS.scene2,
     overviewHeading: 'From Manual Processes to Intelligent Workflows',
     overviewParagraphs: [
       'Every organisation has processes that are slower, more error-prone, and more expensive than they need to be. Approval chains stuck in email. Reports built manually in spreadsheets. Data transferred between systems by hand. These are not small inefficiencies — they compound daily across every team.',
@@ -244,7 +244,7 @@ export const SERVICES: Record<string, ServiceData> = {
     category: 'Digital Workplace',
     title: 'Protect and Recover Your Microsoft 365 Data',
     tagline: 'Ransomware, accidental deletion, and service outages are not hypothetical risks. NEX4 ensures your Microsoft 365 data is protected, compliant, and recoverable — always.',
-    heroImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&q=80&fit=crop',
+    heroImage: ASSETS.scene3,
     overviewHeading: "Microsoft Doesn't Back Up Your Data — You Do",
     overviewParagraphs: [
       "This surprises many organisations: Microsoft's shared responsibility model makes clear that M365 data protection is the customer's responsibility. Microsoft guarantees service availability — not point-in-time recovery of your emails, Teams messages, SharePoint documents, or OneDrive files. A single accidental deletion, malicious insider, or ransomware event can mean permanent data loss.",
