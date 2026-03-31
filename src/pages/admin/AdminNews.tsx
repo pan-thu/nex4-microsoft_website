@@ -1,46 +1,43 @@
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X, Link2, Users } from 'lucide-react';
-import { EventService } from '@/services/EventService';
+import { Plus, Pencil, Trash2, X, Link2 } from 'lucide-react';
+import { NewsService } from '@/services/BlogService';
+import { NEWS_CATEGORIES } from '@/lib/blogConstants';
 import { supabase } from '@/lib/supabase';
-import { EVENT_CATEGORIES, EVENT_TYPES } from '@/lib/eventConstants';
 import { cn } from '@/lib/utils';
 import {
-  toSlug, FieldLabel, FormInput, FormSelect, FormSection,
-  AutoTextarea, SlugField, ImageUploadField, TakeawayEditor,
+  toSlug, estimateReadingTime, FieldLabel, FormInput, FormSelect, FormSection,
+  AutoTextarea, SlugField, ImageUploadField,
   Toast, useKeyboardShortcuts,
 } from './AdminFormUI';
-import type { TakeawayItem } from './AdminFormUI';
-import { AdminRegistrations } from './AdminRegistrations';
-import type { Event } from '@/types/events';
+import type { NewsArticle } from '@/types/blog';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type FormState = Omit<Event, 'id' | 'created_at' | 'key_takeaways'> & {
-  takeaways: TakeawayItem[];
+type FormState = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  hero_image_url: string;
+  category: string;
+  reading_time: string;
+  published_at: string;
 };
 
 const EMPTY_FORM: FormState = {
-  title: '',
-  slug: '',
-  description: '',
+  title:          '',
+  slug:           '',
+  excerpt:        '',
+  content:        '',
   hero_image_url: '',
-  category: 'workplace-ai',
-  type: 'webinar',
-  status: 'upcoming',
-  event_date: '',
-  takeaways: [],
+  category:       'company',
+  reading_time:   '',
+  published_at:   new Date().toISOString().slice(0, 16),
 };
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── NewsForm modal ───────────────────────────────────────────────────────────
 
-function parseDate(iso: string | null) {
-  if (!iso) return '';
-  return iso.slice(0, 16);
-}
-
-// ── EventForm modal ──────────────────────────────────────────────────────────
-
-function EventFormModal({
+function NewsFormModal({
   form,
   setForm,
   editingId,
@@ -65,9 +62,8 @@ function EventFormModal({
 
   function validate() {
     const e: typeof errors = {};
-    if (!form.title.trim())    e.title    = true;
-    if (!form.slug.trim())     e.slug     = true;
-    if (!form.category.trim()) e.category = true;
+    if (!form.title.trim()) e.title = true;
+    if (!form.slug.trim())  e.slug  = true;
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -84,11 +80,17 @@ function EventFormModal({
   async function handleImageUpload(file: File) {
     setUploading(true);
     try {
-      const url = await EventService.uploadImage(file);
+      const ext = file.name.split('.').pop();
+      const path = `news/${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from('assets').upload(path, file);
+      if (uploadError) throw uploadError;
+      const url = supabase.storage.from('assets').getPublicUrl(path).data.publicUrl;
       setForm(f => ({ ...f, hero_image_url: url }));
     } catch { setError('Image upload failed.'); }
     finally { setUploading(false); }
   }
+
+  const { minutes } = estimateReadingTime(form.content);
 
   useKeyboardShortcuts({ onClose, onSave: handleSave });
 
@@ -99,7 +101,7 @@ function EventFormModal({
         <div className="flex justify-between items-center px-7 py-5 border-b border-white/[0.06] shrink-0">
           <div>
             <h2 className="text-[15px] font-semibold text-white">
-              {editingId ? 'Edit Event' : 'New Event'}
+              {editingId ? 'Edit Article' : 'New Article'}
             </h2>
             <p className="text-[10px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
           </div>
@@ -135,12 +137,32 @@ function EventFormModal({
               />
             </div>
             <div>
-              <FieldLabel>Description</FieldLabel>
+              <FieldLabel>Excerpt</FieldLabel>
               <AutoTextarea
-                value={form.description ?? ''}
-                onChange={v => field('description', v)}
+                value={form.excerpt}
+                onChange={v => field('excerpt', v)}
                 maxChars={300}
                 minRows={2}
+              />
+            </div>
+          </FormSection>
+
+          <FormSection title="Content">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <FieldLabel>Body</FieldLabel>
+                {form.content && (
+                  <span className="text-[10px] text-white/20">
+                    ~{minutes} min read
+                  </span>
+                )}
+              </div>
+              <AutoTextarea
+                value={form.content}
+                onChange={v => field('content', v)}
+                placeholder="Supports ## headings, ### subheadings, > blockquotes, and paragraphs"
+                minRows={8}
+                mono
               />
             </div>
           </FormSection>
@@ -148,43 +170,41 @@ function EventFormModal({
           <FormSection title="Classification">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <FieldLabel required error={!!errors.category}>Category</FieldLabel>
+                <FieldLabel required>Category</FieldLabel>
                 <FormSelect
                   value={form.category}
-                  onChange={v => field('category', v as FormState['category'])}
-                  options={EVENT_CATEGORIES}
-                  error={!!errors.category}
+                  onChange={v => field('category', v)}
+                  options={NEWS_CATEGORIES}
                 />
               </div>
               <div>
-                <FieldLabel required>Type</FieldLabel>
-                <FormSelect
-                  value={form.type}
-                  onChange={v => field('type', v as FormState['type'])}
-                  options={EVENT_TYPES}
+                <FieldLabel>
+                  Reading Time (min)
+                  {form.content && (
+                    <button
+                      type="button"
+                      onClick={() => field('reading_time', String(minutes))}
+                      className="ml-2 text-[9px] text-white/20 hover:text-white/50 transition-colors normal-case tracking-normal"
+                    >
+                      use {minutes} min
+                    </button>
+                  )}
+                </FieldLabel>
+                <FormInput
+                  type="number"
+                  value={form.reading_time}
+                  onChange={v => field('reading_time', v)}
+                  placeholder={String(minutes)}
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <FieldLabel required>Status</FieldLabel>
-                <FormSelect
-                  value={form.status}
-                  onChange={v => field('status', v as FormState['status'])}
-                  options={[
-                    { value: 'upcoming',  label: 'Upcoming'  },
-                    { value: 'on_demand', label: 'On Demand' },
-                  ]}
-                />
-              </div>
-              <div>
-                <FieldLabel>Event Date</FieldLabel>
-                <FormInput
-                  type="datetime-local"
-                  value={form.event_date ?? ''}
-                  onChange={v => field('event_date', v)}
-                />
-              </div>
+            <div>
+              <FieldLabel>Published At</FieldLabel>
+              <FormInput
+                type="datetime-local"
+                value={form.published_at}
+                onChange={v => field('published_at', v)}
+              />
             </div>
           </FormSection>
 
@@ -192,19 +212,12 @@ function EventFormModal({
             <div>
               <FieldLabel>Hero Image</FieldLabel>
               <ImageUploadField
-                value={form.hero_image_url ?? ''}
+                value={form.hero_image_url}
                 onChange={v => field('hero_image_url', v)}
                 onUpload={handleImageUpload}
                 uploading={uploading}
               />
             </div>
-          </FormSection>
-
-          <FormSection title="Key Takeaways">
-            <TakeawayEditor
-              items={form.takeaways}
-              onChange={items => field('takeaways', items)}
-            />
           </FormSection>
 
           {error && <p className="text-[12px] text-red-400/70">{error}</p>}
@@ -220,7 +233,7 @@ function EventFormModal({
             disabled={saving || uploading}
             className="px-6 py-2.5 bg-white text-black text-[12px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create event'}
+            {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create article'}
           </button>
         </div>
       </div>
@@ -230,47 +243,29 @@ function EventFormModal({
 
 // ── Main page ────────────────────────────────────────────────────────────────
 
-const STATUS_STYLE: Record<string, string> = {
-  upcoming:  'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  on_demand: 'bg-white/[0.05] text-white/40 border-white/10',
+const CATEGORY_STYLE: Record<string, string> = {
+  company:     'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  partnership: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+  product:     'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  industry:    'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  awards:      'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
 };
 
-export function AdminEvents() {
-  const [events, setEvents]               = useState<Event[]>([]);
-  const [regCounts, setRegCounts]         = useState<Record<string, number>>({});
-  const [loading, setLoading]             = useState(true);
-  const [showForm, setShowForm]           = useState(false);
-  const [editingId, setEditingId]         = useState<string | null>(null);
-  const [form, setForm]                   = useState<FormState>(EMPTY_FORM);
-  const [regsEvent, setRegsEvent]         = useState<Event | null>(null);
-  const [deletingId, setDeletingId]       = useState<string | null>(null);
-  const [toast, setToast]                 = useState<string | null>(null);
+export function AdminNews() {
+  const [articles, setArticles]     = useState<NewsArticle[]>([]);
+  const [loading, setLoading]       = useState(true);
+  const [showForm, setShowForm]     = useState(false);
+  const [editingId, setEditingId]   = useState<string | null>(null);
+  const [form, setForm]             = useState<FormState>(EMPTY_FORM);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [toast, setToast]           = useState<string | null>(null);
 
-  async function loadEvents() {
+  function loadArticles() {
     setLoading(true);
-    try {
-      const evts = await EventService.getEvents();
-      setEvents(evts);
-
-      // Fetch registration counts for all events in one query
-      const { data } = await supabase
-        .from('registrations')
-        .select('event_id')
-        .in('event_id', evts.map(e => e.id));
-
-      if (data) {
-        const counts: Record<string, number> = {};
-        for (const row of data) {
-          counts[row.event_id] = (counts[row.event_id] ?? 0) + 1;
-        }
-        setRegCounts(counts);
-      }
-    } finally {
-      setLoading(false);
-    }
+    NewsService.getArticles().then(setArticles).finally(() => setLoading(false));
   }
 
-  useEffect(() => { loadEvents(); }, []);
+  useEffect(() => { loadArticles(); }, []);
 
   function openCreate() {
     setForm(EMPTY_FORM);
@@ -278,53 +273,49 @@ export function AdminEvents() {
     setShowForm(true);
   }
 
-  function openEdit(event: Event) {
+  function openEdit(article: NewsArticle) {
     setForm({
-      title:          event.title,
-      slug:           event.slug,
-      description:    event.description ?? '',
-      hero_image_url: event.hero_image_url ?? '',
-      category:       event.category,
-      type:           event.type,
-      status:         event.status,
-      event_date:     parseDate(event.event_date),
-      takeaways:      event.key_takeaways,
+      title:          article.title,
+      slug:           article.slug,
+      excerpt:        article.excerpt ?? '',
+      content:        article.content ?? '',
+      hero_image_url: article.hero_image_url ?? '',
+      category:       article.category,
+      reading_time:   article.reading_time?.toString() ?? '',
+      published_at:   article.published_at.slice(0, 16),
     });
-    setEditingId(event.id);
+    setEditingId(article.id);
     setShowForm(true);
   }
 
   async function handleDelete(id: string) {
-    await EventService.deleteEvent(id);
+    await supabase.from('news_articles').delete().eq('id', id);
     setDeletingId(null);
-    loadEvents();
+    loadArticles();
   }
 
   async function handleSave() {
     const payload = {
       title:          form.title,
       slug:           form.slug,
-      description:    form.description || null,
+      excerpt:        form.excerpt || null,
+      content:        form.content || null,
       hero_image_url: form.hero_image_url || null,
       category:       form.category,
-      type:           form.type,
-      status:         form.status,
-      event_date:     form.event_date || null,
-      key_takeaways:  form.takeaways,
+      reading_time:   form.reading_time ? parseInt(form.reading_time) : null,
+      published_at:   form.published_at || new Date().toISOString(),
     };
 
     if (editingId) {
-      await EventService.updateEvent(editingId, payload);
+      const { error } = await supabase.from('news_articles').update(payload).eq('id', editingId);
+      if (error) throw new Error(error.message);
     } else {
-      await EventService.createEvent(payload as Omit<Event, 'id' | 'created_at'>);
+      const { error } = await supabase.from('news_articles').insert(payload);
+      if (error) throw new Error(error.message);
     }
     setShowForm(false);
-    loadEvents();
-    setToast('Event saved successfully.');
-  }
-
-  if (regsEvent) {
-    return <AdminRegistrations event={regsEvent} onBack={() => setRegsEvent(null)} />;
+    loadArticles();
+    setToast('Article saved successfully.');
   }
 
   return (
@@ -333,13 +324,13 @@ export function AdminEvents() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
-          <h1 className="text-[22px] font-semibold text-white">Events</h1>
+          <h1 className="text-[22px] font-semibold text-white">News Articles</h1>
         </div>
         <button
           onClick={openCreate}
           className="flex items-center gap-2 bg-white text-black text-[12px] font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
         >
-          <Plus size={14} /> New Event
+          <Plus size={14} /> New Article
         </button>
       </div>
 
@@ -348,11 +339,11 @@ export function AdminEvents() {
         <div className="space-y-2">
           {[...Array(4)].map((_, i) => <div key={i} className="h-12 bg-white/[0.03] animate-pulse" />)}
         </div>
-      ) : events.length === 0 ? (
+      ) : articles.length === 0 ? (
         <div className="py-20 text-center border border-white/[0.06]">
-          <p className="text-white/20 text-[13px] mb-3">No events yet.</p>
+          <p className="text-white/20 text-[13px] mb-3">No news articles yet.</p>
           <button onClick={openCreate} className="text-[11px] text-white/35 hover:text-white/60 transition-colors underline">
-            Create your first event
+            Create your first article
           </button>
         </div>
       ) : (
@@ -360,56 +351,42 @@ export function AdminEvents() {
           <table className="w-full text-[12px]">
             <thead>
               <tr className="border-b border-white/[0.06] bg-white/[0.02]">
-                {['Title', 'Category', 'Type', 'Status', 'Date', 'Registrations', ''].map(h => (
+                {['Title', 'Category', 'Published', ''].map(h => (
                   <th key={h} className="text-left text-[10px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {events.map(event => (
-                <tr key={event.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors group">
+              {articles.map(article => (
+                <tr key={article.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors group">
                   <td className="px-4 py-3.5">
                     <div className="flex items-center gap-2.5">
-                      {event.hero_image_url && (
-                        <img src={event.hero_image_url} alt="" className="w-8 h-8 object-cover border border-white/[0.06] shrink-0" />
+                      {article.hero_image_url && (
+                        <img src={article.hero_image_url} alt="" className="w-8 h-8 object-cover border border-white/[0.06] shrink-0" />
                       )}
-                      <span className="text-white font-medium truncate max-w-[200px]">{event.title}</span>
+                      <span className="text-white font-medium truncate max-w-[280px]">{article.title}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3.5 text-white/40 whitespace-nowrap">{event.category}</td>
-                  <td className="px-4 py-3.5 text-white/40 capitalize">{event.type}</td>
                   <td className="px-4 py-3.5">
-                    <span className={cn('text-[10px] font-medium uppercase tracking-[0.1em] px-2 py-0.5 border', STATUS_STYLE[event.status])}>
-                      {event.status === 'on_demand' ? 'On Demand' : 'Upcoming'}
+                    <span className={cn('text-[10px] font-medium uppercase tracking-[0.1em] px-2 py-0.5 border', CATEGORY_STYLE[article.category] ?? 'bg-white/[0.05] text-white/40 border-white/10')}>
+                      {article.category}
                     </span>
                   </td>
                   <td className="px-4 py-3.5 text-white/30 font-mono whitespace-nowrap">
-                    {event.event_date
-                      ? new Date(event.event_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                      : '—'}
+                    {new Date(article.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </td>
                   <td className="px-4 py-3.5">
-                    <button
-                      onClick={() => setRegsEvent(event)}
-                      className="flex items-center gap-1.5 text-[12px] font-medium text-blue-400/70 hover:text-blue-300 transition-colors"
-                      title="View registrations"
-                    >
-                      <Users size={12} className="shrink-0" />
-                      {regCounts[event.id] ?? 0}
-                    </button>
-                  </td>
-                  <td className="px-4 py-3.5">
-                    <div className={cn('flex gap-1 justify-end transition-opacity', deletingId === event.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100')}>
-                      <a href={`/events/${event.slug}`} target="_blank" rel="noopener noreferrer"
+                    <div className={cn('flex gap-1 justify-end transition-opacity', deletingId === article.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100')}>
+                      <a href={`/news/${article.slug}`} target="_blank" rel="noopener noreferrer"
                         className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="View">
                         <Link2 size={13} />
                       </a>
-                      <button onClick={() => openEdit(event)} className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="Edit">
+                      <button onClick={() => openEdit(article)} className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="Edit">
                         <Pencil size={13} />
                       </button>
-                      {deletingId === event.id ? (
+                      {deletingId === article.id ? (
                         <span className="flex items-center gap-1.5 ml-1 text-[11px]">
-                          <button onClick={() => handleDelete(event.id)} className="text-red-400 hover:text-red-300 font-medium transition-colors">
+                          <button onClick={() => handleDelete(article.id)} className="text-red-400 hover:text-red-300 font-medium transition-colors">
                             Confirm
                           </button>
                           <button onClick={() => setDeletingId(null)} className="text-white/30 hover:text-white/60 transition-colors">
@@ -417,7 +394,7 @@ export function AdminEvents() {
                           </button>
                         </span>
                       ) : (
-                        <button onClick={() => setDeletingId(event.id)} className="p-1.5 text-white/30 hover:text-red-400/70 transition-colors" title="Delete">
+                        <button onClick={() => setDeletingId(article.id)} className="p-1.5 text-white/30 hover:text-red-400/70 transition-colors" title="Delete">
                           <Trash2 size={13} />
                         </button>
                       )}
@@ -431,7 +408,7 @@ export function AdminEvents() {
       )}
 
       {showForm && (
-        <EventFormModal
+        <NewsFormModal
           form={form}
           setForm={setForm}
           editingId={editingId}

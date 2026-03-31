@@ -12,6 +12,12 @@ import { WorkplaceAI } from '@/pages/services/WorkplaceAI';
 import { WorkplaceAutomation } from '@/pages/services/WorkplaceAutomation';
 import { WorkplaceBackup } from '@/pages/services/WorkplaceBackup';
 import { CloudMigration } from '@/pages/services/CloudMigration';
+import { Blog } from '@/pages/Blog';
+import { BlogPost } from '@/pages/BlogPost';
+import { News } from '@/pages/News';
+import { NewsArticle } from '@/pages/NewsArticle';
+import { CaseStudies } from '@/pages/CaseStudies';
+import { CaseStudyDetail } from '@/pages/CaseStudyDetail';
 import { AdminLogin } from '@/pages/admin/AdminLogin';
 import { AdminDashboard } from '@/pages/admin/AdminDashboard';
 import { ProtectedRoute } from '@/components/admin/ProtectedRoute';
@@ -35,6 +41,12 @@ function App() {
           <Route path="/services/workplace-automation" element={<WorkplaceAutomation />} />
           <Route path="/services/workplace-backup" element={<WorkplaceBackup />} />
           <Route path="/services/cloud-migration" element={<CloudMigration />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/news/:slug" element={<NewsArticle />} />
+          <Route path="/case-studies" element={<CaseStudies />} />
+          <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>

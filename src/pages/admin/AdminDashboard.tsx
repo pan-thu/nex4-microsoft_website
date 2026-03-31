@@ -1,14 +1,16 @@
 import { Routes, Route, NavLink, useNavigate, Navigate } from 'react-router-dom';
-import { Calendar, Users, LogOut, ExternalLink } from 'lucide-react';
+import { Calendar, LogOut, ExternalLink, BookOpen, Newspaper } from 'lucide-react';
 import { Auth } from '@/lib/auth';
 import { ASSETS } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import { AdminEvents } from './AdminEvents';
-import { AdminRegistrations } from './AdminRegistrations';
+import { AdminBlog } from './AdminBlog';
+import { AdminNews } from './AdminNews';
 
 const NAV = [
-  { to: 'events',        label: 'Events',        icon: Calendar },
-  { to: 'registrations', label: 'Registrations', icon: Users },
+  { to: 'events', label: 'Events', icon: Calendar },
+  { to: 'blog',   label: 'Blog',   icon: BookOpen },
+  { to: 'news',   label: 'News',   icon: Newspaper },
 ];
 
 export function AdminDashboard() {
@@ -76,7 +78,8 @@ export function AdminDashboard() {
           <Routes>
             <Route index element={<Navigate to="events" replace />} />
             <Route path="events" element={<AdminEvents />} />
-            <Route path="registrations" element={<AdminRegistrations />} />
+            <Route path="blog" element={<AdminBlog />} />
+            <Route path="news" element={<AdminNews />} />
           </Routes>
         </main>
       </div>
