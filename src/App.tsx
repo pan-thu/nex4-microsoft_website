@@ -18,6 +18,9 @@ import { News } from '@/pages/News';
 import { NewsArticle } from '@/pages/NewsArticle';
 import { CaseStudies } from '@/pages/CaseStudies';
 import { CaseStudyDetail } from '@/pages/CaseStudyDetail';
+import { Careers } from '@/pages/Careers';
+import { CareerDetail } from '@/pages/CareerDetail';
+import { ContactUs } from '@/pages/ContactUs';
 import { AdminLogin } from '@/pages/admin/AdminLogin';
 import { AdminDashboard } from '@/pages/admin/AdminDashboard';
 import { ProtectedRoute } from '@/components/admin/ProtectedRoute';
@@ -47,6 +50,9 @@ function App() {
           <Route path="/news/:slug" element={<NewsArticle />} />
           <Route path="/case-studies" element={<CaseStudies />} />
           <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/careers/:slug" element={<CareerDetail />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>
