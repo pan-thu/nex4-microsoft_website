@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X, Link2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Link2, Users } from 'lucide-react';
 import { CareerService } from '@/services/CareerService';
 import { supabase } from '@/lib/supabase';
+import { AdminJobApplications } from './AdminJobApplications';
 import { cn } from '@/lib/utils';
 import {
   toSlug, FieldLabel, FormInput, FormSelect, FormSection,
@@ -321,13 +322,32 @@ export function AdminCareers() {
   const [form, setForm]           = useState<FormState>(EMPTY_FORM);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [toast, setToast]         = useState<string | null>(null);
+  const [appsJob, setAppsJob]     = useState<JobPosting | null>(null);
+  const [appCounts, setAppCounts] = useState<Record<string, number>>({});
 
   function loadJobs() {
     setLoading(true);
-    CareerService.getAllJobs().then(setJobs).finally(() => setLoading(false));
+    CareerService.getAllJobs().then(jobs => {
+      setJobs(jobs);
+      // fetch application counts per job
+      supabase
+        .from('job_applications')
+        .select('job_id')
+        .then(({ data }) => {
+          const counts: Record<string, number> = {};
+          (data ?? []).forEach((r: { job_id: string }) => {
+            counts[r.job_id] = (counts[r.job_id] ?? 0) + 1;
+          });
+          setAppCounts(counts);
+        });
+    }).finally(() => setLoading(false));
   }
 
   useEffect(() => { loadJobs(); }, []);
+
+  if (appsJob) {
+    return <AdminJobApplications job={appsJob} onBack={() => setAppsJob(null)} />;
+  }
 
   function openCreate() {
     setForm(EMPTY_FORM);
@@ -421,7 +441,7 @@ export function AdminCareers() {
           <table className="w-full text-[12px]">
             <thead>
               <tr className="border-b border-white/[0.06] bg-white/[0.02]">
-                {['Title', 'Type', 'City', 'Status', ''].map(h => (
+                {['Title', 'Type', 'City', 'Status', 'Applications', ''].map(h => (
                   <th key={h} className="text-left text-[10px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
                 ))}
               </tr>
@@ -451,6 +471,16 @@ export function AdminCareers() {
                     )}>
                       {job.status}
                     </span>
+                  </td>
+                  <td className="px-4 py-3.5">
+                    <button
+                      onClick={() => setAppsJob(job)}
+                      className="flex items-center gap-1.5 text-[12px] font-medium text-blue-400/70 hover:text-blue-300 transition-colors"
+                      title="View applications"
+                    >
+                      <Users size={12} className="shrink-0" />
+                      {appCounts[job.id] ?? 0}
+                    </button>
                   </td>
                   <td className="px-4 py-3.5">
                     <div className={cn('flex gap-1 justify-end transition-opacity', deletingId === job.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100')}>

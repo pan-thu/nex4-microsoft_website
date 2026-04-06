@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { CareerService } from '@/services/CareerService';
 import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
+import { ASSETS } from '@/lib/assets';
 import { cn } from '@/lib/utils';
 import type { JobPosting, CareerFilters } from '@/types/career';
 
@@ -60,39 +61,29 @@ function FilterGroup({ label, options, selected, onChange }: FilterGroupProps) {
   }
 
   return (
-    <div className="mb-7">
-      <p className="text-[10px] uppercase tracking-[0.18em] text-white/28 font-semibold mb-3">{label}</p>
-      <div className="flex flex-col gap-2">
+    <div className="mb-6">
+      <p className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-semibold mb-2.5">{label}</p>
+      <div className="flex flex-col gap-0.5">
         {options.map(({ value, count }) => {
           const active = selected.includes(value);
           return (
             <button
               key={value}
               onClick={() => toggle(value)}
-              className="flex items-center gap-2.5 text-left group"
+              className={cn(
+                'flex items-center justify-between text-left px-0 py-1.5 transition-colors duration-150 group',
+              )}
             >
-              {/* Custom checkbox */}
               <span className={cn(
-                'w-3.5 h-3.5 shrink-0 border transition-all duration-150',
-                active
-                  ? 'border-white bg-white'
-                  : 'border-white/20 group-hover:border-white/40',
+                'text-[12px] transition-colors duration-150',
+                active ? 'text-white font-medium' : 'text-white/35 group-hover:text-white/60',
               )}>
-                {active && (
-                  <svg viewBox="0 0 10 8" fill="none" className="w-full h-full p-[1px]">
-                    <path d="M1 4l2.5 2.5L9 1" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </span>
-              <span className={cn(
-                'flex-1 text-[12px] transition-colors duration-150',
-                active ? 'text-white' : 'text-white/40 group-hover:text-white/65',
-              )}>
+                {active && <span className="mr-2 text-white/50">—</span>}
                 {value}
               </span>
               <span className={cn(
-                'text-[11px] tabular-nums transition-colors duration-150',
-                active ? 'text-white/40' : 'text-white/20',
+                'text-[10px] tabular-nums transition-colors duration-150 ml-3',
+                active ? 'text-white/35' : 'text-white/15',
               )}>
                 {count}
               </span>
@@ -108,16 +99,13 @@ interface FilterSidebarProps {
   jobs: JobPosting[];
   filters: CareerFilters;
   onChange: (f: CareerFilters) => void;
-  resultCount: number;
 }
 
-function FilterSidebar({ jobs, filters, onChange, resultCount }: FilterSidebarProps) {
+function FilterSidebar({ jobs, filters, onChange }: FilterSidebarProps) {
   const hasFilters = Object.values(filters).some((v) => v.length > 0);
 
   // Compute option counts from the FULL unfiltered list
-  const workplaceTypeCounts = useMemo(() => countBy(jobs, (j) => j.workplace_type), [jobs]);
-  const cityCounts          = useMemo(() => countBy(jobs, (j) => j.city), [jobs]);
-  const relocationCounts    = useMemo(() => countBy(jobs, (j) => (j.open_to_relocation ? 'Yes' : 'No')), [jobs]);
+  const workplaceTypeCounts  = useMemo(() => countBy(jobs, (j) => j.workplace_type), [jobs]);
   const specializationCounts = useMemo(() => countBy(jobs.filter(j => j.specialization), (j) => j.specialization), [jobs]);
   const skillCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -136,43 +124,26 @@ function FilterSidebar({ jobs, filters, onChange, resultCount }: FilterSidebarPr
   }
 
   return (
-    <aside className="hidden lg:block w-[260px] shrink-0">
-      <div className="sticky top-[76px] flex flex-col pt-14 pb-10 pl-10 pr-4 overflow-y-auto max-h-[calc(100vh-76px)]">
+    <aside className="hidden lg:block w-[220px] shrink-0">
+      <div className="flex flex-col pt-14 pb-10 pl-8 pr-4">
 
-        {/* Result count + clear */}
-        <div className="flex items-center justify-between mb-8">
-          <p className="text-[11px] text-white/30">
-            <span className="text-white font-medium tabular-nums">{resultCount}</span> {resultCount === 1 ? 'role' : 'roles'}
-          </p>
-          {hasFilters && (
+        {/* Clear all */}
+        {hasFilters && (
+          <div className="flex justify-end mb-6">
             <button
               onClick={() => onChange(EMPTY_FILTERS)}
               className="text-[10px] text-white/25 hover:text-white/55 transition-colors underline underline-offset-2"
             >
               Clear all
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         <FilterGroup
           label="Workplace type"
           options={toOptions(workplaceTypeCounts)}
           selected={filters.workplaceTypes}
           onChange={(v) => set('workplaceTypes', v)}
-        />
-
-        <FilterGroup
-          label="City"
-          options={toOptions(cityCounts)}
-          selected={filters.cities}
-          onChange={(v) => set('cities', v)}
-        />
-
-        <FilterGroup
-          label="Open to relocation"
-          options={toOptions(relocationCounts)}
-          selected={filters.relocation}
-          onChange={(v) => set('relocation', v)}
         />
 
         <FilterGroup
@@ -208,7 +179,7 @@ function JobCard({ job, index }: { job: JobPosting; index: number }) {
       initial={{ opacity: 0, y: 16 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.06 }}
-      className="border-t border-white/[0.05] group"
+      className="border-t border-white/[0.05] group first:border-t-0"
     >
       <Link to={`/careers/${job.slug}`} className="block py-8 pr-6">
         <div className="flex items-start justify-between gap-6">
@@ -271,14 +242,18 @@ function JobCard({ job, index }: { job: JobPosting; index: number }) {
 function Hero() {
   return (
     <section className="relative bg-black overflow-hidden" style={{ minHeight: 580 }}>
-      {/* Decorative blobs */}
-      <div className="absolute -top-20 -right-20 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(104,33,122,0.22) 0%, rgba(0,120,212,0.14) 50%, transparent 70%)', filter: 'blur(90px)' }} />
-      <div className="absolute top-1/2 left-1/3 w-[360px] h-[360px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(0,188,242,0.10) 0%, transparent 65%)', filter: 'blur(70px)' }} />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%)' }} />
+      {/* Background image */}
+      <img
+        src={ASSETS.scene5}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 w-full h-full object-cover opacity-30"
+      />
+      {/* Gradient overlays */}
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.60) 55%, rgba(0,0,0,0.30) 100%)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.70) 0%, transparent 50%)' }} />
 
-      <div className="relative z-10 max-w-[1240px] mx-auto px-10 flex flex-col justify-end" style={{ minHeight: 580, paddingBottom: 80 }}>
+      <div className="relative z-10 max-w-[1240px] mx-auto px-8 flex flex-col justify-end" style={{ minHeight: 580, paddingBottom: 80 }}>
         <nav className="flex items-center gap-2 mb-10">
           <Link to="/" className="text-[11px] text-white/30 hover:text-white/55 transition-colors">Home</Link>
           <ChevronRight size={11} className="text-white/20" />
@@ -286,8 +261,9 @@ function Hero() {
         </nav>
 
         <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-white/35 mb-5">Careers at NEX4</p>
-        <h1 className="text-[44px] lg:text-[58px] font-light leading-[1.08] text-white max-w-[640px] mb-7">
-          Build your future<br />with us
+        <h1 className="text-[46px] lg:text-[62px] font-semibold leading-tight text-white max-w-[640px] mb-7">
+          Build your <span className="gradient-text">future.</span><br />
+          <span className="font-light">Grow with <span className="gradient-text">us.</span></span>
         </h1>
         <p className="text-[16px] text-white/50 leading-relaxed max-w-[480px]">
           Join a team of driven professionals delivering cloud, security, and modern workplace solutions across Southeast Asia.
@@ -352,15 +328,14 @@ export function Careers() {
       <div className="relative" style={{ zIndex: 1 }}>
         <Hero />
 
-        <div className="max-w-[1400px] mx-auto flex">
+        <div className="max-w-[1240px] mx-auto w-full flex">
           <FilterSidebar
             jobs={jobs}
             filters={filters}
             onChange={setFilters}
-            resultCount={filteredJobs.length}
           />
 
-          <main className="flex-1 min-w-0 py-14 pr-10 lg:pr-14">
+          <main className="flex-1 min-w-0 py-14 pl-12 pr-10">
             {loading ? (
               <Skeleton />
             ) : filteredJobs.length === 0 ? (

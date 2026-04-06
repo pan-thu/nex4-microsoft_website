@@ -1,3 +1,25 @@
+// ── Supabase row (snake_case) ─────────────────────────────────────────────────
+
+export interface CaseStudyRow {
+  id: string;
+  slug: string;
+  client: string;
+  industry: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  image_url: string | null;
+  challenge: string;
+  approach_intro: string;
+  approach: unknown;      // JSONB: CaseStudyApproachStep[]
+  technologies: string[];
+  results_intro: string;
+  results: unknown;       // JSONB: CaseStudyResult[]
+  testimonial: unknown;   // JSONB: CaseStudyTestimonial | null
+  related_service: unknown; // JSONB: { title: string; slug: string }
+  created_at: string;
+}
+
 export type CaseStudyCategory =
   | 'workplace-productivity'
   | 'workplace-security'

@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { ChevronRight, ArrowLeft, MapPin, Monitor, Users } from 'lucide-react';
 import { CareerService } from '@/services/CareerService';
 import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
+import { supabase } from '@/lib/supabase';
+import { cn } from '@/lib/utils';
 import type { JobPosting } from '@/types/career';
 
 // ── Content renderer (same pattern as BlogPost) ───────────────────────────────
@@ -120,6 +122,117 @@ function Hero({ job }: { job: JobPosting }) {
   );
 }
 
+// ── Apply form ────────────────────────────────────────────────────────────────
+
+type ApplyState = { first_name: string; last_name: string; email: string; phone: string; cover_letter: string };
+const EMPTY_APPLY: ApplyState = { first_name: '', last_name: '', email: '', phone: '', cover_letter: '' };
+
+function ApplyForm({ jobId }: { jobId: string }) {
+  const [form, setForm]           = useState<ApplyState>(EMPTY_APPLY);
+  const [errors, setErrors]       = useState<Partial<Record<keyof ApplyState, true>>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted]   = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  function field(key: keyof ApplyState, val: string) {
+    setForm(f => ({ ...f, [key]: val }));
+    if (errors[key]) setErrors(e => { const n = { ...e }; delete n[key]; return n; });
+  }
+
+  function validate() {
+    const e: typeof errors = {};
+    if (!form.first_name.trim()) e.first_name = true;
+    if (!form.last_name.trim())  e.last_name  = true;
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = true;
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validate()) return;
+    setSubmitting(true);
+    setServerError(null);
+    const { error } = await supabase.from('job_applications').insert({
+      job_id:       jobId,
+      first_name:   form.first_name,
+      last_name:    form.last_name,
+      email:        form.email,
+      phone:        form.phone        || null,
+      cover_letter: form.cover_letter || null,
+    });
+    if (error) setServerError(error.message);
+    else setSubmitted(true);
+    setSubmitting(false);
+  }
+
+  const inputCls = (err?: boolean) => cn(
+    'w-full bg-white/[0.04] border px-3 py-2.5 text-white text-[13px] outline-none transition-colors placeholder:text-white/15',
+    err ? 'border-red-500/40' : 'border-white/[0.08] focus:border-white/25',
+  );
+
+  if (submitted) {
+    return (
+      <div className="border border-white/[0.08] p-6 text-center">
+        <p className="text-[11px] uppercase tracking-[0.15em] text-white/30 font-semibold mb-2">Application received</p>
+        <p className="text-[13px] text-white/50 leading-relaxed">Thank you! We'll be in touch shortly.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="border border-white/[0.08] p-6">
+      <p className="text-[11px] uppercase tracking-[0.15em] text-white/28 font-semibold mb-2">Interested?</p>
+      <h3 className="text-[16px] font-semibold text-white mb-5 leading-snug">Apply for this role</h3>
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-3">
+        <div className="grid grid-cols-2 gap-3">
+          <input
+            placeholder="First name *"
+            value={form.first_name}
+            onChange={e => field('first_name', e.target.value)}
+            className={inputCls(errors.first_name)}
+          />
+          <input
+            placeholder="Last name *"
+            value={form.last_name}
+            onChange={e => field('last_name', e.target.value)}
+            className={inputCls(errors.last_name)}
+          />
+        </div>
+        <input
+          type="email"
+          placeholder="Email *"
+          value={form.email}
+          onChange={e => field('email', e.target.value)}
+          className={inputCls(errors.email)}
+        />
+        <input
+          type="tel"
+          placeholder="Phone"
+          value={form.phone}
+          onChange={e => field('phone', e.target.value)}
+          className={inputCls()}
+        />
+        <textarea
+          placeholder="Cover letter (optional)"
+          value={form.cover_letter}
+          onChange={e => field('cover_letter', e.target.value)}
+          rows={4}
+          className={cn(inputCls(), 'resize-none')}
+        />
+        {serverError && <p className="text-[11px] text-red-400/70">{serverError}</p>}
+        <button
+          type="submit"
+          disabled={submitting}
+          className="w-full px-5 py-3 bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-1"
+        >
+          {submitting ? 'Submitting…' : 'Apply now'}
+        </button>
+      </form>
+    </div>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export function CareerDetail() {
@@ -186,17 +299,8 @@ export function CareerDetail() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex flex-col gap-8"
           >
-            {/* Apply CTA */}
-            <div className="border border-white/[0.08] p-6">
-              <p className="text-[11px] uppercase tracking-[0.15em] text-white/28 font-semibold mb-2">Interested?</p>
-              <h3 className="text-[16px] font-semibold text-white mb-4 leading-snug">Apply for this role</h3>
-              <a
-                href={`mailto:careers@nex4.com?subject=Application: ${encodeURIComponent(job.title)}`}
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition-colors"
-              >
-                Apply now <ChevronRight size={14} />
-              </a>
-            </div>
+            {/* Apply form */}
+            <ApplyForm jobId={job.id} />
 
             {/* Details */}
             <div className="border border-white/[0.08] p-6 flex flex-col gap-4">

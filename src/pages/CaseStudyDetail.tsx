@@ -3,8 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
 import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
-import { CASE_STUDIES_BY_SLUG } from '@/data/caseStudies';
+import { CaseStudyService } from '@/services/CaseStudyService';
 import { cn } from '@/lib/utils';
+import type { CaseStudyFull } from '@/types/caseStudy';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -178,7 +179,20 @@ function TechPill({ label }: { label: string }) {
 
 export function CaseStudyDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const cs = slug ? CASE_STUDIES_BY_SLUG[slug] : undefined;
+  const [cs, setCs] = useState<CaseStudyFull | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (!slug) { setCs(null); return; }
+    CaseStudyService.getBySlug(slug).then(setCs);
+  }, [slug]);
+
+  if (cs === undefined) {
+    return (
+      <div className="min-h-screen bg-[#060606] text-white pt-[76px] flex items-center justify-center">
+        <div className="w-8 h-8 border border-white/20 border-t-white/60 rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   if (!cs) {
     return (

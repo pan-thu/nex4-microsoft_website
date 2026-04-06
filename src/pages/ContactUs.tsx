@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
@@ -8,17 +8,6 @@ import { OurLocations } from '@/components/home/OurLocations';
 import { cn } from '@/lib/utils';
 
 // ── Options ───────────────────────────────────────────────────────────────────
-
-const INQUIRY_TYPES = [
-  'General Inquiry',
-  'Cloud Solutions',
-  'Cybersecurity',
-  'Modern Workplace',
-  'AI & Automation',
-  'Partnership',
-  'Careers',
-  'Other',
-];
 
 const POSITIONS = [
   'C-Suite / Executive',
@@ -39,19 +28,9 @@ const COUNTRIES = [
   'Other',
 ];
 
-const HOW_HEARD = [
-  'Search Engine',
-  'LinkedIn',
-  'Microsoft Event',
-  'Referral',
-  'Conference / Webinar',
-  'Other',
-];
-
 // ── Form state ────────────────────────────────────────────────────────────────
 
 type FormData = {
-  inquiry_type: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -61,25 +40,20 @@ type FormData = {
   country: string;
   city: string;
   message: string;
-  how_heard: string;
   consent: boolean;
-  subscribed: boolean;
 };
 
 const EMPTY: FormData = {
-  inquiry_type: '',
-  first_name:   '',
-  last_name:    '',
-  email:        '',
-  phone:        '',
-  company:      '',
-  position:     '',
-  country:      '',
-  city:         '',
-  message:      '',
-  how_heard:    '',
-  consent:      false,
-  subscribed:   false,
+  first_name: '',
+  last_name:  '',
+  email:      '',
+  phone:      '',
+  company:    '',
+  position:   '',
+  country:    '',
+  city:       '',
+  message:    '',
+  consent:    false,
 };
 
 type Errors = Partial<Record<keyof FormData, string>>;
@@ -233,53 +207,6 @@ function FormCheckbox({
   );
 }
 
-// ── Section accordion ─────────────────────────────────────────────────────────
-
-function FormSection({
-  title,
-  open,
-  onToggle,
-  children,
-}: {
-  title: string;
-  open: boolean;
-  onToggle: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="border-t border-white/[0.08]">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="flex items-center justify-between w-full py-5 text-left group"
-      >
-        <span className="text-[15px] text-white/50 group-hover:text-white/75 transition-colors">{title}</span>
-        <ChevronDown
-          size={16}
-          className={cn(
-            'text-white/30 transition-transform duration-300',
-            open ? 'rotate-180' : 'rotate-0',
-          )}
-        />
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="content"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="pb-16">{children}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
 // ── Success state ─────────────────────────────────────────────────────────────
 
 function SuccessMessage() {
@@ -306,7 +233,6 @@ function SuccessMessage() {
 export function ContactUs() {
   const [form, setForm]       = useState<FormData>(EMPTY);
   const [errors, setErrors]   = useState<Errors>({});
-  const [open, setOpen]       = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted]   = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -318,7 +244,6 @@ export function ContactUs() {
 
   function validate(): boolean {
     const e: Errors = {};
-    if (!form.inquiry_type) e.inquiry_type = 'Required';
     if (!form.first_name.trim()) e.first_name = 'Required';
     if (!form.last_name.trim())  e.last_name  = 'Required';
     if (!form.email.trim())      e.email      = 'Required';
@@ -336,18 +261,18 @@ export function ContactUs() {
     setServerError(null);
     try {
       const { error } = await supabase.from('contact_submissions').insert({
-        inquiry_type: form.inquiry_type,
+        inquiry_type: null,
         first_name:   form.first_name,
         last_name:    form.last_name,
         email:        form.email,
-        phone:        form.phone   || null,
-        company:      form.company || null,
+        phone:        form.phone    || null,
+        company:      form.company  || null,
         position:     form.position || null,
-        country:      form.country || null,
-        city:         form.city    || null,
-        message:      form.message || null,
-        how_heard:    form.how_heard || null,
-        subscribed:   form.subscribed,
+        country:      form.country  || null,
+        city:         form.city     || null,
+        message:      form.message  || null,
+        how_heard:    null,
+        subscribed:   false,
       });
       if (error) throw new Error(error.message);
       setSubmitted(true);
@@ -379,8 +304,9 @@ export function ContactUs() {
             transition={{ duration: 0.6 }}
             className="mb-20"
           >
-            <h1 className="text-[64px] lg:text-[96px] font-light text-white leading-[0.95] tracking-[-0.02em]">
-              Ask Us<br />Anything
+            <h1 className="text-[46px] lg:text-[62px] font-semibold leading-tight text-white">
+              Let's <span className="gradient-text">connect.</span><br />
+              <span className="font-light">We'd love to <span className="gradient-text">hear from you.</span></span>
             </h1>
           </motion.div>
 
@@ -388,157 +314,117 @@ export function ContactUs() {
           {submitted ? (
             <SuccessMessage />
           ) : (
-            <form onSubmit={handleSubmit} noValidate>
-              <FormSection
-                title="General Information Request"
-                open={open}
-                onToggle={() => setOpen(o => !o)}
-              >
-                {/* Inquiry type */}
-                <div className="mb-10">
-                  <UnderlineSelect
-                    label="Select the Reason for Your Inquiry"
-                    value={form.inquiry_type}
-                    onChange={v => set('inquiry_type', v)}
-                    options={INQUIRY_TYPES}
-                    placeholder="Choose one…"
-                    required
-                    error={errors.inquiry_type}
-                  />
-                </div>
+            <form onSubmit={handleSubmit} noValidate className="border-t border-white/[0.08] pt-12">
+              {/* Name row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-8">
+                <UnderlineInput
+                  label="First Name"
+                  value={form.first_name}
+                  onChange={v => set('first_name', v)}
+                  required
+                  error={errors.first_name}
+                />
+                <UnderlineInput
+                  label="Last Name"
+                  value={form.last_name}
+                  onChange={v => set('last_name', v)}
+                  required
+                  error={errors.last_name}
+                />
+              </div>
 
-                {/* Name row */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-8">
-                  <UnderlineInput
-                    label="First Name"
-                    value={form.first_name}
-                    onChange={v => set('first_name', v)}
-                    required
-                    error={errors.first_name}
-                  />
-                  <UnderlineInput
-                    label="Last Name"
-                    value={form.last_name}
-                    onChange={v => set('last_name', v)}
-                    required
-                    error={errors.last_name}
-                  />
-                </div>
+              {/* Email + Phone */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-8">
+                <UnderlineInput
+                  label="Email"
+                  type="email"
+                  value={form.email}
+                  onChange={v => set('email', v)}
+                  required
+                  error={errors.email}
+                />
+                <UnderlineInput
+                  label="Phone"
+                  type="tel"
+                  value={form.phone}
+                  onChange={v => set('phone', v)}
+                />
+              </div>
 
-                {/* Email + Phone */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-8">
-                  <UnderlineInput
-                    label="Email"
-                    type="email"
-                    value={form.email}
-                    onChange={v => set('email', v)}
-                    required
-                    error={errors.email}
-                  />
-                  <UnderlineInput
-                    label="Phone"
-                    type="tel"
-                    value={form.phone}
-                    onChange={v => set('phone', v)}
-                  />
-                </div>
+              {/* Company + Position */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-8">
+                <UnderlineInput
+                  label="Company"
+                  value={form.company}
+                  onChange={v => set('company', v)}
+                />
+                <UnderlineSelect
+                  label="Position"
+                  value={form.position}
+                  onChange={v => set('position', v)}
+                  options={POSITIONS}
+                  placeholder="Select…"
+                />
+              </div>
 
-                {/* Company + Position */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-8">
-                  <UnderlineInput
-                    label="Company"
-                    value={form.company}
-                    onChange={v => set('company', v)}
-                  />
-                  <UnderlineSelect
-                    label="Position"
-                    value={form.position}
-                    onChange={v => set('position', v)}
-                    options={POSITIONS}
-                    placeholder="Select…"
-                  />
-                </div>
+              {/* Country + City */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-10">
+                <UnderlineSelect
+                  label="Country"
+                  value={form.country}
+                  onChange={v => set('country', v)}
+                  options={COUNTRIES}
+                  placeholder="Select…"
+                  required
+                  error={errors.country}
+                />
+                <UnderlineInput
+                  label="City"
+                  value={form.city}
+                  onChange={v => set('city', v)}
+                />
+              </div>
 
-                {/* Country + City */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-10">
-                  <UnderlineSelect
-                    label="Country"
-                    value={form.country}
-                    onChange={v => set('country', v)}
-                    options={COUNTRIES}
-                    placeholder="Select…"
-                    required
-                    error={errors.country}
-                  />
-                  <UnderlineInput
-                    label="City"
-                    value={form.city}
-                    onChange={v => set('city', v)}
-                  />
-                </div>
+              {/* Message */}
+              <div className="mb-12">
+                <UnderlineTextarea
+                  label="Your inquiry or comments"
+                  value={form.message}
+                  onChange={v => set('message', v)}
+                />
+              </div>
 
-                {/* Message */}
-                <div className="mb-10">
-                  <UnderlineTextarea
-                    label="Your inquiry or comments"
-                    value={form.message}
-                    onChange={v => set('message', v)}
-                  />
-                </div>
-
-                {/* How heard */}
-                <div className="mb-12">
-                  <UnderlineSelect
-                    label="How did you hear about NEX4?"
-                    value={form.how_heard}
-                    onChange={v => set('how_heard', v)}
-                    options={HOW_HEARD}
-                    placeholder="Select…"
-                    required={false}
-                  />
-                </div>
-
-                {/* Checkboxes */}
-                <div className="flex flex-col gap-5 mb-10">
-                  <div>
-                    <FormCheckbox
-                      checked={form.consent}
-                      onChange={v => set('consent', v)}
-                    >
-                      I consent to NEX4 ICT Solutions processing my personal information in accordance with our{' '}
-                      <span className="underline text-white/60">Privacy Policy</span>
-                      , and understand that processing may take place outside of my home jurisdiction.{' '}
-                      <span className="text-white/30">*</span>
-                    </FormCheckbox>
-                    {errors.consent && (
-                      <p className="text-[10px] text-red-400/70 mt-1.5 ml-9">You must accept to continue.</p>
-                    )}
-                  </div>
-
-                  <FormCheckbox
-                    checked={form.subscribed}
-                    onChange={v => set('subscribed', v)}
-                  >
-                    I'd like to receive updates from NEX4 about cloud solutions, events, and Microsoft news by email.
-                  </FormCheckbox>
-                </div>
-
-                {/* Footer row */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="inline-flex items-center gap-3 border border-white/35 rounded-full px-10 py-4 text-[12px] font-bold uppercase tracking-[0.22em] text-white hover:bg-white hover:text-black transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {submitting ? 'Sending…' : 'Submit'}
-                  </button>
-                  <p className="text-[11px] text-white/25">* Indicates required fields</p>
-                </div>
-
-                {serverError && (
-                  <p className="mt-4 text-[12px] text-red-400/70">{serverError}</p>
+              {/* Consent */}
+              <div className="mb-10">
+                <FormCheckbox
+                  checked={form.consent}
+                  onChange={v => set('consent', v)}
+                >
+                  I consent to NEX4 ICT Solutions processing my personal information in accordance with our{' '}
+                  <span className="underline text-white/60">Privacy Policy</span>
+                  , and understand that processing may take place outside of my home jurisdiction.{' '}
+                  <span className="text-white/30">*</span>
+                </FormCheckbox>
+                {errors.consent && (
+                  <p className="text-[10px] text-red-400/70 mt-1.5 ml-9">You must accept to continue.</p>
                 )}
-              </FormSection>
+              </div>
+
+              {/* Footer row */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="inline-flex items-center gap-3 border border-white/35 rounded-full px-10 py-4 text-[12px] font-bold uppercase tracking-[0.22em] text-white hover:bg-white hover:text-black transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? 'Sending…' : 'Submit'}
+                </button>
+                <p className="text-[11px] text-white/25">* Indicates required fields</p>
+              </div>
+
+              {serverError && (
+                <p className="mt-4 text-[12px] text-red-400/70">{serverError}</p>
+              )}
             </form>
           )}
         </div>

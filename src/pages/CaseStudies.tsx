@@ -1,12 +1,12 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
 import { ASSETS } from '@/lib/assets';
-import { CASE_STUDIES } from '@/data/caseStudies';
+import { CaseStudyService } from '@/services/CaseStudyService';
 import { cn } from '@/lib/utils';
-import type { CaseStudyCategory } from '@/types/caseStudy';
+import type { CaseStudyCategory, CaseStudyFull } from '@/types/caseStudy';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -116,7 +116,7 @@ function CaseStudyCard({
   index,
   total,
 }: {
-  cs: typeof CASE_STUDIES[0];
+  cs: CaseStudyFull;
   index: number;
   total: number;
 }) {
@@ -238,21 +238,30 @@ function Pill({
 const PAGE_SIZE = 8;
 
 export function CaseStudies() {
+  const [allStudies, setAllStudies] = useState<CaseStudyFull[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<CaseStudyCategory | null>(null);
   const [activeIndustry, setActiveIndustry] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
+  useEffect(() => {
+    CaseStudyService.getAll().then(data => {
+      setAllStudies(data);
+      setLoading(false);
+    });
+  }, []);
+
   const industries = useMemo(
-    () => Array.from(new Set(CASE_STUDIES.map(cs => cs.industry))).sort(),
-    [],
+    () => Array.from(new Set(allStudies.map(cs => cs.industry))).sort(),
+    [allStudies],
   );
 
   const filtered = useMemo(() => {
-    let list = CASE_STUDIES;
+    let list = allStudies;
     if (activeCategory) list = list.filter(cs => cs.category === activeCategory);
     if (activeIndustry) list = list.filter(cs => cs.industry === activeIndustry);
     return list;
-  }, [activeCategory, activeIndustry]);
+  }, [allStudies, activeCategory, activeIndustry]);
 
   // Reset visible count when filters change
   const handleCategoryChange = useCallback((val: CaseStudyCategory | null) => {
@@ -266,6 +275,19 @@ export function CaseStudies() {
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen text-white relative pt-[76px]">
+        <BackgroundBlobs />
+        <div className="max-w-[1240px] mx-auto px-10 py-20 grid grid-cols-3 gap-3">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="rounded-2xl bg-white/[0.03] animate-pulse" style={{ height: 280 }} />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-white relative">

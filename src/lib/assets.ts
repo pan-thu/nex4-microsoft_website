@@ -19,4 +19,8 @@ export const ASSETS = {
   scene6:      `${BASE}/scene-6.png`,
   scene7:      `${BASE}/scene-7.png`,
   scene8:      `${BASE}/scene-8.png`,
+  locMyanmar:  `${BASE}/locations/myanmar.jpg`,
+  locThailand: `${BASE}/locations/thailand.jpg`,
+  locCambodia: `${BASE}/locations/cambodia.jpg`,
+  locJapan:    `${BASE}/locations/japan.jpg`,
 };

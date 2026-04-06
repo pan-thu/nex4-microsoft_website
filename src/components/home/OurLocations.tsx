@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { ASSETS } from '@/lib/assets';
 
 interface Location {
   country: string;
@@ -14,28 +15,28 @@ const LOCATIONS: Location[] = [
     country: 'Myanmar',
     city: 'Yangon',
     coords: '16.8661° N, 96.1951° E',
-    image: 'https://images.unsplash.com/photo-1570521462033-3015e76e7432?w=600&q=80&fit=crop',
+    image: ASSETS.locMyanmar,
     alt: 'Yangon, Myanmar',
   },
   {
     country: 'Thailand',
     city: 'Bangkok',
     coords: '13.7563° N, 100.5018° E',
-    image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600&q=80&fit=crop',
+    image: ASSETS.locThailand,
     alt: 'Bangkok, Thailand',
   },
   {
     country: 'Cambodia',
     city: 'Phnom Penh',
     coords: '11.5564° N, 104.9282° E',
-    image: 'https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?w=600&q=80&fit=crop',
+    image: ASSETS.locCambodia,
     alt: 'Phnom Penh, Cambodia',
   },
   {
     country: 'Japan',
     city: 'Tokyo',
     coords: '35.6762° N, 139.6503° E',
-    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80&fit=crop',
+    image: ASSETS.locJapan,
     alt: 'Tokyo, Japan',
   },
 ];
