@@ -284,7 +284,13 @@ function Capabilities({ data }: { data: ServiceData }) {
                 <h3 className="text-[26px] lg:text-[32px] font-semibold text-white leading-snug mb-6">
                   {cap.title}
                 </h3>
-                <p className="text-[15px] text-white/55 leading-relaxed">{cap.body}</p>
+                <p className="text-[15px] text-white/55 leading-relaxed mb-8">{cap.body}</p>
+                <Link
+                  to="/contact-us"
+                  className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-white hover:bg-white hover:text-black transition-all duration-200"
+                >
+                  Explore More <ChevronRight size={13} />
+                </Link>
               </div>
 
               <div className="absolute bottom-0 left-0 right-0 h-[2px]"
