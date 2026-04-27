@@ -20,7 +20,7 @@ interface SubLink {
   id: string;
   label: string;
   href: string;
-  cards: [StoryCard, StoryCard];
+  cards: StoryCard[];
 }
 
 interface Section {
@@ -120,46 +120,68 @@ const SERVICES_SECTIONS: Section[] = [
   },
 ];
 
-// ─── Dynamic insights data ─────────────────────────────────────────────────────
+// ─── Dynamic navbar data ───────────────────────────────────────────────────────
 
 function shortDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
-type InsightsData = Record<string, { items: InsightItem[]; cards: StoryCard[] }>;
+// Maps each service sub-link id → the DB category string shared by blog_posts / case_studies
+const SERVICE_CATEGORY_MAP: Record<string, string> = {
+  'wp-productivity': 'workplace-productivity',
+  'wp-security':     'workplace-security',
+  'wp-ai':           'workplace-ai',
+  'wp-automation':   'workplace-automation',
+  'wp-backup':       'workplace-backup',
+  'cloud-migration': 'cloud-migration',
+};
 
-// Module-level singleton promise so we only fetch once per page load
-let insightsPromise: Promise<InsightsData> | null = null;
+interface NavbarData {
+  insights:     Record<string, { items: InsightItem[]; cards: StoryCard[] }>;
+  serviceCards: Record<string, StoryCard[]>;
+}
 
-async function fetchInsightsData(): Promise<InsightsData> {
+// Module-level singleton — fetch once per page load
+let navbarPromise: Promise<NavbarData> | null = null;
+
+async function fetchNavbarData(): Promise<NavbarData> {
+  const serviceCategories = Object.values(SERVICE_CATEGORY_MAP);
+
   const [
     { data: blogPosts },
     { data: newsArticles },
     { data: events },
     { data: caseStudies },
+    { data: serviceBlog },
+    { data: serviceCS },
   ] = await Promise.all([
     supabase.from('blog_posts').select('title,slug,excerpt,hero_image_url,category,published_at').order('published_at', { ascending: false }).limit(3),
     supabase.from('news_articles').select('title,slug,excerpt,hero_image_url,category,published_at').order('published_at', { ascending: false }).limit(3),
     supabase.from('events').select('title,slug,description,hero_image_url,category,event_date,status').order('event_date', { ascending: false }).limit(3),
     supabase.from('case_studies').select('title,slug,excerpt,image_url,category,created_at').order('created_at', { ascending: false }).limit(3),
+    supabase.from('blog_posts').select('title,slug,excerpt,hero_image_url,category,published_at').in('category', serviceCategories).order('published_at', { ascending: false }).limit(30),
+    supabase.from('case_studies').select('title,slug,excerpt,image_url,category,created_at').in('category', serviceCategories).order('created_at', { ascending: false }).limit(30),
   ]);
 
   function toCard(item: Record<string, string>, tag: string, href: string, fallback: string): StoryCard {
     return {
       tag,
-      title: item.title ?? '',
-      body: (item.excerpt ?? item.description ?? '').slice(0, 120),
+      title:  item.title ?? '',
+      body:   (item.excerpt ?? item.description ?? '').slice(0, 120),
       href,
-      image: item.hero_image_url || item.image_url || fallback,
+      image:  item.hero_image_url || item.image_url || fallback,
     };
   }
 
-  const blog = (blogPosts ?? []) as Record<string, string>[];
+  const blog = (blogPosts  ?? []) as Record<string, string>[];
   const news = (newsArticles ?? []) as Record<string, string>[];
-  const evts = (events ?? []) as Record<string, string>[];
+  const evts = (events     ?? []) as Record<string, string>[];
   const cs   = (caseStudies ?? []) as Record<string, string>[];
+  const sBlog = (serviceBlog ?? []) as Record<string, string>[];
+  const sCS   = (serviceCS  ?? []) as Record<string, string>[];
 
-  return {
+  // ── Insights panels ──
+  const insights: NavbarData['insights'] = {
     blog: {
       items: blog.map(p => ({ label: p.title, date: shortDate(p.published_at), href: `/blog/${p.slug}` })),
       cards: blog.slice(0, 2).map((p, i) => toCard(p, BLOG_CATEGORY_LABEL[p.category as keyof typeof BLOG_CATEGORY_LABEL] ?? 'Blog', `/blog/${p.slug}`, i === 0 ? IMG.i1 : IMG.i2)),
@@ -177,6 +199,30 @@ async function fetchInsightsData(): Promise<InsightsData> {
       cards: news.slice(0, 2).map((a, i) => toCard(a, NEWS_CATEGORY_LABEL[a.category as keyof typeof NEWS_CATEGORY_LABEL] ?? 'News', `/news/${a.slug}`, i === 0 ? IMG.i2 : IMG.i1)),
     },
   };
+
+  // ── Service featured cards ──
+  // Merge blog posts + case studies per service category, pick top 2 by recency
+  const serviceCards: NavbarData['serviceCards'] = {};
+  for (const [subId, cat] of Object.entries(SERVICE_CATEGORY_MAP)) {
+    const blogMatches = sBlog
+      .filter(p => p.category === cat)
+      .map(p => ({ ...p, _ts: p.published_at, _type: 'blog' as const }));
+    const csMatches = sCS
+      .filter(c => c.category === cat)
+      .map(c => ({ ...c, _ts: c.created_at, _type: 'cs' as const }));
+
+    const merged = [...blogMatches, ...csMatches]
+      .sort((a, b) => b._ts.localeCompare(a._ts))
+      .slice(0, 2);
+
+    serviceCards[subId] = merged.map((item, i) =>
+      item._type === 'blog'
+        ? toCard(item, BLOG_CATEGORY_LABEL[item.category as keyof typeof BLOG_CATEGORY_LABEL] ?? 'Blog', `/blog/${item.slug}`, i === 0 ? IMG.i1 : IMG.i2)
+        : toCard(item, 'Case Study', `/case-studies/${item.slug}`, i === 0 ? IMG.i2 : IMG.i1),
+    );
+  }
+
+  return { insights, serviceCards };
 }
 
 // Static skeleton used before data loads / if fetch fails
@@ -187,21 +233,21 @@ const INSIGHTS_SKELETON: InsightCategory[] = [
   { id: 'news',          label: 'News',          items: [], cards: [] },
 ];
 
-function useInsightsData(): InsightCategory[] {
-  const [data, setData] = useState<InsightsData | null>(null);
+function useNavbarData(): { insightCats: InsightCategory[]; serviceCards: Record<string, StoryCard[]> } {
+  const [data, setData] = useState<NavbarData | null>(null);
 
   useEffect(() => {
-    if (!insightsPromise) insightsPromise = fetchInsightsData();
-    insightsPromise.then(setData).catch(() => { /* keep skeleton */ });
+    if (!navbarPromise) navbarPromise = fetchNavbarData();
+    navbarPromise.then(setData).catch(() => { /* keep skeleton */ });
   }, []);
 
-  if (!data) return INSIGHTS_SKELETON;
-
-  return INSIGHTS_SKELETON.map(cat => ({
+  const insightCats = INSIGHTS_SKELETON.map(cat => ({
     ...cat,
-    items: data[cat.id]?.items ?? [],
-    cards: data[cat.id]?.cards ?? [],
+    items: data?.insights[cat.id]?.items ?? [],
+    cards: data?.insights[cat.id]?.cards ?? [],
   }));
+
+  return { insightCats, serviceCards: data?.serviceCards ?? {} };
 }
 
 // ─── Story Card ────────────────────────────────────────────────────────────────
@@ -247,7 +293,7 @@ function PanelLabel({ children }: { children: React.ReactNode }) {
 
 // ─── Services Mega Menu ────────────────────────────────────────────────────────
 
-function ServicesMegaMenu({ visible }: { visible: boolean }) {
+function ServicesMegaMenu({ visible, serviceCards }: { visible: boolean; serviceCards: Record<string, StoryCard[]> }) {
   const [activeSectionId, setActiveSectionId] = useState(SERVICES_SECTIONS[0].id);
   const [activeSubId, setActiveSubId] = useState(SERVICES_SECTIONS[0].links[0].id);
 
@@ -359,11 +405,19 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
           {/* Panel 3 — Story cards */}
           <div className="flex-1 py-9 px-8">
             <PanelLabel>Featured</PanelLabel>
-            <div className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]">
-              {activeSub.cards.map((card, i) => (
-                <StoryCard key={`${activeSub.id}-${i}`} card={card} />
-              ))}
-            </div>
+            {(() => {
+              const dynamic = serviceCards[activeSub.id];
+              const cards = dynamic && dynamic.length > 0 ? dynamic : activeSub.cards;
+              return cards.length > 0 ? (
+                <div className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]">
+                  {cards.map((card, i) => <StoryCard key={`${activeSub.id}-${i}`} card={card} />)}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]">
+                  {[0, 1].map(i => <div key={i} className="bg-white/[0.03] animate-pulse" style={{ minHeight: 240 }} />)}
+                </div>
+              );
+            })()}
           </div>
 
         </div>
@@ -375,7 +429,7 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
 // ─── Insights Mega Menu ────────────────────────────────────────────────────────
 
 function InsightsMegaMenu({ visible }: { visible: boolean }) {
-  const categories = useInsightsData();
+  const { insightCats: categories } = useNavbarData();
   const [activeCatId, setActiveCatId] = useState(INSIGHTS_SKELETON[0].id);
   const activeCat = categories.find((c) => c.id === activeCatId) ?? categories[0];
   const navigate = useNavigate();
@@ -535,6 +589,7 @@ function NavLink({
 type MenuKey = 'services' | 'insights' | null;
 
 export function Navbar() {
+  const { serviceCards } = useNavbarData();
   const [scrolled, setScrolled] = useState(false);
   const [openMenu, setOpenMenu] = useState<MenuKey>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -621,7 +676,7 @@ export function Navbar() {
         onMouseLeave={close}
         className="absolute top-[76px] left-0 right-0"
       >
-        <ServicesMegaMenu visible={openMenu === 'services'} />
+        <ServicesMegaMenu visible={openMenu === 'services'} serviceCards={serviceCards} />
       </div>
       <div
         onMouseEnter={() => open('insights')}
