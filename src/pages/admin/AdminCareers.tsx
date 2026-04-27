@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X, Link2, Users } from 'lucide-react';
+import { Plus, Pencil, Trash2, Link2, Users } from 'lucide-react';
 import { CareerService } from '@/services/CareerService';
 import { supabase } from '@/lib/supabase';
 import { AdminJobApplications } from './AdminJobApplications';

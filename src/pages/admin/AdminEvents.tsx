@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X, Link2, Users } from 'lucide-react';
+import { Plus, Pencil, Trash2, Link2, Users } from 'lucide-react';
 import { EventService } from '@/services/EventService';
 import { supabase } from '@/lib/supabase';
 import { EVENT_CATEGORIES, EVENT_TYPES } from '@/lib/eventConstants';
 import { cn } from '@/lib/utils';
 import {
   toSlug, FieldLabel, FormInput, FormSelect, FormSection,
-  AutoTextarea, SlugField, ImageUploadField, TakeawayEditor,
+  SlugField, ImageUploadField, TakeawayEditor,
   Toast, useKeyboardShortcuts,
 } from './AdminFormUI';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';

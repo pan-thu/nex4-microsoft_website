@@ -34,7 +34,7 @@ interface Props {
   eventTitle: string;
 }
 
-export function RegistrationForm({ eventId, eventTitle }: Props) {
+export function RegistrationForm({ eventId }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 

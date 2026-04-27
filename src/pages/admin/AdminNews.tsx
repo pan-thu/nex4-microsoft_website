@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X, Link2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Link2 } from 'lucide-react';
 import { NewsService } from '@/services/BlogService';
 import { NEWS_CATEGORIES } from '@/lib/blogConstants';
 import { supabase } from '@/lib/supabase';

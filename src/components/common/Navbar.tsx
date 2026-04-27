@@ -215,11 +215,12 @@ async function fetchNavbarData(): Promise<NavbarData> {
       .sort((a, b) => b._ts.localeCompare(a._ts))
       .slice(0, 2);
 
-    serviceCards[subId] = merged.map((item, i) =>
-      item._type === 'blog'
-        ? toCard(item, BLOG_CATEGORY_LABEL[item.category as keyof typeof BLOG_CATEGORY_LABEL] ?? 'Blog', `/blog/${item.slug}`, i === 0 ? IMG.i1 : IMG.i2)
-        : toCard(item, 'Case Study', `/case-studies/${item.slug}`, i === 0 ? IMG.i2 : IMG.i1),
-    );
+    serviceCards[subId] = merged.map((item, i) => {
+      const rec = item as Record<string, string>;
+      return item._type === 'blog'
+        ? toCard(rec, BLOG_CATEGORY_LABEL[rec.category as keyof typeof BLOG_CATEGORY_LABEL] ?? 'Blog', `/blog/${rec.slug}`, i === 0 ? IMG.i1 : IMG.i2)
+        : toCard(rec, 'Case Study', `/case-studies/${rec.slug}`, i === 0 ? IMG.i2 : IMG.i1);
+    });
   }
 
   return { insights, serviceCards };
