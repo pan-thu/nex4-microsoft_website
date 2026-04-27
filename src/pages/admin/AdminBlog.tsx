@@ -9,6 +9,7 @@ import {
   AutoTextarea, SlugField, ImageUploadField, TagsInput,
   Toast, useKeyboardShortcuts,
 } from './AdminFormUI';
+import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import type { BlogPost } from '@/types/blog';
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -102,23 +103,32 @@ function BlogFormModal({
   useKeyboardShortcuts({ onClose, onSave: handleSave });
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0e0e0e] border border-white/[0.08] w-full max-w-2xl max-h-[92vh] flex flex-col">
-        {/* Header */}
-        <div className="flex justify-between items-center px-7 py-5 border-b border-white/[0.06] shrink-0">
-          <div>
-            <h2 className="text-[15px] font-semibold text-white">
-              {editingId ? 'Edit Post' : 'New Post'}
-            </h2>
-            <p className="text-[10px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
-          </div>
-          <button onClick={onClose} className="text-white/30 hover:text-white/70 transition-colors">
-            <X size={18} />
+    <div className="fixed inset-0 z-50 bg-[#080808] flex flex-col">
+      {/* Header */}
+      <div className="flex justify-between items-center px-8 py-4 border-b border-white/[0.07] shrink-0 bg-[#0a0a0a]">
+        <div>
+          <h2 className="text-[17px] font-semibold text-white">
+            {editingId ? 'Edit Post' : 'New Post'}
+          </h2>
+          <p className="text-[11px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button onClick={onClose} className="px-5 py-2 text-[13px] text-white/40 hover:text-white/70 transition-colors">
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving || uploading}
+            className="px-6 py-2 bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create post'}
           </button>
         </div>
+      </div>
 
-        {/* Body */}
-        <div className="overflow-y-auto px-7 py-6 flex flex-col gap-7">
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto">
+      <div className="max-w-[860px] mx-auto px-8 py-8 flex flex-col gap-7">
 
           <FormSection title="Identity">
             <div>
@@ -164,12 +174,11 @@ function BlogFormModal({
                   </span>
                 )}
               </div>
-              <AutoTextarea
+              <RichTextEditor
                 value={form.content}
                 onChange={v => field('content', v)}
-                placeholder="Supports ## headings, ### subheadings, > blockquotes, and paragraphs"
-                minRows={8}
-                mono
+                placeholder="Start writing your post…"
+                minHeight={320}
               />
             </div>
           </FormSection>
@@ -255,21 +264,7 @@ function BlogFormModal({
             />
           </FormSection>
 
-          {error && <p className="text-[12px] text-red-400/70">{error}</p>}
-        </div>
-
-        {/* Footer */}
-        <div className="px-7 py-5 border-t border-white/[0.06] flex justify-end gap-3 shrink-0">
-          <button onClick={onClose} className="px-5 py-2.5 text-[12px] text-white/40 hover:text-white/70 transition-colors">
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving || uploading}
-            className="px-6 py-2.5 bg-white text-black text-[12px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create post'}
-          </button>
+          {error && <p className="text-[13px] text-red-400/70">{error}</p>}
         </div>
       </div>
     </div>
@@ -356,14 +351,14 @@ export function AdminBlog() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
-          <h1 className="text-[22px] font-semibold text-white">Blog Posts</h1>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
+          <h1 className="text-[24px] font-semibold text-white">Blog Posts</h1>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 bg-white text-black text-[12px] font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
+          className="flex items-center gap-2 bg-white text-black text-[13px] font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
         >
-          <Plus size={14} /> New Post
+          <Plus size={15} /> New Post
         </button>
       </div>
 
@@ -381,11 +376,11 @@ export function AdminBlog() {
         </div>
       ) : (
         <div className="border border-white/[0.07] overflow-hidden">
-          <table className="w-full text-[12px]">
+          <table className="w-full text-[13px]">
             <thead>
               <tr className="border-b border-white/[0.06] bg-white/[0.02]">
                 {['Title', 'Category', 'Author', 'Published', ''].map(h => (
-                  <th key={h} className="text-left text-[10px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
+                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -409,13 +404,13 @@ export function AdminBlog() {
                     <div className={cn('flex gap-1 justify-end transition-opacity', deletingId === post.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100')}>
                       <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer"
                         className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="View">
-                        <Link2 size={13} />
+                        <Link2 size={15} />
                       </a>
                       <button onClick={() => openEdit(post)} className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="Edit">
-                        <Pencil size={13} />
+                        <Pencil size={15} />
                       </button>
                       {deletingId === post.id ? (
-                        <span className="flex items-center gap-1.5 ml-1 text-[11px]">
+                        <span className="flex items-center gap-1.5 ml-1 text-[13px]">
                           <button onClick={() => handleDelete(post.id)} className="text-red-400 hover:text-red-300 font-medium transition-colors">
                             Confirm
                           </button>
@@ -425,7 +420,7 @@ export function AdminBlog() {
                         </span>
                       ) : (
                         <button onClick={() => setDeletingId(post.id)} className="p-1.5 text-white/30 hover:text-red-400/70 transition-colors" title="Delete">
-                          <Trash2 size={13} />
+                          <Trash2 size={15} />
                         </button>
                       )}
                     </div>

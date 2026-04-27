@@ -125,11 +125,11 @@ export function Blog() {
       {/* ── Posts grid ────────────────────────────────────────────────────── */}
       <section className="max-w-[1240px] mx-auto px-10 py-14">
         <div className="flex items-baseline gap-4 mb-8">
-          <h2 className="text-[13px] uppercase tracking-[0.2em] text-white/50 font-semibold">
+          <h2 className="text-[14px] uppercase tracking-[0.2em] text-white/50 font-semibold">
             Latest Posts
           </h2>
           {!loading && (
-            <span className="text-[11px] font-mono text-white/20">
+            <span className="text-[12px] font-mono text-white/20">
               {filtered.length} {filtered.length === 1 ? 'post' : 'posts'}
             </span>
           )}
@@ -145,10 +145,10 @@ export function Blog() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center border border-white/[0.06]">
-            <p className="text-white/20 text-[13px] mb-1">No posts match your filters.</p>
+            <p className="text-white/20 text-[14px] mb-1">No posts match your filters.</p>
             <button
               onClick={() => setFilters(EMPTY_FILTERS)}
-              className="text-[11px] text-white/35 hover:text-white/60 transition-colors underline underline-offset-2"
+              className="text-[13px] text-white/35 hover:text-white/60 transition-colors underline underline-offset-2"
             >
               Clear filters
             </button>
@@ -179,7 +179,7 @@ export function Blog() {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
-                  className="px-8 py-3 border border-white/[0.12] text-[12px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 transition-all duration-200"
+                  className="px-8 py-3 border border-white/[0.12] text-[13px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 transition-all duration-200"
                 >
                   Load more posts
                 </button>

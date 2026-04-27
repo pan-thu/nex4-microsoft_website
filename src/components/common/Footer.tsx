@@ -133,7 +133,7 @@ export function Footer() {
             </p>
             <Link
               to="/contact-us"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-white/90 text-black text-[13px] font-medium transition-colors duration-150"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-white/90 text-black text-[13px] font-medium rounded-lg transition-colors duration-150"
             >
               Contact Us
             </Link>
@@ -161,7 +161,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              className="w-8 h-8 flex items-center justify-center border border-white/[0.08] text-white/35 hover:text-white hover:border-white/20 transition-all duration-150"
+              className="w-8 h-8 flex items-center justify-center border border-white/[0.08] rounded-lg text-white/35 hover:text-white hover:border-white/20 transition-all duration-150"
             >
               <Icon size={13} />
             </a>

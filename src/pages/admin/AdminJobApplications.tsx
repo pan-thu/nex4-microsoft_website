@@ -11,16 +11,18 @@ interface JobApplication {
   email: string;
   phone: string | null;
   cover_letter: string | null;
+  cv_url: string | null;
   submitted_at: string;
 }
 
 function exportCSV(applications: JobApplication[], jobTitle: string) {
-  const headers = ['First Name', 'Last Name', 'Email', 'Phone', 'Cover Letter', 'Submitted At'];
+  const headers = ['First Name', 'Last Name', 'Email', 'Phone', 'CV URL', 'Cover Letter', 'Submitted At'];
   const rows = applications.map(a => [
     a.first_name,
     a.last_name,
     a.email,
     a.phone ?? '',
+    a.cv_url ?? '',
     a.cover_letter ?? '',
     new Date(a.submitted_at).toLocaleString(),
   ]);
@@ -110,7 +112,7 @@ export function AdminJobApplications({ job, onBack }: { job: JobPosting; onBack:
           <table className="w-full text-[12px] min-w-[640px]">
             <thead>
               <tr className="border-b border-white/[0.06] bg-white/[0.02]">
-                {['Name', 'Email', 'Phone', 'Cover Letter', 'Submitted'].map(h => (
+                {['Name', 'Email', 'Phone', 'CV', 'Cover Letter', 'Submitted'].map(h => (
                   <th key={h} className="text-left text-[10px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3 whitespace-nowrap">
                     {h}
                   </th>
@@ -125,6 +127,12 @@ export function AdminJobApplications({ job, onBack }: { job: JobPosting; onBack:
                   </td>
                   <td className="px-4 py-3 text-white/50">{a.email}</td>
                   <td className="px-4 py-3 text-white/35">{a.phone ?? <span className="text-white/15">—</span>}</td>
+                  <td className="px-4 py-3">
+                    {a.cv_url
+                      ? <a href={a.cv_url} target="_blank" rel="noopener noreferrer" className="text-[12px] text-blue-400/70 hover:text-blue-300 transition-colors underline underline-offset-2">View PDF</a>
+                      : <span className="text-white/15">—</span>
+                    }
+                  </td>
                   <td className="px-4 py-3 text-white/35 max-w-[220px]">
                     {a.cover_letter
                       ? <span className="line-clamp-1">{a.cover_letter}</span>

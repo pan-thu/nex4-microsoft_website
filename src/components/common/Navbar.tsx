@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ASSETS } from '@/lib/assets';
+import { supabase } from '@/lib/supabase';
+import { BLOG_CATEGORY_LABEL, NEWS_CATEGORY_LABEL } from '@/lib/blogConstants';
 
 // ─── Types & Data ──────────────────────────────────────────────────────────────
 
@@ -37,7 +39,7 @@ interface InsightCategory {
   id: string;
   label: string;
   items: InsightItem[];
-  cards: [StoryCard, StoryCard];
+  cards: StoryCard[];
 }
 
 const IMG = {
@@ -118,60 +120,89 @@ const SERVICES_SECTIONS: Section[] = [
   },
 ];
 
-const INSIGHTS_CATEGORIES: InsightCategory[] = [
-  {
-    id: 'blog',
-    label: 'Blog',
-    items: [
-      { label: 'How AI Creates a Better Workplace', date: 'Mar 2025', href: '/blog/how-ai-create-better-workplace' },
-      { label: 'Modern Architecture & Interior Design', date: 'Feb 2025', href: '/blog/modern-architecture-and-interior' },
-      { label: 'Design a Perfect Home Office', date: 'Jan 2025', href: '/blog/design-a-perfect-home' },
-    ],
-    cards: [
-      { tag: 'Blog', title: 'How AI Creates a Better Workplace', body: 'Discover how AI-driven tools are reshaping collaboration, decision-making, and productivity.', href: '/blog/how-ai-create-better-workplace', image: IMG.i1 },
-      { tag: 'Blog', title: 'Modern Workspace Architecture', body: 'The intersection of physical space and digital infrastructure in enterprise environments.', href: '/blog/modern-architecture-and-interior', image: IMG.i2 },
-    ],
-  },
-  {
-    id: 'case-studies',
-    label: 'Case Studies',
-    items: [
-      { label: 'Inspiring Design Trends This Fall', date: 'Mar 2025', href: '/case-studies/inspiring-design-trends-this-fall' },
-      { label: 'Tips for Planning a Project', date: 'Jul 2024', href: '/case-studies/tips-for-planning-a-project' },
-      { label: 'Enhanced Business Critical App Security', date: 'May 2024', href: '#' },
-    ],
-    cards: [
-      { tag: 'Case Study', title: 'Enhanced Business App Security on AWS', body: 'How we secured a business-critical application on public cloud with zero downtime.', href: '#', image: IMG.i2 },
-      { tag: 'Case Study', title: 'Inspiring Design Trends This Fall', body: 'Exploring the latest workplace and technology design trends shaping enterprise environments.', href: '/case-studies/inspiring-design-trends-this-fall', image: IMG.i1 },
-    ],
-  },
-  {
-    id: 'events',
-    label: 'Events',
-    items: [
-      { label: 'Microsoft Cloud Summit 2025', date: 'Apr 2025', href: '/events' },
-      { label: 'Digital Workplace Forum', date: 'May 2025', href: '/events' },
-      { label: 'AI in Business Webinar', date: 'Jun 2025', href: '/events' },
-    ],
-    cards: [
-      { tag: 'Upcoming', title: 'Microsoft Cloud Summit 2025', body: 'Join us for a full-day summit exploring the future of cloud infrastructure and AI.', href: '/events', image: IMG.i1 },
-      { tag: 'Webinar', title: 'AI in Business: Practical Applications', body: 'A live session with NEX4 and Microsoft experts on deploying AI in enterprise settings.', href: '/events', image: IMG.i2 },
-    ],
-  },
-  {
-    id: 'news',
-    label: 'News',
-    items: [
-      { label: 'NEX4 Achieves Microsoft Gold Partner Status', date: 'Mar 2025', href: '/news' },
-      { label: 'New Office Opening in Singapore', date: 'Feb 2025', href: '/news' },
-      { label: 'NEX4 Listed in Gartner Report', date: 'Jan 2025', href: '/news' },
-    ],
-    cards: [
-      { tag: 'Announcement', title: 'NEX4 Achieves Microsoft Gold Partner', body: 'We are proud to announce our Gold Partner designation across Cloud and Modern Workplace.', href: '/news', image: IMG.i2 },
-      { tag: 'Expansion', title: 'NEX4 Opens New Regional Office', body: 'Expanding our presence to better serve enterprise clients across Southeast Asia.', href: '/news', image: IMG.i1 },
-    ],
-  },
+// ─── Dynamic insights data ─────────────────────────────────────────────────────
+
+function shortDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+
+type InsightsData = Record<string, { items: InsightItem[]; cards: StoryCard[] }>;
+
+// Module-level singleton promise so we only fetch once per page load
+let insightsPromise: Promise<InsightsData> | null = null;
+
+async function fetchInsightsData(): Promise<InsightsData> {
+  const [
+    { data: blogPosts },
+    { data: newsArticles },
+    { data: events },
+    { data: caseStudies },
+  ] = await Promise.all([
+    supabase.from('blog_posts').select('title,slug,excerpt,hero_image_url,category,published_at').order('published_at', { ascending: false }).limit(3),
+    supabase.from('news_articles').select('title,slug,excerpt,hero_image_url,category,published_at').order('published_at', { ascending: false }).limit(3),
+    supabase.from('events').select('title,slug,description,hero_image_url,category,event_date,status').order('event_date', { ascending: false }).limit(3),
+    supabase.from('case_studies').select('title,slug,excerpt,image_url,category,created_at').order('created_at', { ascending: false }).limit(3),
+  ]);
+
+  function toCard(item: Record<string, string>, tag: string, href: string, fallback: string): StoryCard {
+    return {
+      tag,
+      title: item.title ?? '',
+      body: (item.excerpt ?? item.description ?? '').slice(0, 120),
+      href,
+      image: item.hero_image_url || item.image_url || fallback,
+    };
+  }
+
+  const blog = (blogPosts ?? []) as Record<string, string>[];
+  const news = (newsArticles ?? []) as Record<string, string>[];
+  const evts = (events ?? []) as Record<string, string>[];
+  const cs   = (caseStudies ?? []) as Record<string, string>[];
+
+  return {
+    blog: {
+      items: blog.map(p => ({ label: p.title, date: shortDate(p.published_at), href: `/blog/${p.slug}` })),
+      cards: blog.slice(0, 2).map((p, i) => toCard(p, BLOG_CATEGORY_LABEL[p.category as keyof typeof BLOG_CATEGORY_LABEL] ?? 'Blog', `/blog/${p.slug}`, i === 0 ? IMG.i1 : IMG.i2)),
+    },
+    'case-studies': {
+      items: cs.map(c => ({ label: c.title, date: shortDate(c.created_at), href: `/case-studies/${c.slug}` })),
+      cards: cs.slice(0, 2).map((c, i) => toCard(c, 'Case Study', `/case-studies/${c.slug}`, i === 0 ? IMG.i2 : IMG.i1)),
+    },
+    events: {
+      items: evts.map(e => ({ label: e.title, date: shortDate(e.event_date), href: `/events/${e.slug}` })),
+      cards: evts.slice(0, 2).map((e, i) => toCard(e, e.status === 'upcoming' ? 'Upcoming' : 'On Demand', `/events/${e.slug}`, i === 0 ? IMG.i1 : IMG.i2)),
+    },
+    news: {
+      items: news.map(a => ({ label: a.title, date: shortDate(a.published_at), href: `/news/${a.slug}` })),
+      cards: news.slice(0, 2).map((a, i) => toCard(a, NEWS_CATEGORY_LABEL[a.category as keyof typeof NEWS_CATEGORY_LABEL] ?? 'News', `/news/${a.slug}`, i === 0 ? IMG.i2 : IMG.i1)),
+    },
+  };
+}
+
+// Static skeleton used before data loads / if fetch fails
+const INSIGHTS_SKELETON: InsightCategory[] = [
+  { id: 'blog',          label: 'Blog',          items: [], cards: [] },
+  { id: 'case-studies',  label: 'Case Studies',  items: [], cards: [] },
+  { id: 'events',        label: 'Events',        items: [], cards: [] },
+  { id: 'news',          label: 'News',          items: [], cards: [] },
 ];
+
+function useInsightsData(): InsightCategory[] {
+  const [data, setData] = useState<InsightsData | null>(null);
+
+  useEffect(() => {
+    if (!insightsPromise) insightsPromise = fetchInsightsData();
+    insightsPromise.then(setData).catch(() => { /* keep skeleton */ });
+  }, []);
+
+  if (!data) return INSIGHTS_SKELETON;
+
+  return INSIGHTS_SKELETON.map(cat => ({
+    ...cat,
+    items: data[cat.id]?.items ?? [],
+    cards: data[cat.id]?.cards ?? [],
+  }));
+}
 
 // ─── Story Card ────────────────────────────────────────────────────────────────
 
@@ -344,8 +375,9 @@ function ServicesMegaMenu({ visible }: { visible: boolean }) {
 // ─── Insights Mega Menu ────────────────────────────────────────────────────────
 
 function InsightsMegaMenu({ visible }: { visible: boolean }) {
-  const [activeCatId, setActiveCatId] = useState(INSIGHTS_CATEGORIES[0].id);
-  const activeCat = INSIGHTS_CATEGORIES.find((c) => c.id === activeCatId) ?? INSIGHTS_CATEGORIES[0];
+  const categories = useInsightsData();
+  const [activeCatId, setActiveCatId] = useState(INSIGHTS_SKELETON[0].id);
+  const activeCat = categories.find((c) => c.id === activeCatId) ?? categories[0];
   const navigate = useNavigate();
 
   return (
@@ -377,7 +409,7 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
           >
             <PanelLabel>Insights</PanelLabel>
             <ul className="space-y-0.5">
-              {INSIGHTS_CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <li key={cat.id}>
                   <button
                     onMouseEnter={() => setActiveCatId(cat.id)}
@@ -412,20 +444,28 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
             style={{ borderRight: '1px solid rgba(255,255,255,0.06)' }}
           >
             <PanelLabel>Recent {activeCat.label}</PanelLabel>
-            <ul className="space-y-0.5">
-              {activeCat.items.map((item) => (
-                <li key={item.label}>
-                  <Link
-                    to={item.href}
-                    className="flex items-start justify-between gap-4 px-3 py-3 text-[#a0a0a8] hover:text-white transition-colors duration-150"
-                    style={{ borderLeft: '2px solid transparent' }}
-                  >
-                    <span className="text-[14px] leading-snug">{item.label}</span>
-                    <span className="text-[11px] text-white/25 shrink-0 mt-0.5 font-medium">{item.date}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {activeCat.items.length > 0 ? (
+              <ul className="space-y-0.5">
+                {activeCat.items.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      to={item.href}
+                      className="flex items-start justify-between gap-4 px-3 py-3 text-[#a0a0a8] hover:text-white transition-colors duration-150"
+                      style={{ borderLeft: '2px solid transparent' }}
+                    >
+                      <span className="text-[14px] leading-snug line-clamp-2">{item.label}</span>
+                      <span className="text-[11px] text-white/25 shrink-0 mt-0.5 font-medium">{item.date}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="space-y-2 px-3">
+                {[70, 55, 65].map((w, i) => (
+                  <div key={i} className="h-3 bg-white/[0.04] rounded-sm animate-pulse" style={{ width: `${w}%` }} />
+                ))}
+              </div>
+            )}
             <div className="mt-5 px-3">
               <Link
                 to={`/${activeCat.id}`}
@@ -440,11 +480,19 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
           {/* Panel 3 — Featured cards */}
           <div className="flex-1 py-9 px-8">
             <PanelLabel>Featured</PanelLabel>
-            <div className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]">
-              {activeCat.cards.map((card, i) => (
-                <StoryCard key={`${activeCat.id}-${i}`} card={card} />
-              ))}
-            </div>
+            {activeCat.cards.length > 0 ? (
+              <div className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]">
+                {activeCat.cards.map((card, i) => (
+                  <StoryCard key={`${activeCat.id}-${i}`} card={card} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]">
+                {[0, 1].map(i => (
+                  <div key={i} className="bg-white/[0.03] animate-pulse" style={{ minHeight: 240 }} />
+                ))}
+              </div>
+            )}
           </div>
 
         </div>
@@ -631,7 +679,7 @@ export function Navbar() {
           </button>
           {mobileSection === 'insights' && (
             <div style={{ background: 'rgba(255,255,255,0.02)' }}>
-              {INSIGHTS_CATEGORIES.map((cat) => (
+              {INSIGHTS_SKELETON.map((cat) => (
                 <Link
                   key={cat.id}
                   to={`/${cat.id}`}

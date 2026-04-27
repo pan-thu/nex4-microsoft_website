@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react';
+import { ArrowLeft, Clock, Calendar, Tag, User } from 'lucide-react';
 import { NewsService } from '@/services/BlogService';
 import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
 import { NewsCard } from '@/components/news/NewsCard';
@@ -16,36 +16,20 @@ function formatDateLong(iso: string) {
 }
 
 function renderContent(content: string) {
+  if (content.trim().startsWith('<')) {
+    return <div className="prose-content text-[16px]" dangerouslySetInnerHTML={{ __html: content }} />;
+  }
   return content.split(/\n\n+/).map((para, i) => {
     if (para.startsWith('## ')) {
-      return (
-        <h2 key={i} className="text-[22px] font-semibold text-white mt-10 mb-4 leading-snug">
-          {para.replace(/^## /, '')}
-        </h2>
-      );
+      return <h2 key={i} className="text-[24px] font-semibold text-white mt-10 mb-4 leading-snug">{para.replace(/^## /, '')}</h2>;
     }
     if (para.startsWith('### ')) {
-      return (
-        <h3 key={i} className="text-[17px] font-semibold text-white/90 mt-8 mb-3 leading-snug">
-          {para.replace(/^### /, '')}
-        </h3>
-      );
+      return <h3 key={i} className="text-[19px] font-semibold text-white/90 mt-8 mb-3 leading-snug">{para.replace(/^### /, '')}</h3>;
     }
     if (para.startsWith('> ')) {
-      return (
-        <blockquote
-          key={i}
-          className="border-l-2 border-white/20 pl-5 my-6 italic text-white/50 text-[16px] leading-[1.9]"
-        >
-          {para.replace(/^> /, '')}
-        </blockquote>
-      );
+      return <blockquote key={i} className="border-l-2 border-white/20 pl-5 my-6 italic text-white/50 text-[17px] leading-[1.9]">{para.replace(/^> /, '')}</blockquote>;
     }
-    return (
-      <p key={i} className="text-[15px] text-white/60 leading-[1.9] mb-0">
-        {para}
-      </p>
-    );
+    return <p key={i} className="text-[16px] text-white/60 leading-[1.9] mb-0">{para}</p>;
   });
 }
 
@@ -141,7 +125,7 @@ export function NewsArticle() {
           </div>
 
           {/* Article meta — bottom of banner */}
-          <div className="absolute bottom-0 left-0 right-0 max-w-[1240px] mx-auto px-10 pb-8">
+          <div className="absolute bottom-0 left-0 right-0 max-w-[1240px] mx-auto px-6 pb-8">
             <div className="flex gap-2 mb-4">
               <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/15 rounded-full px-2.5 py-0.5">
                 {NEWS_CATEGORY_LABEL[article.category]}
@@ -166,7 +150,7 @@ export function NewsArticle() {
       </div>
 
       {/* ── Body ─────────────────────────────────────────────────────────── */}
-      <div className="max-w-[800px] mx-auto px-10 py-12">
+      <div className="max-w-[1240px] mx-auto px-6 py-12">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -214,23 +198,29 @@ export function NewsArticle() {
             </div>
           )}
 
-          {/* Microsoft partner note */}
-          <div
-            className="mt-10 border border-white/[0.06] p-5 flex gap-4 items-center"
-            style={{ backgroundImage: 'radial-gradient(rgba(0,120,212,0.08) 0%, transparent 70%)' }}
-          >
-            <div className="shrink-0 mt-0.5">
-              <div className="w-6 h-6 grid grid-cols-2 gap-px opacity-70">
-                <div className="bg-[#f25022]" /><div className="bg-[#7fba00]" />
-                <div className="bg-[#00a4ef]" /><div className="bg-[#ffb900]" />
+          {/* Author section */}
+          {article.author_name && (
+            <div className="mt-10 border border-white/[0.06] rounded-xl p-6 flex gap-4 items-start">
+              {article.author_avatar_url ? (
+                <img
+                  src={article.author_avatar_url}
+                  alt={article.author_name}
+                  className="w-12 h-12 rounded-full object-cover shrink-0 border border-white/10"
+                />
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 shrink-0 flex items-center justify-center">
+                  <User size={18} className="text-white/30" />
+                </div>
+              )}
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.18em] text-white/25 font-semibold mb-1">Author</p>
+                <p className="text-white font-semibold text-[15px]">{article.author_name}</p>
+                {article.author_title && (
+                  <p className="text-[13px] text-white/35 mt-0.5">{article.author_title}</p>
+                )}
               </div>
             </div>
-            <p className="text-[11px] text-white/50 leading-relaxed">
-              NEX4 ICT Solutions is an official{' '}
-              <span className="gradient-text font-medium">Microsoft Partner</span> serving
-              enterprise clients across APAC — delivering cloud, security, and modern workplace solutions.
-            </p>
-          </div>
+          )}
 
           {/* Back link */}
           <div className="mt-8 pt-6 border-t border-white/[0.06]">

@@ -7,6 +7,7 @@ import {
   AutoTextarea, SlugField, ImageUploadField,
   TagsInput, Toast, useKeyboardShortcuts,
 } from './AdminFormUI';
+import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import type { CaseStudyRow, CaseStudyCategory } from '@/types/caseStudy';
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -43,6 +44,7 @@ type FormState = {
   testimonial_quote: string;
   testimonial_name: string;
   testimonial_title: string;
+  testimonial_photo_url: string;
   related_service_title: string;
   related_service_slug: string;
 };
@@ -65,6 +67,7 @@ const EMPTY_FORM: FormState = {
   testimonial_quote:     '',
   testimonial_name:      '',
   testimonial_title:     '',
+  testimonial_photo_url: '',
   related_service_title: '',
   related_service_slug:  '',
 };
@@ -133,7 +136,7 @@ function ApproachEditor({
           </div>
           <div>
             <FieldLabel>Body</FieldLabel>
-            <AutoTextarea value={step.body} onChange={v => update(i, 'body', v)} minRows={3} />
+            <RichTextEditor value={step.body} onChange={v => update(i, 'body', v)} minHeight={140} />
           </div>
         </div>
       ))}
@@ -217,7 +220,8 @@ function CaseStudyFormModal({
   onClose: () => void;
   onSave: () => Promise<void>;
 }) {
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading]             = useState(false);
+  const [uploadingPhoto, setUploadingPhoto]   = useState(false);
   const [saving, setSaving]       = useState(false);
   const [error, setError]         = useState<string | null>(null);
   const [errors, setErrors]       = useState<Partial<Record<keyof FormState, true>>>({});
@@ -258,26 +262,48 @@ function CaseStudyFormModal({
     finally { setUploading(false); }
   }
 
+  async function handlePhotoUpload(file: File) {
+    setUploadingPhoto(true);
+    try {
+      const ext = file.name.split('.').pop();
+      const path = `case-studies/testimonials/${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from('assets').upload(path, file);
+      if (uploadError) throw uploadError;
+      const url = supabase.storage.from('assets').getPublicUrl(path).data.publicUrl;
+      setForm(f => ({ ...f, testimonial_photo_url: url }));
+    } catch { setError('Photo upload failed.'); }
+    finally { setUploadingPhoto(false); }
+  }
+
   useKeyboardShortcuts({ onClose, onSave: handleSave });
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0e0e0e] border border-white/[0.08] w-full max-w-2xl max-h-[92vh] flex flex-col">
-        {/* Header */}
-        <div className="flex justify-between items-center px-7 py-5 border-b border-white/[0.06] shrink-0">
-          <div>
-            <h2 className="text-[15px] font-semibold text-white">
-              {editingId ? 'Edit Case Study' : 'New Case Study'}
-            </h2>
-            <p className="text-[10px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
-          </div>
-          <button onClick={onClose} className="text-white/30 hover:text-white/70 transition-colors">
-            <X size={18} />
+    <div className="fixed inset-0 z-50 bg-[#080808] flex flex-col">
+      {/* Header */}
+      <div className="flex justify-between items-center px-8 py-4 border-b border-white/[0.07] shrink-0 bg-[#0a0a0a]">
+        <div>
+          <h2 className="text-[17px] font-semibold text-white">
+            {editingId ? 'Edit Case Study' : 'New Case Study'}
+          </h2>
+          <p className="text-[11px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button onClick={onClose} className="px-5 py-2 text-[13px] text-white/40 hover:text-white/70 transition-colors">
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving || uploading}
+            className="px-6 py-2 bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create case study'}
           </button>
         </div>
+      </div>
 
-        {/* Body */}
-        <div className="overflow-y-auto px-7 py-6 flex flex-col gap-7">
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto">
+      <div className="max-w-[860px] mx-auto px-8 py-8 flex flex-col gap-7">
 
           <FormSection title="Identity">
             <div className="grid grid-cols-2 gap-4">
@@ -342,10 +368,11 @@ function CaseStudyFormModal({
           <FormSection title="Challenge">
             <div>
               <FieldLabel>Challenge Description</FieldLabel>
-              <AutoTextarea
+              <RichTextEditor
                 value={form.challenge}
                 onChange={v => field('challenge', v)}
-                minRows={4}
+                placeholder="Describe the client's challenge…"
+                minHeight={180}
               />
             </div>
           </FormSection>
@@ -353,10 +380,11 @@ function CaseStudyFormModal({
           <FormSection title="Approach">
             <div>
               <FieldLabel>Approach Introduction</FieldLabel>
-              <AutoTextarea
+              <RichTextEditor
                 value={form.approach_intro}
                 onChange={v => field('approach_intro', v)}
-                minRows={2}
+                placeholder="Introduce the approach…"
+                minHeight={140}
               />
             </div>
             <div>
@@ -381,10 +409,11 @@ function CaseStudyFormModal({
           <FormSection title="Results">
             <div>
               <FieldLabel>Results Introduction</FieldLabel>
-              <AutoTextarea
+              <RichTextEditor
                 value={form.results_intro}
                 onChange={v => field('results_intro', v)}
-                minRows={2}
+                placeholder="Summarize the outcomes…"
+                minHeight={140}
               />
             </div>
             <div>
@@ -443,6 +472,16 @@ function CaseStudyFormModal({
                     />
                   </div>
                 </div>
+                <div>
+                  <FieldLabel>Customer Photo (optional)</FieldLabel>
+                  <ImageUploadField
+                    value={form.testimonial_photo_url}
+                    onChange={v => field('testimonial_photo_url', v)}
+                    onUpload={handlePhotoUpload}
+                    uploading={uploadingPhoto}
+                    variant="avatar"
+                  />
+                </div>
               </div>
             )}
           </FormSection>
@@ -480,21 +519,7 @@ function CaseStudyFormModal({
             </div>
           </FormSection>
 
-          {error && <p className="text-[12px] text-red-400/70">{error}</p>}
-        </div>
-
-        {/* Footer */}
-        <div className="px-7 py-5 border-t border-white/[0.06] flex justify-end gap-3 shrink-0">
-          <button onClick={onClose} className="px-5 py-2.5 text-[12px] text-white/40 hover:text-white/70 transition-colors">
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving || uploading}
-            className="px-6 py-2.5 bg-white text-black text-[12px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create case study'}
-          </button>
+          {error && <p className="text-[13px] text-red-400/70">{error}</p>}
         </div>
       </div>
     </div>
@@ -542,9 +567,10 @@ function rowToForm(row: CaseStudyRow): FormState {
     results_intro:         row.results_intro ?? '',
     results:               results.length ? results.map(r => ({ ...r, suffix: r.suffix ?? '' })) : [{ value: '', suffix: '', label: '' }],
     has_testimonial:       !!testimonial,
-    testimonial_quote:     testimonial?.quote ?? '',
-    testimonial_name:      testimonial?.name  ?? '',
-    testimonial_title:     testimonial?.title ?? '',
+    testimonial_quote:     testimonial?.quote     ?? '',
+    testimonial_name:      testimonial?.name      ?? '',
+    testimonial_title:     testimonial?.title     ?? '',
+    testimonial_photo_url: (testimonial as { photo_url?: string } | null)?.photo_url ?? '',
     related_service_title: relatedService?.title ?? '',
     related_service_slug:  relatedService?.slug  ?? '',
   };
@@ -615,7 +641,12 @@ export function AdminCaseStudies() {
       results_intro:   form.results_intro || null,
       results:         results,
       testimonial:     form.has_testimonial && form.testimonial_quote
-        ? { quote: form.testimonial_quote, name: form.testimonial_name, title: form.testimonial_title }
+        ? {
+            quote:     form.testimonial_quote,
+            name:      form.testimonial_name,
+            title:     form.testimonial_title,
+            ...(form.testimonial_photo_url ? { photo_url: form.testimonial_photo_url } : {}),
+          }
         : null,
       related_service: form.related_service_title
         ? { title: form.related_service_title, slug: form.related_service_slug }
@@ -639,14 +670,14 @@ export function AdminCaseStudies() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
-          <h1 className="text-[22px] font-semibold text-white">Case Studies</h1>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
+          <h1 className="text-[24px] font-semibold text-white">Case Studies</h1>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 bg-white text-black text-[12px] font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
+          className="flex items-center gap-2 bg-white text-black text-[13px] font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
         >
-          <Plus size={14} /> New Case Study
+          <Plus size={15} /> New Case Study
         </button>
       </div>
 
@@ -664,11 +695,11 @@ export function AdminCaseStudies() {
         </div>
       ) : (
         <div className="border border-white/[0.07] overflow-hidden">
-          <table className="w-full text-[12px]">
+          <table className="w-full text-[13px]">
             <thead>
               <tr className="border-b border-white/[0.06] bg-white/[0.02]">
                 {['Client', 'Title', 'Category', ''].map(h => (
-                  <th key={h} className="text-left text-[10px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
+                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -706,17 +737,17 @@ export function AdminCaseStudies() {
                         className="p-1.5 text-white/30 hover:text-white/70 transition-colors"
                         title="View"
                       >
-                        <Link2 size={13} />
+                        <Link2 size={15} />
                       </a>
                       <button
                         onClick={() => openEdit(row)}
                         className="p-1.5 text-white/30 hover:text-white/70 transition-colors"
                         title="Edit"
                       >
-                        <Pencil size={13} />
+                        <Pencil size={15} />
                       </button>
                       {deletingId === row.id ? (
-                        <span className="flex items-center gap-1.5 ml-1 text-[11px]">
+                        <span className="flex items-center gap-1.5 ml-1 text-[13px]">
                           <button
                             onClick={() => handleDelete(row.id)}
                             className="text-red-400 hover:text-red-300 font-medium transition-colors"
@@ -736,7 +767,7 @@ export function AdminCaseStudies() {
                           className="p-1.5 text-white/30 hover:text-red-400/70 transition-colors"
                           title="Delete"
                         >
-                          <Trash2 size={13} />
+                          <Trash2 size={15} />
                         </button>
                       )}
                     </div>

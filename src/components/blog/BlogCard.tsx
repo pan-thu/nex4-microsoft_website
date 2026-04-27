@@ -44,33 +44,33 @@ export function BlogCard({ post }: { post: BlogPost }) {
       <div className="flex flex-col flex-1 p-5 gap-3">
         {/* Meta row */}
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/30 border border-white/10 rounded-full px-3 py-0.5">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.18em] text-white/30 border border-white/10 rounded-full px-3 py-0.5">
             {BLOG_CATEGORY_LABEL[post.category]}
           </span>
-          <span className="text-[11px] font-mono text-white/30 tabular-nums">{date}</span>
+          <span className="text-[13px] font-mono text-white/30 tabular-nums">{date}</span>
         </div>
 
         {/* Title */}
-        <h3 className="text-white font-semibold text-[16px] leading-snug group-hover:text-white/85 transition-colors line-clamp-2">
+        <h3 className="text-white font-semibold text-[18px] leading-snug group-hover:text-white/85 transition-colors line-clamp-2">
           {post.title}
         </h3>
 
         {/* Excerpt */}
         {post.excerpt && (
-          <p className="text-[13px] text-white/30 leading-relaxed line-clamp-2">{post.excerpt}</p>
+          <p className="text-[15px] text-white/30 leading-relaxed line-clamp-2">{post.excerpt}</p>
         )}
 
         {/* Footer row */}
         <div className="mt-auto pt-3 border-t border-white/[0.06] flex items-center justify-between">
-          <div className="flex items-center gap-1 text-[11px] text-white/20">
+          <div className="flex items-center gap-1 text-[13px] text-white/20">
             {post.reading_time && (
               <>
-                <Clock size={10} />
+                <Clock size={11} />
                 <span>{post.reading_time} min read</span>
               </>
             )}
           </div>
-          <div className="flex items-center gap-1.5 text-[13px] text-white/40 group-hover:text-white/70 transition-colors">
+          <div className="flex items-center gap-1.5 text-[14px] text-white/40 group-hover:text-white/70 transition-colors">
             Read more
             <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
           </div>

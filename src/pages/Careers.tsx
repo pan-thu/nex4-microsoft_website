@@ -62,7 +62,7 @@ function FilterGroup({ label, options, selected, onChange }: FilterGroupProps) {
 
   return (
     <div className="mb-6">
-      <p className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-semibold mb-2.5">{label}</p>
+      <p className="text-[11px] uppercase tracking-[0.2em] text-white/20 font-semibold mb-2.5">{label}</p>
       <div className="flex flex-col gap-0.5">
         {options.map(({ value, count }) => {
           const active = selected.includes(value);
@@ -132,7 +132,7 @@ function FilterSidebar({ jobs, filters, onChange }: FilterSidebarProps) {
           <div className="flex justify-end mb-6">
             <button
               onClick={() => onChange(EMPTY_FILTERS)}
-              className="text-[10px] text-white/25 hover:text-white/55 transition-colors underline underline-offset-2"
+              className="text-[12px] text-white/25 hover:text-white/55 transition-colors underline underline-offset-2"
             >
               Clear all
             </button>
@@ -186,25 +186,25 @@ function JobCard({ job, index }: { job: JobPosting; index: number }) {
           <div className="flex-1 min-w-0">
             {/* HOT badge */}
             {job.is_hot && (
-              <span className="inline-block mb-3 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white rounded-full"
+              <span className="inline-block mb-3 px-3 py-1 text-[12px] font-semibold uppercase tracking-[0.12em] text-white rounded-full"
                 style={{ background: 'linear-gradient(90deg, #7c3aed, #2563eb)' }}>
                 Hot
               </span>
             )}
 
             {/* Title */}
-            <h3 className="text-[22px] font-semibold text-white group-hover:text-white/85 transition-colors leading-snug mb-3">
+            <h3 className="text-[24px] font-semibold text-white group-hover:text-white/85 transition-colors leading-snug mb-3">
               {job.title}
             </h3>
 
             {/* Location & type */}
-            <p className="text-[11px] uppercase tracking-[0.14em] font-semibold text-white/45 mb-1">
+            <p className="text-[13px] uppercase tracking-[0.14em] font-semibold text-white/45 mb-1">
               {job.workplace_type} in {job.city}
             </p>
 
             {/* Specialization + skills */}
             {(job.specialization || job.skills.length > 0) && (
-              <p className="text-[11px] uppercase tracking-[0.14em] font-semibold text-white/45 mb-5">
+              <p className="text-[13px] uppercase tracking-[0.14em] font-semibold text-white/45 mb-5">
                 {job.specialization}
                 {job.specialization && job.skills.length > 0 && ' · '}
                 {visibleSkills.join(', ')}
@@ -218,7 +218,7 @@ function JobCard({ job, index }: { job: JobPosting; index: number }) {
 
             {/* Summary */}
             {job.summary && (
-              <p className="text-[14px] text-white/45 leading-relaxed line-clamp-3 max-w-[640px]">
+              <p className="text-[16px] text-white/45 leading-relaxed line-clamp-3 max-w-[640px]">
                 {job.summary}
               </p>
             )}

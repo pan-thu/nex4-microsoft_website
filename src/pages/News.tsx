@@ -170,10 +170,10 @@ function NewsBentoCard({
 
       {/* Category + date badges — top */}
       <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/50 border border-white/15 rounded-full px-2.5 py-0.5 backdrop-blur-sm bg-black/20">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50 border border-white/15 rounded-full px-2.5 py-0.5 backdrop-blur-sm bg-black/20">
           {NEWS_CATEGORY_LABEL[article.category]}
         </span>
-        <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/10 rounded-full px-2.5 py-0.5 backdrop-blur-sm bg-black/20">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/10 rounded-full px-2.5 py-0.5 backdrop-blur-sm bg-black/20">
           {formatDate(article.published_at)}
         </span>
       </div>
@@ -183,7 +183,7 @@ function NewsBentoCard({
         <h3
           className={cn(
             'font-semibold text-white leading-snug',
-            isFeatured ? 'text-[22px] lg:text-[26px] max-w-lg' : 'text-[16px] line-clamp-2',
+            isFeatured ? 'text-[24px] lg:text-[28px] max-w-lg' : 'text-[18px] line-clamp-2',
           )}
         >
           {article.title}
@@ -195,7 +195,7 @@ function NewsBentoCard({
         <h3
           className={cn(
             'font-semibold text-white leading-snug mb-3',
-            isFeatured ? 'text-[22px] lg:text-[26px] max-w-lg' : 'text-[16px] line-clamp-2',
+            isFeatured ? 'text-[24px] lg:text-[28px] max-w-lg' : 'text-[18px] line-clamp-2',
           )}
         >
           {article.title}
@@ -204,14 +204,14 @@ function NewsBentoCard({
           <p
             className={cn(
               'text-white/65 leading-relaxed mb-4',
-              isFeatured ? 'text-[14px] max-w-lg line-clamp-3' : 'text-[12px] line-clamp-2',
+              isFeatured ? 'text-[15px] max-w-lg line-clamp-3' : 'text-[14px] line-clamp-2',
             )}
           >
             {article.excerpt}
           </p>
         )}
-        <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-white">
-          Read article <ChevronRight size={13} />
+        <span className="inline-flex items-center gap-1.5 text-[14px] font-medium text-white">
+          Read article <ChevronRight size={14} />
         </span>
       </div>
     </motion.div>
@@ -233,7 +233,7 @@ function Pill({
     <button
       onClick={onClick}
       className={cn(
-        'shrink-0 text-[11px] font-medium px-3 py-1 rounded-full border transition-all duration-200',
+        'shrink-0 text-[12px] font-medium px-3 py-1 rounded-full border transition-all duration-200',
         active
           ? 'bg-white text-black border-white'
           : 'border-white/15 text-white/45 hover:border-white/35 hover:text-white/80',
@@ -358,7 +358,7 @@ export function News() {
         <div className="max-w-[1240px] mx-auto px-10 py-4">
           <div className="flex flex-wrap gap-x-5 gap-y-3 items-center">
             <div className="flex items-center gap-2.5">
-              <span className="shrink-0 text-[9px] uppercase tracking-[0.18em] text-white/25 font-semibold">When</span>
+              <span className="shrink-0 text-[11px] uppercase tracking-[0.18em] text-white/25 font-semibold">When</span>
               <div className="flex gap-1.5">
                 {CONTENT_DATE_FILTERS.map(d => (
                   <Pill
@@ -375,7 +375,7 @@ export function News() {
             <div className="w-px h-5 bg-white/10 hidden sm:block" />
 
             <div className="flex items-center gap-2.5 min-w-0">
-              <span className="shrink-0 text-[9px] uppercase tracking-[0.18em] text-white/25 font-semibold">Category</span>
+              <span className="shrink-0 text-[11px] uppercase tracking-[0.18em] text-white/25 font-semibold">Category</span>
               <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
                 <Pill active={!filters.category} onClick={() => setFilters(f => ({ ...f, category: undefined }))}>All</Pill>
                 {NEWS_CATEGORIES.map(c => (
@@ -396,11 +396,11 @@ export function News() {
       {/* ── Bento grid ────────────────────────────────────────────────────── */}
       <section className="max-w-[1240px] mx-auto px-10 py-14">
         <div className="flex items-baseline gap-4 mb-8">
-          <h2 className="text-[13px] uppercase tracking-[0.2em] text-white/50 font-semibold">
+          <h2 className="text-[14px] uppercase tracking-[0.2em] text-white/50 font-semibold">
             Latest News
           </h2>
           {!loading && (
-            <span className="text-[11px] font-mono text-white/20">
+            <span className="text-[12px] font-mono text-white/20">
               {filtered.length} {filtered.length === 1 ? 'article' : 'articles'}
             </span>
           )}
@@ -414,10 +414,10 @@ export function News() {
           <SkeletonGrid />
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center border border-white/[0.06] rounded-2xl">
-            <p className="text-white/20 text-[13px] mb-1">No news articles match your filters.</p>
+            <p className="text-white/20 text-[14px] mb-1">No news articles match your filters.</p>
             <button
               onClick={() => setFilters(EMPTY_FILTERS)}
-              className="text-[11px] text-white/35 hover:text-white/60 transition-colors underline underline-offset-2"
+              className="text-[13px] text-white/35 hover:text-white/60 transition-colors underline underline-offset-2"
             >
               Clear filters
             </button>
@@ -440,7 +440,7 @@ export function News() {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
-                  className="px-8 py-3 border border-white/[0.12] rounded-full text-[12px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 transition-all duration-200"
+                  className="px-8 py-3 border border-white/[0.12] rounded-full text-[13px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 transition-all duration-200"
                 >
                   Load more news
                 </button>

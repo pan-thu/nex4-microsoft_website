@@ -9,7 +9,8 @@ export function toSlug(s: string) {
 }
 
 export function estimateReadingTime(content: string) {
-  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  const plain = content.replace(/<[^>]*>/g, ' ');
+  const words = plain.trim().split(/\s+/).filter(Boolean).length;
   return { words, minutes: Math.max(1, Math.round(words / 200)) };
 }
 
@@ -26,7 +27,7 @@ export function FieldLabel({
 }) {
   return (
     <label className={cn(
-      'block text-[10px] uppercase tracking-[0.15em] font-medium mb-2 transition-colors',
+      'block text-[12px] uppercase tracking-[0.15em] font-medium mb-2 transition-colors',
       error ? 'text-red-400/80' : 'text-white/30',
     )}>
       {children}
@@ -36,7 +37,7 @@ export function FieldLabel({
 }
 
 const inputBase =
-  'w-full bg-white/[0.04] border px-3 py-2.5 text-white text-[13px] outline-none transition-colors placeholder:text-white/15';
+  'w-full bg-white/[0.04] border px-3 py-3 text-white text-[14px] outline-none transition-colors placeholder:text-white/15';
 
 export function FormInput({
   value,
@@ -86,7 +87,7 @@ export function FormSelect({
       value={value}
       onChange={e => onChange(e.target.value)}
       className={cn(
-        'w-full bg-[#111] border px-3 py-2.5 text-white text-[13px] outline-none transition-colors',
+        'w-full bg-[#111] border px-3 py-3 text-white text-[14px] outline-none transition-colors',
         error
           ? 'border-red-500/40 focus:border-red-500/60'
           : 'border-white/[0.08] focus:border-white/25',
@@ -138,7 +139,7 @@ export function AutoTextarea({
         style={{ overflow: 'hidden' }}
         className={cn(
           inputBase,
-          'resize-none',
+          'resize-y',
           mono && 'font-mono',
           error
             ? 'border-red-500/40 focus:border-red-500/60'
@@ -164,7 +165,7 @@ export function FormSection({ title, children }: { title: string; children: Reac
   return (
     <div>
       <div className="flex items-center gap-3 mb-4">
-        <p className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-semibold whitespace-nowrap">{title}</p>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-white/20 font-semibold whitespace-nowrap">{title}</p>
         <div className="flex-1 h-px bg-white/[0.05]" />
       </div>
       <div className="flex flex-col gap-4">{children}</div>
@@ -210,40 +211,70 @@ export function ImageUploadField({
   onChange,
   onUpload,
   uploading,
+  variant = 'image',
 }: {
   value: string;
   onChange: (v: string) => void;
   onUpload: (file: File) => Promise<void>;
   uploading: boolean;
+  variant?: 'image' | 'avatar';
 }) {
   return (
     <div>
-      <div className="flex gap-2">
-        <FormInput value={value} onChange={onChange} placeholder="Paste URL or upload →" />
-        <label className={cn(
-          'shrink-0 flex items-center gap-1.5 px-3 py-2 border border-white/[0.08] text-[11px] text-white/40 cursor-pointer hover:border-white/25 hover:text-white/70 transition-colors',
-          uploading && 'opacity-50 pointer-events-none',
-        )}>
-          {uploading ? <span className="animate-pulse text-[12px]">…</span> : <Upload size={13} />}
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={e => e.target.files?.[0] && onUpload(e.target.files[0])}
-          />
-        </label>
-      </div>
-      {value && (
-        <div className="mt-2 relative h-28 overflow-hidden border border-white/[0.06] group">
-          <img src={value} alt="preview" className="w-full h-full object-cover" />
-          <button
-            type="button"
-            onClick={() => onChange('')}
-            className="absolute top-2 right-2 p-1 bg-black/60 text-white/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <X size={12} />
-          </button>
+      {variant === 'avatar' ? (
+        <div className="flex items-center gap-4">
+          {value && (
+            <div className="relative shrink-0 group">
+              <img src={value} alt="preview" className="w-14 h-14 rounded-full object-cover border border-white/[0.12]" />
+              <button
+                type="button"
+                onClick={() => onChange('')}
+                className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black/80 border border-white/10 text-white/50 hover:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X size={9} />
+              </button>
+            </div>
+          )}
+          <label className={cn(
+            'flex items-center gap-2 px-4 py-2 border border-white/[0.08] text-[12px] text-white/40 cursor-pointer hover:border-white/25 hover:text-white/70 transition-colors',
+            uploading && 'opacity-50 pointer-events-none',
+          )}>
+            {uploading ? <span className="animate-pulse">Uploading…</span> : <><Upload size={13} /> {value ? 'Change photo' : 'Upload photo'}</>}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={e => e.target.files?.[0] && onUpload(e.target.files[0])}
+            />
+          </label>
         </div>
+      ) : (
+        <>
+          <label className={cn(
+            'flex items-center gap-2 px-4 py-2.5 border border-dashed border-white/[0.08] text-[12px] text-white/40 cursor-pointer hover:border-white/25 hover:text-white/70 transition-colors w-full justify-center',
+            uploading && 'opacity-50 pointer-events-none',
+          )}>
+            {uploading ? <span className="animate-pulse">Uploading…</span> : <><Upload size={13} /> {value ? 'Replace image' : 'Upload image'}</>}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={e => e.target.files?.[0] && onUpload(e.target.files[0])}
+            />
+          </label>
+          {value && (
+            <div className="mt-2 relative h-28 overflow-hidden border border-white/[0.06] group">
+              <img src={value} alt="preview" className="w-full h-full object-cover" />
+              <button
+                type="button"
+                onClick={() => onChange('')}
+                className="absolute top-2 right-2 p-1 bg-black/60 text-white/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X size={12} />
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
@@ -269,7 +300,7 @@ export function TagsInput({ tags, onChange }: { tags: string[]; onChange: (tags:
       'flex flex-wrap gap-1.5 min-h-[42px] p-2 border border-white/[0.08] bg-white/[0.04] focus-within:border-white/25 transition-colors',
     )}>
       {tags.map((t, i) => (
-        <span key={i} className="flex items-center gap-1 bg-white/[0.08] text-white/60 text-[11px] px-2 py-0.5 rounded-sm">
+        <span key={i} className="flex items-center gap-1 bg-white/[0.08] text-white/60 text-[13px] px-2 py-0.5 rounded-sm">
           {t}
           <button type="button" onClick={() => removeTag(i)} className="text-white/30 hover:text-white/70 transition-colors leading-none">
             <X size={10} />

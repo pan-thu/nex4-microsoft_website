@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronRight, ArrowLeft, MapPin, Monitor, Users } from 'lucide-react';
+import { ChevronRight, ArrowLeft, MapPin, Monitor, Users, Upload } from 'lucide-react';
 import { CareerService } from '@/services/CareerService';
 import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
 import { supabase } from '@/lib/supabase';
@@ -11,33 +11,20 @@ import type { JobPosting } from '@/types/career';
 // ── Content renderer (same pattern as BlogPost) ───────────────────────────────
 
 function renderContent(content: string) {
+  if (content.trim().startsWith('<')) {
+    return <div className="prose-content text-[16px]" dangerouslySetInnerHTML={{ __html: content }} />;
+  }
   return content.split(/\n\n+/).map((para, i) => {
     if (para.startsWith('## ')) {
-      return (
-        <h2 key={i} className="text-[22px] font-semibold text-white mt-10 mb-4 leading-snug">
-          {para.replace(/^## /, '')}
-        </h2>
-      );
+      return <h2 key={i} className="text-[24px] font-semibold text-white mt-10 mb-4 leading-snug">{para.replace(/^## /, '')}</h2>;
     }
     if (para.startsWith('### ')) {
-      return (
-        <h3 key={i} className="text-[17px] font-semibold text-white/90 mt-8 mb-3 leading-snug">
-          {para.replace(/^### /, '')}
-        </h3>
-      );
+      return <h3 key={i} className="text-[19px] font-semibold text-white/90 mt-8 mb-3 leading-snug">{para.replace(/^### /, '')}</h3>;
     }
     if (para.startsWith('> ')) {
-      return (
-        <blockquote key={i} className="border-l-2 border-white/20 pl-5 my-6 italic text-white/50 text-[16px] leading-[1.9]">
-          {para.replace(/^> /, '')}
-        </blockquote>
-      );
+      return <blockquote key={i} className="border-l-2 border-white/20 pl-5 my-6 italic text-white/50 text-[17px] leading-[1.9]">{para.replace(/^> /, '')}</blockquote>;
     }
-    return (
-      <p key={i} className="text-[15px] text-white/60 leading-[1.9] mb-0">
-        {para}
-      </p>
-    );
+    return <p key={i} className="text-[16px] text-white/60 leading-[1.9] mb-0">{para}</p>;
   });
 }
 
@@ -128,11 +115,13 @@ type ApplyState = { first_name: string; last_name: string; email: string; phone:
 const EMPTY_APPLY: ApplyState = { first_name: '', last_name: '', email: '', phone: '', cover_letter: '' };
 
 function ApplyForm({ jobId }: { jobId: string }) {
-  const [form, setForm]           = useState<ApplyState>(EMPTY_APPLY);
-  const [errors, setErrors]       = useState<Partial<Record<keyof ApplyState, true>>>({});
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted]   = useState(false);
+  const [form, setForm]               = useState<ApplyState>(EMPTY_APPLY);
+  const [errors, setErrors]           = useState<Partial<Record<keyof ApplyState, true>>>({});
+  const [submitting, setSubmitting]   = useState(false);
+  const [submitted, setSubmitted]     = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [cvFile, setCvFile]           = useState<File | null>(null);
+  const [cvError, setCvError]         = useState<string | null>(null);
 
   function field(key: keyof ApplyState, val: string) {
     setForm(f => ({ ...f, [key]: val }));
@@ -153,6 +142,21 @@ function ApplyForm({ jobId }: { jobId: string }) {
     if (!validate()) return;
     setSubmitting(true);
     setServerError(null);
+    setCvError(null);
+
+    let cv_url: string | null = null;
+    if (cvFile) {
+      const ext = cvFile.name.split('.').pop();
+      const path = `cv/${Date.now()}_${form.last_name.toLowerCase()}.${ext}`;
+      const { error: uploadErr } = await supabase.storage.from('assets').upload(path, cvFile);
+      if (uploadErr) {
+        setCvError('CV upload failed. Please try again.');
+        setSubmitting(false);
+        return;
+      }
+      cv_url = supabase.storage.from('assets').getPublicUrl(path).data.publicUrl;
+    }
+
     const { error } = await supabase.from('job_applications').insert({
       job_id:       jobId,
       first_name:   form.first_name,
@@ -160,6 +164,7 @@ function ApplyForm({ jobId }: { jobId: string }) {
       email:        form.email,
       phone:        form.phone        || null,
       cover_letter: form.cover_letter || null,
+      cv_url,
     });
     if (error) setServerError(error.message);
     else setSubmitted(true);
@@ -173,7 +178,7 @@ function ApplyForm({ jobId }: { jobId: string }) {
 
   if (submitted) {
     return (
-      <div className="border border-white/[0.08] p-6 text-center">
+      <div className="border border-white/[0.08] rounded-xl p-6 text-center">
         <p className="text-[11px] uppercase tracking-[0.15em] text-white/30 font-semibold mb-2">Application received</p>
         <p className="text-[13px] text-white/50 leading-relaxed">Thank you! We'll be in touch shortly.</p>
       </div>
@@ -181,7 +186,7 @@ function ApplyForm({ jobId }: { jobId: string }) {
   }
 
   return (
-    <div className="border border-white/[0.08] p-6">
+    <div className="border border-white/[0.08] rounded-xl p-6">
       <p className="text-[11px] uppercase tracking-[0.15em] text-white/28 font-semibold mb-2">Interested?</p>
       <h3 className="text-[16px] font-semibold text-white mb-5 leading-snug">Apply for this role</h3>
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-3">
@@ -220,11 +225,40 @@ function ApplyForm({ jobId }: { jobId: string }) {
           rows={4}
           className={cn(inputCls(), 'resize-none')}
         />
+        {/* CV upload */}
+        <div>
+          <label className="block text-[11px] uppercase tracking-[0.15em] text-white/30 font-semibold mb-2">
+            CV / Resume (PDF)
+          </label>
+          <label className={cn(
+            'flex items-center gap-3 border px-3 py-2.5 cursor-pointer transition-colors',
+            cvFile ? 'border-white/20 bg-white/[0.03]' : 'border-white/[0.08] hover:border-white/20',
+          )}>
+            <Upload size={14} className="text-white/35 shrink-0" />
+            <span className={cn('text-[13px] truncate', cvFile ? 'text-white/70' : 'text-white/25')}>
+              {cvFile ? cvFile.name : 'Upload PDF…'}
+            </span>
+            <input
+              type="file"
+              accept=".pdf,application/pdf"
+              className="hidden"
+              onChange={e => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                if (file.type !== 'application/pdf') { setCvError('Only PDF files are accepted.'); return; }
+                setCvError(null);
+                setCvFile(file);
+              }}
+            />
+          </label>
+          {cvError && <p className="mt-1.5 text-[11px] text-red-400/70">{cvError}</p>}
+        </div>
+
         {serverError && <p className="text-[11px] text-red-400/70">{serverError}</p>}
         <button
           type="submit"
           disabled={submitting}
-          className="w-full px-5 py-3 bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-1"
+          className="w-full px-5 py-3 bg-white text-black text-[13px] font-semibold rounded-lg hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-1"
         >
           {submitting ? 'Submitting…' : 'Apply now'}
         </button>
@@ -303,7 +337,7 @@ export function CareerDetail() {
             <ApplyForm jobId={job.id} />
 
             {/* Details */}
-            <div className="border border-white/[0.08] p-6 flex flex-col gap-4">
+            <div className="border border-white/[0.08] rounded-xl p-6 flex flex-col gap-4">
               <p className="text-[11px] uppercase tracking-[0.15em] text-white/28 font-semibold">Details</p>
 
               <div>
@@ -333,7 +367,7 @@ export function CareerDetail() {
 
             {/* Skills */}
             {job.skills.length > 0 && (
-              <div className="border border-white/[0.08] p-6">
+              <div className="border border-white/[0.08] rounded-xl p-6">
                 <p className="text-[11px] uppercase tracking-[0.15em] text-white/28 font-semibold mb-4">Skills</p>
                 <div className="flex flex-wrap gap-2">
                   {job.skills.map((skill) => (

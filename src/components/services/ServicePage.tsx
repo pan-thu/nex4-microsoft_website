@@ -156,8 +156,8 @@ function Overview({ data }: { data: ServiceData }) {
             <h2 className="text-[34px] lg:text-[42px] font-semibold text-white leading-tight">{data.overviewHeading}</h2>
           </div>
           <div className="lg:pt-14">
-            <p className="text-[16px] text-white/58 leading-relaxed mb-6">{data.overviewParagraphs[0]}</p>
-            <p className="text-[15px] text-white/38 leading-relaxed">{data.overviewParagraphs[1]}</p>
+            <p className="text-[17px] text-white/58 leading-relaxed mb-6">{data.overviewParagraphs[0]}</p>
+            <p className="text-[16px] text-white/38 leading-relaxed">{data.overviewParagraphs[1]}</p>
           </div>
         </motion.div>
       </div>
@@ -188,8 +188,8 @@ function Benefits({ data }: { data: ServiceData }) {
                 <div className="mb-6 w-12 h-12 flex items-center justify-center">
                   <Icon size={30} className="text-white/55" />
                 </div>
-                <h3 className="text-[17px] font-semibold text-white mb-3 leading-snug">{benefit.title}</h3>
-                <p className="text-[14px] text-white/45 leading-relaxed">{benefit.body}</p>
+                <h3 className="text-[18px] font-semibold text-white mb-3 leading-snug">{benefit.title}</h3>
+                <p className="text-[15px] text-white/45 leading-relaxed">{benefit.body}</p>
               </motion.div>
             );
           })}
@@ -247,7 +247,7 @@ function Capabilities({ data }: { data: ServiceData }) {
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {data.capabilities.map((c, i) => (
                 <button key={c.title} onClick={() => setActiveTab(i)}
-                  className={cn('shrink-0 px-5 py-3.5 text-[13px] font-medium whitespace-nowrap border-b-2 -mb-px transition-all duration-150',
+                  className={cn('shrink-0 px-5 py-3.5 text-[14px] font-medium whitespace-nowrap border-b-2 -mb-px transition-all duration-150',
                     activeTab === i ? 'text-white border-white/55' : 'text-white/30 border-transparent hover:text-white/58')}>
                   {c.title}
                 </button>
@@ -284,10 +284,10 @@ function Capabilities({ data }: { data: ServiceData }) {
                 <h3 className="text-[26px] lg:text-[32px] font-semibold text-white leading-snug mb-6">
                   {cap.title}
                 </h3>
-                <p className="text-[15px] text-white/55 leading-relaxed mb-8">{cap.body}</p>
+                <p className="text-[16px] text-white/55 leading-relaxed mb-8">{cap.body}</p>
                 <Link
                   to="/contact-us"
-                  className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-white hover:bg-white hover:text-black transition-all duration-200"
+                  className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-white hover:bg-white hover:text-black transition-all duration-200"
                 >
                   Explore More <ChevronRight size={13} />
                 </Link>
@@ -322,7 +322,7 @@ function Technologies({ data }: { data: ServiceData }) {
           <div className="flex flex-wrap gap-3">
             {data.technologies.map((tech, i) => (
               <motion.span key={tech} initial={{ opacity: 0, scale: 0.95 }} animate={inView ? { opacity: 1, scale: 1 } : {}} transition={{ duration: 0.3, delay: 0.15 + i * 0.05 }}
-                className="px-4 py-2 border border-white/[0.10] rounded-full text-[13px] text-white/45 hover:border-white/22 hover:text-white/75 transition-all duration-200">
+                className="px-4 py-2 border border-white/[0.10] rounded-full text-[14px] text-white/45 hover:border-white/22 hover:text-white/75 transition-all duration-200">
                 {tech}
               </motion.span>
             ))}
@@ -350,7 +350,7 @@ function Stats({ data }: { data: ServiceData }) {
                 <span className="text-[68px] lg:text-[84px] font-light">{stat.value}</span>
                 {stat.suffix && <span className="text-[36px] lg:text-[46px] font-light text-white/50 ml-1">{stat.suffix}</span>}
               </p>
-              <p className="text-[12px] text-white/32 uppercase tracking-[0.13em] max-w-[220px] mx-auto leading-relaxed">{stat.label}</p>
+              <p className="text-[13px] text-white/32 uppercase tracking-[0.13em] max-w-[220px] mx-auto leading-relaxed">{stat.label}</p>
             </div>
           ))}
         </motion.div>

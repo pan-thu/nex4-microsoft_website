@@ -43,6 +43,7 @@ export interface CaseStudyTestimonial {
   quote: string;
   name: string;
   title: string;
+  photo_url?: string;
 }
 
 export interface CaseStudyFull {

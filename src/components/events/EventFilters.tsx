@@ -20,7 +20,7 @@ function Pill({
     <button
       onClick={onClick}
       className={cn(
-        'shrink-0 text-[11px] font-medium px-3 py-1 rounded-full border transition-all duration-200',
+        'shrink-0 text-[12px] font-medium px-3 py-1 rounded-full border transition-all duration-200',
         active
           ? 'bg-white text-black border-white'
           : 'border-white/15 text-white/45 hover:border-white/35 hover:text-white/80',
@@ -33,7 +33,7 @@ function Pill({
 
 function GroupLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span className="shrink-0 text-[9px] uppercase tracking-[0.18em] text-white/25 font-semibold">
+    <span className="shrink-0 text-[11px] uppercase tracking-[0.18em] text-white/25 font-semibold">
       {children}
     </span>
   );

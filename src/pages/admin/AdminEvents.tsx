@@ -9,14 +9,16 @@ import {
   AutoTextarea, SlugField, ImageUploadField, TakeawayEditor,
   Toast, useKeyboardShortcuts,
 } from './AdminFormUI';
+import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import type { TakeawayItem } from './AdminFormUI';
 import { AdminRegistrations } from './AdminRegistrations';
-import type { Event } from '@/types/events';
+import type { Event, EventSpeaker } from '@/types/events';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type FormState = Omit<Event, 'id' | 'created_at' | 'key_takeaways'> & {
+type FormState = Omit<Event, 'id' | 'created_at' | 'key_takeaways' | 'speakers'> & {
   takeaways: TakeawayItem[];
+  speakers: EventSpeaker[];
 };
 
 const EMPTY_FORM: FormState = {
@@ -29,6 +31,7 @@ const EMPTY_FORM: FormState = {
   status: 'upcoming',
   event_date: '',
   takeaways: [],
+  speakers: [],
 };
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -36,6 +39,77 @@ const EMPTY_FORM: FormState = {
 function parseDate(iso: string | null) {
   if (!iso) return '';
   return iso.slice(0, 16);
+}
+
+// ── Speaker editor ───────────────────────────────────────────────────────────
+
+function SpeakerEditor({
+  speakers,
+  onChange,
+  onPhotoUpload,
+}: {
+  speakers: EventSpeaker[];
+  onChange: (s: EventSpeaker[]) => void;
+  onPhotoUpload: (index: number, file: File) => Promise<void>;
+}) {
+  const [uploadingIdx, setUploadingIdx] = useState<number | null>(null);
+
+  function add() { onChange([...speakers, { name: '', title: '', photo_url: null }]); }
+  function remove(i: number) { onChange(speakers.filter((_, idx) => idx !== i)); }
+  function update(i: number, key: keyof EventSpeaker, val: string | null) {
+    onChange(speakers.map((s, idx) => idx === i ? { ...s, [key]: val } : s));
+  }
+
+  async function handleUpload(i: number, file: File) {
+    setUploadingIdx(i);
+    try { await onPhotoUpload(i, file); }
+    finally { setUploadingIdx(null); }
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      {speakers.map((speaker, i) => (
+        <div key={i} className="border border-white/[0.07] p-4 flex flex-col gap-3 relative">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <FieldLabel>Name</FieldLabel>
+              <FormInput value={speaker.name} onChange={v => update(i, 'name', v)} placeholder="Speaker name" />
+            </div>
+            <div>
+              <FieldLabel>Title / Role</FieldLabel>
+              <FormInput value={speaker.title ?? ''} onChange={v => update(i, 'title', v)} placeholder="e.g. Cloud Architect" />
+            </div>
+          </div>
+          <div className="flex gap-2 items-end">
+            <div className="flex-1">
+              <FieldLabel>Photo</FieldLabel>
+              <ImageUploadField
+                value={speaker.photo_url ?? ''}
+                onChange={v => update(i, 'photo_url', v || null)}
+                onUpload={file => handleUpload(i, file)}
+                uploading={uploadingIdx === i}
+                variant="avatar"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => remove(i)}
+              className="shrink-0 p-2.5 mb-0.5 text-white/25 hover:text-red-400/70 transition-colors border border-white/[0.07]"
+            >
+              <Trash2 size={13} />
+            </button>
+          </div>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={add}
+        className="flex items-center gap-1.5 text-[11px] text-white/30 hover:text-white/60 transition-colors border border-dashed border-white/[0.08] px-4 py-2.5 hover:border-white/20"
+      >
+        <Plus size={12} /> Add speaker
+      </button>
+    </div>
+  );
 }
 
 // ── EventForm modal ──────────────────────────────────────────────────────────
@@ -90,26 +164,47 @@ function EventFormModal({
     finally { setUploading(false); }
   }
 
+  async function handleSpeakerPhotoUpload(index: number, file: File) {
+    const ext = file.name.split('.').pop();
+    const path = `events/speakers/${Date.now()}.${ext}`;
+    const { error: uploadError } = await supabase.storage.from('assets').upload(path, file);
+    if (uploadError) throw uploadError;
+    const url = supabase.storage.from('assets').getPublicUrl(path).data.publicUrl;
+    setForm(f => ({
+      ...f,
+      speakers: f.speakers.map((s, i) => i === index ? { ...s, photo_url: url } : s),
+    }));
+  }
+
   useKeyboardShortcuts({ onClose, onSave: handleSave });
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0e0e0e] border border-white/[0.08] w-full max-w-2xl max-h-[92vh] flex flex-col">
-        {/* Header */}
-        <div className="flex justify-between items-center px-7 py-5 border-b border-white/[0.06] shrink-0">
-          <div>
-            <h2 className="text-[15px] font-semibold text-white">
-              {editingId ? 'Edit Event' : 'New Event'}
-            </h2>
-            <p className="text-[10px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
-          </div>
-          <button onClick={onClose} className="text-white/30 hover:text-white/70 transition-colors">
-            <X size={18} />
+    <div className="fixed inset-0 z-50 bg-[#080808] flex flex-col">
+      {/* Header */}
+      <div className="flex justify-between items-center px-8 py-4 border-b border-white/[0.07] shrink-0 bg-[#0a0a0a]">
+        <div>
+          <h2 className="text-[17px] font-semibold text-white">
+            {editingId ? 'Edit Event' : 'New Event'}
+          </h2>
+          <p className="text-[11px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button onClick={onClose} className="px-5 py-2 text-[13px] text-white/40 hover:text-white/70 transition-colors">
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving || uploading}
+            className="px-6 py-2 bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create event'}
           </button>
         </div>
+      </div>
 
-        {/* Body */}
-        <div className="overflow-y-auto px-7 py-6 flex flex-col gap-7">
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto">
+      <div className="max-w-[860px] mx-auto px-8 py-8 flex flex-col gap-7">
 
           <FormSection title="Identity">
             <div>
@@ -136,11 +231,11 @@ function EventFormModal({
             </div>
             <div>
               <FieldLabel>Description</FieldLabel>
-              <AutoTextarea
+              <RichTextEditor
                 value={form.description ?? ''}
                 onChange={v => field('description', v)}
-                maxChars={300}
-                minRows={2}
+                placeholder="Describe the event…"
+                minHeight={160}
               />
             </div>
           </FormSection>
@@ -207,21 +302,15 @@ function EventFormModal({
             />
           </FormSection>
 
-          {error && <p className="text-[12px] text-red-400/70">{error}</p>}
-        </div>
+          <FormSection title="Speakers">
+            <SpeakerEditor
+              speakers={form.speakers}
+              onChange={speakers => field('speakers', speakers)}
+              onPhotoUpload={handleSpeakerPhotoUpload}
+            />
+          </FormSection>
 
-        {/* Footer */}
-        <div className="px-7 py-5 border-t border-white/[0.06] flex justify-end gap-3 shrink-0">
-          <button onClick={onClose} className="px-5 py-2.5 text-[12px] text-white/40 hover:text-white/70 transition-colors">
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving || uploading}
-            className="px-6 py-2.5 bg-white text-black text-[12px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create event'}
-          </button>
+          {error && <p className="text-[13px] text-red-400/70">{error}</p>}
         </div>
       </div>
     </div>
@@ -289,6 +378,7 @@ export function AdminEvents() {
       status:         event.status,
       event_date:     parseDate(event.event_date),
       takeaways:      event.key_takeaways,
+      speakers:       event.speakers ?? [],
     });
     setEditingId(event.id);
     setShowForm(true);
@@ -311,6 +401,7 @@ export function AdminEvents() {
       status:         form.status,
       event_date:     form.event_date || null,
       key_takeaways:  form.takeaways,
+      speakers:       form.speakers,
     };
 
     if (editingId) {
@@ -332,14 +423,14 @@ export function AdminEvents() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
-          <h1 className="text-[22px] font-semibold text-white">Events</h1>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
+          <h1 className="text-[24px] font-semibold text-white">Events</h1>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 bg-white text-black text-[12px] font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
+          className="flex items-center gap-2 bg-white text-black text-[13px] font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
         >
-          <Plus size={14} /> New Event
+          <Plus size={15} /> New Event
         </button>
       </div>
 
@@ -357,11 +448,11 @@ export function AdminEvents() {
         </div>
       ) : (
         <div className="border border-white/[0.07] overflow-hidden">
-          <table className="w-full text-[12px]">
+          <table className="w-full text-[13px]">
             <thead>
               <tr className="border-b border-white/[0.06] bg-white/[0.02]">
                 {['Title', 'Category', 'Type', 'Status', 'Date', 'Registrations', ''].map(h => (
-                  <th key={h} className="text-left text-[10px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
+                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -402,13 +493,13 @@ export function AdminEvents() {
                     <div className={cn('flex gap-1 justify-end transition-opacity', deletingId === event.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100')}>
                       <a href={`/events/${event.slug}`} target="_blank" rel="noopener noreferrer"
                         className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="View">
-                        <Link2 size={13} />
+                        <Link2 size={15} />
                       </a>
                       <button onClick={() => openEdit(event)} className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="Edit">
-                        <Pencil size={13} />
+                        <Pencil size={15} />
                       </button>
                       {deletingId === event.id ? (
-                        <span className="flex items-center gap-1.5 ml-1 text-[11px]">
+                        <span className="flex items-center gap-1.5 ml-1 text-[13px]">
                           <button onClick={() => handleDelete(event.id)} className="text-red-400 hover:text-red-300 font-medium transition-colors">
                             Confirm
                           </button>
@@ -418,7 +509,7 @@ export function AdminEvents() {
                         </span>
                       ) : (
                         <button onClick={() => setDeletingId(event.id)} className="p-1.5 text-white/30 hover:text-red-400/70 transition-colors" title="Delete">
-                          <Trash2 size={13} />
+                          <Trash2 size={15} />
                         </button>
                       )}
                     </div>

@@ -14,12 +14,19 @@ export interface KeyTakeaway {
   text: string;
 }
 
+export interface EventSpeaker {
+  name: string;
+  title?: string;
+  photo_url: string | null;
+}
+
 export interface Event {
   id: string;
   title: string;
   slug: string;
   description: string | null;
   key_takeaways: KeyTakeaway[];
+  speakers: EventSpeaker[];
   hero_image_url: string | null;
   category: EventCategory;
   type: EventType;

@@ -41,6 +41,9 @@ export interface NewsArticle {
   published_at: string;
   created_at: string;
   reading_time: number | null;
+  author_name: string | null;
+  author_title: string | null;
+  author_avatar_url: string | null;
 }
 
 export type ContentDateFilter = 'all' | 'week' | 'month' | 'quarter' | 'year';

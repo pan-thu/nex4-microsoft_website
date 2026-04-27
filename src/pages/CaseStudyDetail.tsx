@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion, useInView } from 'framer-motion';
-import { ChevronRight, ArrowLeft } from 'lucide-react';
+import { ChevronRight, ArrowLeft, Quote, User } from 'lucide-react';
 import { BackgroundBlobs } from '@/components/common/BackgroundBlobs';
 import { CaseStudyService } from '@/services/CaseStudyService';
 import { cn } from '@/lib/utils';
@@ -10,11 +10,12 @@ import type { CaseStudyFull } from '@/types/caseStudy';
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const TOC_ITEMS = [
-  { label: 'Overview',    id: 'overview'    },
-  { label: 'Challenge',   id: 'challenge'   },
-  { label: 'Approach',    id: 'approach'    },
-  { label: 'Technologies',id: 'technologies'},
-  { label: 'Results',     id: 'results'     },
+  { label: 'Overview',     id: 'overview'     },
+  { label: 'Challenge',    id: 'challenge'    },
+  { label: 'Approach',     id: 'approach'     },
+  { label: 'Technologies', id: 'technologies' },
+  { label: 'Results',      id: 'results'      },
+  { label: 'Testimonial',  id: 'testimonial'  },
 ] as const;
 
 const SCROLL_OFFSET = 96;
@@ -309,13 +310,19 @@ export function CaseStudyDetail() {
             <h2 className="text-[24px] lg:text-[30px] font-semibold text-white leading-tight mb-6 max-w-2xl">
               What stood in the way
             </h2>
-            <p className="text-[15px] text-white/55 leading-[1.85]">{cs.challenge}</p>
+            {cs.challenge.trim().startsWith('<')
+              ? <div className="prose-content text-[16px]" dangerouslySetInnerHTML={{ __html: cs.challenge }} />
+              : <p className="text-[16px] text-white/55 leading-[1.85]">{cs.challenge}</p>
+            }
           </Section>
 
           {/* ── Approach ─────────────────────────────────────────────────── */}
           <Section id="approach">
             <SectionLabel>Our Approach</SectionLabel>
-            <p className="text-[15px] text-white/55 leading-[1.85] mb-10">{cs.approachIntro}</p>
+            {cs.approachIntro.trim().startsWith('<')
+              ? <div className="prose-content text-[16px] mb-10" dangerouslySetInnerHTML={{ __html: cs.approachIntro }} />
+              : <p className="text-[16px] text-white/55 leading-[1.85] mb-10">{cs.approachIntro}</p>
+            }
             <div>
               {cs.approach.map((step, i) => (
                 <ApproachStep key={i} title={step.title} body={step.body} index={i} />
@@ -334,36 +341,51 @@ export function CaseStudyDetail() {
                 <TechPill key={tech} label={tech} />
               ))}
             </div>
-
-            {/* Microsoft partner note */}
-            <div
-              className="mt-8 border border-white/[0.06] rounded-xl p-5 flex gap-4 items-center"
-              style={{ backgroundImage: 'radial-gradient(rgba(0,120,212,0.07) 0%, transparent 70%)' }}
-            >
-              <div className="shrink-0">
-                <div className="w-6 h-6 grid grid-cols-2 gap-px opacity-70">
-                  <div className="bg-[#f25022]" /><div className="bg-[#7fba00]" />
-                  <div className="bg-[#00a4ef]" /><div className="bg-[#ffb900]" />
-                </div>
-              </div>
-              <p className="text-[11px] text-white/45 leading-relaxed">
-                All solutions are delivered through NEX4's{' '}
-                <span className="gradient-text font-medium">Microsoft partner</span>{' '}
-                programme, ensuring certified implementation and ongoing support.
-              </p>
-            </div>
           </Section>
 
           {/* ── Results ──────────────────────────────────────────────────── */}
           <Section id="results">
             <SectionLabel>Results</SectionLabel>
-            <p className="text-[15px] text-white/55 leading-[1.85] mb-8">{cs.resultsIntro}</p>
+            {cs.resultsIntro.trim().startsWith('<')
+              ? <div className="prose-content text-[16px] mb-8" dangerouslySetInnerHTML={{ __html: cs.resultsIntro }} />
+              : <p className="text-[16px] text-white/55 leading-[1.85] mb-8">{cs.resultsIntro}</p>
+            }
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {cs.results.map((r, i) => (
                 <ResultCard key={i} {...r} index={i} />
               ))}
             </div>
           </Section>
+
+          {/* ── Testimonial ───────────────────────────────────────────────── */}
+          {cs.testimonial && (
+            <Section id="testimonial">
+              <SectionLabel>Testimonial</SectionLabel>
+              <div className="border border-white/[0.06] rounded-2xl p-8 flex flex-col gap-6">
+                <Quote size={28} className="text-white/15" />
+                <p className="text-[18px] text-white/70 leading-[1.75] font-light italic">
+                  "{cs.testimonial.quote}"
+                </p>
+                <div className="flex items-center gap-4 pt-4 border-t border-white/[0.06]">
+                  {cs.testimonial.photo_url ? (
+                    <img
+                      src={cs.testimonial.photo_url}
+                      alt={cs.testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover border border-white/10 shrink-0"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 shrink-0 flex items-center justify-center">
+                      <User size={18} className="text-white/30" />
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-[15px] font-semibold text-white">{cs.testimonial.name}</p>
+                    <p className="text-[13px] text-white/40 mt-0.5">{cs.testimonial.title}</p>
+                  </div>
+                </div>
+              </div>
+            </Section>
+          )}
 
         </div>
       </div>

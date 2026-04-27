@@ -16,36 +16,21 @@ function formatDateLong(iso: string) {
 }
 
 function renderContent(content: string) {
+  if (content.trim().startsWith('<')) {
+    return <div className="prose-content text-[16px]" dangerouslySetInnerHTML={{ __html: content }} />;
+  }
+  // Legacy markdown
   return content.split(/\n\n+/).map((para, i) => {
     if (para.startsWith('## ')) {
-      return (
-        <h2 key={i} className="text-[22px] font-semibold text-white mt-10 mb-4 leading-snug">
-          {para.replace(/^## /, '')}
-        </h2>
-      );
+      return <h2 key={i} className="text-[24px] font-semibold text-white mt-10 mb-4 leading-snug">{para.replace(/^## /, '')}</h2>;
     }
     if (para.startsWith('### ')) {
-      return (
-        <h3 key={i} className="text-[17px] font-semibold text-white/90 mt-8 mb-3 leading-snug">
-          {para.replace(/^### /, '')}
-        </h3>
-      );
+      return <h3 key={i} className="text-[19px] font-semibold text-white/90 mt-8 mb-3 leading-snug">{para.replace(/^### /, '')}</h3>;
     }
     if (para.startsWith('> ')) {
-      return (
-        <blockquote
-          key={i}
-          className="border-l-2 border-white/20 pl-5 my-6 italic text-white/50 text-[16px] leading-[1.9]"
-        >
-          {para.replace(/^> /, '')}
-        </blockquote>
-      );
+      return <blockquote key={i} className="border-l-2 border-white/20 pl-5 my-6 italic text-white/50 text-[17px] leading-[1.9]">{para.replace(/^> /, '')}</blockquote>;
     }
-    return (
-      <p key={i} className="text-[15px] text-white/60 leading-[1.9] mb-0">
-        {para}
-      </p>
-    );
+    return <p key={i} className="text-[16px] text-white/60 leading-[1.9] mb-0">{para}</p>;
   });
 }
 
@@ -137,7 +122,7 @@ export function BlogPost() {
           <div className="absolute top-6 left-0 right-0 max-w-[1240px] mx-auto px-10">
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 text-[11px] text-white/35 hover:text-white/70 transition-colors uppercase tracking-[0.15em] font-medium"
+              className="inline-flex items-center gap-2 text-[11px] text-white/35 hover:text-white/70 transition-colors uppercase tracking-[0.15em] font-medium rounded-full"
             >
               <ArrowLeft size={12} /> All Posts
             </Link>
@@ -180,7 +165,7 @@ export function BlogPost() {
             className="min-w-0"
           >
             {/* Meta row */}
-            <div className="flex flex-wrap gap-5 pb-8 border-b border-white/[0.06] mb-10">
+            <div className="flex flex-wrap gap-5 pb-8 border-b border-white/[0.06] mb-10 rounded-sm">
               <div className="flex items-center gap-2.5 text-[13px] text-white/40">
                 <Calendar size={14} className="text-white/20" />
                 {dateStr}
@@ -238,7 +223,7 @@ export function BlogPost() {
             )}
 
             {/* Author card */}
-            <div className="mt-10 border border-white/[0.06] p-6 flex gap-4 items-start">
+            <div className="mt-10 border border-white/[0.06] rounded-xl p-6 flex gap-4 items-start">
               {post.author_avatar_url ? (
                 <img
                   src={post.author_avatar_url}
@@ -259,23 +244,6 @@ export function BlogPost() {
               </div>
             </div>
 
-            {/* Microsoft partner note */}
-            <div
-              className="mt-6 border border-white/[0.06] p-5 flex gap-4 items-center"
-              style={{ backgroundImage: 'radial-gradient(rgba(0,120,212,0.08) 0%, transparent 70%)' }}
-            >
-              <div className="shrink-0 mt-0.5">
-                <div className="w-6 h-6 grid grid-cols-2 gap-px opacity-70">
-                  <div className="bg-[#f25022]" /><div className="bg-[#7fba00]" />
-                  <div className="bg-[#00a4ef]" /><div className="bg-[#ffb900]" />
-                </div>
-              </div>
-              <p className="text-[11px] text-white/50 leading-relaxed">
-                This article reflects insights from{' '}
-                <span className="gradient-text font-medium">NEX4 ICT Solutions</span>, an official{' '}
-                <span className="gradient-text font-medium">Microsoft Partner</span> across APAC.
-              </p>
-            </div>
           </motion.div>
 
           {/* ── Right: sticky sidebar ───────────────────────────────────── */}
@@ -286,7 +254,7 @@ export function BlogPost() {
             className="lg:sticky lg:top-28 flex flex-col gap-6"
           >
             {/* Quick facts */}
-            <div className="border border-white/[0.06] p-5 flex flex-col gap-4">
+            <div className="border border-white/[0.06] rounded-xl p-5 flex flex-col gap-4">
               <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold">About this post</p>
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-3 text-[13px] text-white/40">
@@ -306,7 +274,7 @@ export function BlogPost() {
 
             {/* Related posts */}
             {related.length > 0 && (
-              <div className="border border-white/[0.06] p-5 flex flex-col gap-4">
+              <div className="border border-white/[0.06] rounded-xl p-5 flex flex-col gap-4">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold">Related Posts</p>
                 <div className="flex flex-col gap-4">
                   {related.map(r => (

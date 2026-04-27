@@ -43,7 +43,7 @@ export function EventCard({ event }: { event: Event }) {
         )}
         {/* Soon badge */}
         {soon && (
-          <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-white text-black text-[9px] font-bold uppercase tracking-[0.15em] px-2 py-1">
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.15em] px-2 py-1">
             <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
             {days === 0 ? 'Today' : `${days}d left`}
           </div>
@@ -54,26 +54,26 @@ export function EventCard({ event }: { event: Event }) {
       <div className="flex flex-col flex-1 p-5 gap-3">
         {/* Meta row */}
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/30 border border-white/10 rounded-full px-3 py-0.5">
+          <span className="text-[12px] font-semibold uppercase tracking-[0.18em] text-white/30 border border-white/10 rounded-full px-3 py-0.5">
             {TYPE_LABEL[event.type]}
           </span>
           {date && (
-            <span className="text-[11px] font-mono text-white/30 tabular-nums">{date}</span>
+            <span className="text-[13px] font-mono text-white/30 tabular-nums">{date}</span>
           )}
         </div>
 
         {/* Title */}
-        <h3 className="text-white font-semibold text-[16px] leading-snug group-hover:text-white/85 transition-colors line-clamp-2">
+        <h3 className="text-white font-semibold text-[18px] leading-snug group-hover:text-white/85 transition-colors line-clamp-2">
           {event.title}
         </h3>
 
         {/* Category */}
-        <p className="text-[11px] uppercase tracking-[0.15em] text-white/25 font-medium">
+        <p className="text-[13px] uppercase tracking-[0.15em] text-white/25 font-medium">
           {CATEGORY_SHORT[event.category]}
         </p>
 
         {/* CTA */}
-        <div className="mt-auto pt-3 border-t border-white/[0.06] flex items-center gap-1.5 text-[13px] text-white/40 group-hover:text-white/70 transition-colors">
+        <div className="mt-auto pt-3 border-t border-white/[0.06] flex items-center gap-1.5 text-[14px] text-white/40 group-hover:text-white/70 transition-colors">
           Register
           <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform duration-200" />
         </div>

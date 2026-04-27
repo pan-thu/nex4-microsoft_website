@@ -56,7 +56,7 @@ export function RegistrationForm({ eventId, eventTitle }: Props) {
 
   if (submitted) {
     return (
-      <div className="bg-[#0e0e0e] border border-white/[0.08] p-8 text-center">
+      <div className="bg-[#0e0e0e] border border-white/[0.08] rounded-xl p-8 text-center">
         <div className="w-12 h-12 border border-white/20 flex items-center justify-center mx-auto mb-5">
           <span className="text-white text-xl">✓</span>
         </div>
@@ -69,7 +69,7 @@ export function RegistrationForm({ eventId, eventTitle }: Props) {
   }
 
   return (
-    <div className="bg-[#0e0e0e] border border-white/[0.08] p-7 lg:p-8">
+    <div className="bg-[#0e0e0e] border border-white/[0.08] rounded-xl p-7 lg:p-8">
       {/* Header */}
       <div className="mb-8 pb-6 border-b border-white/[0.06]">
         <p className="text-[9px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-2">
@@ -111,9 +111,9 @@ export function RegistrationForm({ eventId, eventTitle }: Props) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mt-2 w-full bg-white text-black text-[13px] font-semibold py-3.5 hover:bg-white/90 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-2 w-full bg-white text-black text-[13px] font-semibold py-3.5 rounded-lg hover:bg-white/90 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'Registering…' : `Register for ${eventTitle}`}
+          {isSubmitting ? 'Registering…' : 'Register'}
         </button>
 
         <p className="text-[11px] text-white/15 text-center leading-relaxed">

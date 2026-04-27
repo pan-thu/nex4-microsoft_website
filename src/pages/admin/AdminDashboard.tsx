@@ -34,22 +34,22 @@ export function AdminDashboard() {
         <div className="flex items-center gap-4">
           <img src={ASSETS.logo} alt="NEX4" className="h-7 w-auto object-contain" />
           <div className="w-px h-4 bg-white/[0.08]" />
-          <span className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold">Admin</span>
+          <span className="text-[12px] uppercase tracking-[0.2em] text-white/25 font-semibold">Admin</span>
         </div>
         <div className="flex items-center gap-4">
           <a
             href="/events"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-[11px] text-white/30 hover:text-white/60 transition-colors"
+            className="flex items-center gap-1.5 text-[13px] text-white/30 hover:text-white/60 transition-colors"
           >
-            View site <ExternalLink size={11} />
+            View site <ExternalLink size={13} />
           </a>
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-1.5 text-[11px] text-white/30 hover:text-white/60 transition-colors"
+            className="flex items-center gap-1.5 text-[13px] text-white/30 hover:text-white/60 transition-colors"
           >
-            <LogOut size={13} /> Sign out
+            <LogOut size={15} /> Sign out
           </button>
         </div>
       </header>
@@ -63,18 +63,18 @@ export function AdminDashboard() {
                 key={to}
                 to={`/admin/${to}`}
                 className={({ isActive }) => cn(
-                  'flex items-center gap-2.5 px-3 py-2.5 text-[12px] font-medium rounded transition-colors duration-150',
+                  'flex items-center gap-2.5 px-3 py-2.5 text-[14px] font-medium rounded transition-colors duration-150',
                   isActive
                     ? 'bg-white/[0.08] text-white'
                     : 'text-white/35 hover:text-white/65 hover:bg-white/[0.04]',
                 )}
               >
-                <Icon size={14} />
+                <Icon size={16} />
                 {label}
               </NavLink>
             ))}
           </nav>
-          <p className="mt-auto px-1 text-[10px] text-white/15 leading-relaxed">
+          <p className="mt-auto px-1 text-[11px] text-white/15 leading-relaxed">
             © {new Date().getFullYear()} NEX4 ICT Solutions.<br />All rights reserved.
           </p>
         </aside>

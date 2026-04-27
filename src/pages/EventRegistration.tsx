@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, Tag } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag, User } from 'lucide-react';
 import { EventService } from '@/services/EventService';
 import { RegistrationForm } from '@/components/events/RegistrationForm';
 import { KeyTakeaways } from '@/components/events/KeyTakeaways';
@@ -140,7 +140,7 @@ export function EventRegistration() {
             className="flex flex-col gap-10"
           >
             {/* Date + category */}
-            <div className="flex flex-wrap gap-5 pb-8 border-b border-white/[0.06]">
+            <div className="flex flex-wrap gap-5 pb-8 border-b border-white/[0.06] rounded-sm">
               {dateStr && (
                 <div className="flex items-center gap-2.5 text-[13px] text-white/40">
                   <Calendar size={14} className="text-white/20" />
@@ -159,7 +159,10 @@ export function EventRegistration() {
                 <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-4">
                   About this event
                 </p>
-                <p className="text-[15px] text-white/55 leading-[1.85]">{event.description}</p>
+                {event.description.trim().startsWith('<')
+                  ? <div className="prose-content text-[16px]" dangerouslySetInnerHTML={{ __html: event.description }} />
+                  : <p className="text-[16px] text-white/55 leading-[1.85]">{event.description}</p>
+                }
               </div>
             )}
 
@@ -168,27 +171,35 @@ export function EventRegistration() {
               <KeyTakeaways items={event.key_takeaways} />
             )}
 
-            {/* Partner note */}
-            <div
-              className="border border-white/[0.06] p-5 flex gap-4 items-start"
-              style={{
-                backgroundImage: 'radial-gradient(rgba(0,120,212,0.08) 0%, transparent 70%)',
-              }}
-            >
-              <div className="shrink-0 mt-0.5">
-                <div className="w-6 h-6 grid grid-cols-2 gap-px opacity-70">
-                  <div className="bg-[#f25022]" /><div className="bg-[#7fba00]" />
-                  <div className="bg-[#00a4ef]" /><div className="bg-[#ffb900]" />
+            {/* Speakers */}
+            {event.speakers && event.speakers.length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-4">
+                  Speakers
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  {event.speakers.map((speaker, i) => (
+                    <div key={i} className="flex items-center gap-3 border border-white/[0.06] rounded-xl px-4 py-3">
+                      {speaker.photo_url ? (
+                        <img
+                          src={speaker.photo_url}
+                          alt={speaker.name}
+                          className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-white/[0.06] border border-white/10 shrink-0 flex items-center justify-center">
+                          <User size={16} className="text-white/30" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-[14px] font-medium text-white">{speaker.name}</p>
+                        {speaker.title && <p className="text-[12px] text-white/40">{speaker.title}</p>}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div>
-                <p className="text-[11px] text-white/50 leading-relaxed">
-                  This session is delivered in partnership with{' '}
-                  <span className="gradient-text font-medium">Microsoft</span>.
-                  Content reflects current Microsoft technology and roadmaps.
-                </p>
-              </div>
-            </div>
+            )}
           </motion.div>
 
           {/* Right — registration form (sticky) */}

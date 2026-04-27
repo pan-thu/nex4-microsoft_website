@@ -159,21 +159,21 @@ function CaseStudyCard({
 
       {/* Industry + category badge — top left */}
       <div className="absolute top-5 left-5 flex items-center gap-2 z-10">
-        <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/50 border border-white/15 rounded-full px-2.5 py-0.5 backdrop-blur-sm bg-black/20">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/50 border border-white/15 rounded-full px-2.5 py-0.5 backdrop-blur-sm bg-black/20">
           {cs.industry}
         </span>
-        <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/10 rounded-full px-2.5 py-0.5 backdrop-blur-sm bg-black/20">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40 border border-white/10 rounded-full px-2.5 py-0.5 backdrop-blur-sm bg-black/20">
           {CATEGORY_LABELS[cs.category]}
         </span>
       </div>
 
       {/* REST STATE: client + title pinned to bottom */}
       <div className="absolute inset-x-0 bottom-0 p-6 z-10 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-        <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.client}</p>
+        <p className="text-[12px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.client}</p>
         <h3
           className={cn(
             'font-semibold text-white leading-snug',
-            isFeatured ? 'text-[22px] lg:text-[26px] max-w-lg' : 'text-[16px] line-clamp-2',
+            isFeatured ? 'text-[24px] lg:text-[28px] max-w-lg' : 'text-[18px] line-clamp-2',
           )}
         >
           {cs.title}
@@ -182,11 +182,11 @@ function CaseStudyCard({
 
       {/* HOVER STATE: excerpt + CTA slides up */}
       <div className="absolute inset-x-0 bottom-0 p-6 z-10 pointer-events-none translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-        <p className="text-[10px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.client}</p>
+        <p className="text-[12px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.client}</p>
         <h3
           className={cn(
             'font-semibold text-white leading-snug mb-3',
-            isFeatured ? 'text-[22px] lg:text-[26px] max-w-lg' : 'text-[16px] line-clamp-2',
+            isFeatured ? 'text-[24px] lg:text-[28px] max-w-lg' : 'text-[18px] line-clamp-2',
           )}
         >
           {cs.title}
@@ -194,13 +194,13 @@ function CaseStudyCard({
         <p
           className={cn(
             'text-white/65 leading-relaxed mb-4',
-            isFeatured ? 'text-[14px] max-w-lg line-clamp-3' : 'text-[12px] line-clamp-2',
+            isFeatured ? 'text-[15px] max-w-lg line-clamp-3' : 'text-[14px] line-clamp-2',
           )}
         >
           {cs.excerpt}
         </p>
-        <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-white">
-          Read the story <ChevronRight size={13} />
+        <span className="inline-flex items-center gap-1.5 text-[14px] font-medium text-white">
+          Read the story <ChevronRight size={14} />
         </span>
       </div>
     </motion.div>
@@ -222,7 +222,7 @@ function Pill({
     <button
       onClick={onClick}
       className={cn(
-        'shrink-0 text-[11px] font-medium px-3 py-1 rounded-full border transition-all duration-200',
+        'shrink-0 text-[12px] font-medium px-3 py-1 rounded-full border transition-all duration-200',
         active
           ? 'bg-white text-black border-white'
           : 'border-white/15 text-white/45 hover:border-white/35 hover:text-white/80',
@@ -367,7 +367,7 @@ export function CaseStudies() {
           <div className="flex flex-wrap gap-x-5 gap-y-3 items-center">
             {/* Service category */}
             <div className="flex items-center gap-2.5">
-              <span className="shrink-0 text-[9px] uppercase tracking-[0.18em] text-white/25 font-semibold">Service</span>
+              <span className="shrink-0 text-[11px] uppercase tracking-[0.18em] text-white/25 font-semibold">Service</span>
               <div className="flex gap-1.5 flex-wrap">
                 <Pill active={!activeCategory} onClick={() => handleCategoryChange(null)}>All</Pill>
                 {ALL_CATEGORIES.map(([val, label]) => (
@@ -386,7 +386,7 @@ export function CaseStudies() {
 
             {/* Industry */}
             <div className="flex items-center gap-2.5 min-w-0">
-              <span className="shrink-0 text-[9px] uppercase tracking-[0.18em] text-white/25 font-semibold">Industry</span>
+              <span className="shrink-0 text-[11px] uppercase tracking-[0.18em] text-white/25 font-semibold">Industry</span>
               <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
                 <Pill active={!activeIndustry} onClick={() => handleIndustryChange(null)}>All</Pill>
                 {industries.map(ind => (
@@ -407,20 +407,20 @@ export function CaseStudies() {
       {/* ── Bento grid ─────────────────────────────────────────────────────── */}
       <section className="max-w-[1240px] mx-auto px-10 py-14">
         <div className="flex items-baseline gap-4 mb-8">
-          <h2 className="text-[13px] uppercase tracking-[0.2em] text-white/50 font-semibold">
+          <h2 className="text-[14px] uppercase tracking-[0.2em] text-white/50 font-semibold">
             Client Stories
           </h2>
-          <span className="text-[11px] font-mono text-white/20">
+          <span className="text-[12px] font-mono text-white/20">
             {filtered.length} {filtered.length === 1 ? 'story' : 'stories'}
           </span>
         </div>
 
         {filtered.length === 0 ? (
           <div className="py-20 text-center border border-white/[0.06] rounded-2xl">
-            <p className="text-white/20 text-[13px] mb-1">No case studies match your filters.</p>
+            <p className="text-white/20 text-[14px] mb-1">No case studies match your filters.</p>
             <button
               onClick={() => { handleCategoryChange(null); handleIndustryChange(null); }}
-              className="text-[11px] text-white/35 hover:text-white/60 transition-colors underline underline-offset-2"
+              className="text-[13px] text-white/35 hover:text-white/60 transition-colors underline underline-offset-2"
             >
               Clear filters
             </button>
@@ -443,7 +443,7 @@ export function CaseStudies() {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
-                  className="px-8 py-3 border border-white/[0.12] rounded-full text-[12px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 transition-all duration-200"
+                  className="px-8 py-3 border border-white/[0.12] rounded-full text-[13px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 transition-all duration-200"
                 >
                   Load more stories
                 </button>
