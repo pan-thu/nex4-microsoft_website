@@ -115,7 +115,9 @@ function Hero({ data }: { data: ServiceData }) {
           <ChevronRight size={11} className="text-white/20" />
           <span className="text-[11px] text-white/30">Services</span>
           <ChevronRight size={11} className="text-white/20" />
-          <span className="text-[11px] text-white/45">{data.category}</span>
+          <span className="text-[11px] text-white/30">{data.category}</span>
+          <ChevronRight size={11} className="text-white/20" />
+          <span className="text-[11px] text-white/45">{data.name}</span>
         </nav>
 
         <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-white/35 mb-5">{data.category}</p>
@@ -269,22 +271,22 @@ function Capabilities({ data }: { data: ServiceData }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.28 }}
-              className="relative overflow-hidden"
+              className="group relative overflow-hidden rounded-2xl mt-3 transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.10),0_8px_40px_rgba(0,0,0,0.5)]"
               style={{ minHeight: 420 }}
             >
-              <img src={bgImage} alt={cap.title} className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0"
+              <img src={bgImage} alt={cap.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" />
+              <div className="absolute inset-0 transition-opacity duration-500"
                 style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.84) 36%, rgba(0,0,0,0.45) 62%, rgba(0,0,0,0.14) 100%)' }} />
 
               {/* Content — bottom left */}
               <div className="absolute inset-x-0 bottom-0 z-10 p-12 lg:p-14 max-w-[520px]">
-                <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/28 mb-5">
+                <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/28 mb-5 transition-colors duration-300 group-hover:text-white/40">
                   {String(activeTab + 1).padStart(2, '0')} / {String(data.capabilities.length).padStart(2, '0')}
                 </p>
                 <h3 className="text-[26px] lg:text-[32px] font-semibold text-white leading-snug mb-6">
                   {cap.title}
                 </h3>
-                <p className="text-[16px] text-white/55 leading-relaxed mb-8">{cap.body}</p>
+                <p className="text-[16px] text-white/55 leading-relaxed mb-8 transition-colors duration-300 group-hover:text-white/70">{cap.body}</p>
                 <Link
                   to="/contact-us"
                   className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-white hover:bg-white hover:text-black transition-all duration-200"
@@ -292,9 +294,6 @@ function Capabilities({ data }: { data: ServiceData }) {
                   Explore More <ChevronRight size={13} />
                 </Link>
               </div>
-
-              <div className="absolute bottom-0 left-0 right-0 h-[2px]"
-                style={{ background: 'linear-gradient(90deg, rgba(0,120,212,0.9), rgba(0,188,242,0.5), transparent 60%)' }} />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -392,45 +391,43 @@ function CaseStudies({ data }: { data: ServiceData }) {
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => emblaApi?.scrollPrev()} disabled={!canPrev} aria-label="Previous"
-              className={cn('w-10 h-10 flex items-center justify-center border transition-all duration-200',
-                canPrev ? 'border-white/20 text-white/55 hover:border-white/45 hover:text-white hover:scale-[1.1]' : 'border-white/[0.07] text-white/18 cursor-not-allowed')}>
+              className={cn('w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-200',
+                canPrev ? 'border-white/20 text-white/55 hover:bg-white/10 hover:border-white/40 hover:text-white' : 'border-white/[0.07] text-white/18 cursor-not-allowed')}>
               <ChevronLeft size={16} />
             </button>
             <button onClick={() => emblaApi?.scrollNext()} disabled={!canNext} aria-label="Next"
-              className={cn('w-10 h-10 flex items-center justify-center border transition-all duration-200',
-                canNext ? 'border-white/20 text-white/55 hover:border-white/45 hover:text-white hover:scale-[1.1]' : 'border-white/[0.07] text-white/18 cursor-not-allowed')}>
+              className={cn('w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-200',
+                canNext ? 'border-white/20 text-white/55 hover:bg-white/10 hover:border-white/40 hover:text-white' : 'border-white/[0.07] text-white/18 cursor-not-allowed')}>
               <ChevronRight size={16} />
             </button>
           </div>
         </motion.div>
 
-        <div className="overflow-hidden" ref={emblaRef}>
+        <div className="overflow-hidden py-3 -my-3" ref={emblaRef}>
           <div className="flex gap-4">
             {data.caseStudies.map((cs) => (
-              <div key={cs.client + cs.title} className="group flex-[0_0_calc(33.333%-11px)] min-w-0 relative overflow-hidden cursor-pointer" style={{ minHeight: 460 }}>
+              <div key={cs.client + cs.title} className="group flex-[0_0_calc(33.333%-11px)] min-w-0 relative overflow-hidden cursor-pointer rounded-2xl transition-[transform,box-shadow] duration-500 ease-out hover:scale-[1.025] hover:shadow-[0_20px_48px_rgba(0,0,0,0.7),0_0_0_1px_rgba(255,255,255,0.08)]" style={{ minHeight: 460 }}>
                 {/* Image */}
-                <img src={cs.image} alt={cs.client} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.04]" />
+                <img src={cs.image} alt={cs.client} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out scale-100 group-hover:scale-[1.05]" />
 
-                {/* Permanent gradient */}
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.72) 45%, rgba(0,0,0,0.2) 100%)' }} />
-                {/* Extra dark layer that lifts on hover */}
-                <div className="absolute inset-0 bg-black/35 opacity-100 group-hover:opacity-0 transition-opacity duration-500" />
-
-                {/* Top accent line */}
-                <div className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.6), transparent)' }} />
+                {/* Permanent deep gradient */}
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0.15) 100%)' }} />
 
                 {/* REST STATE: industry + client + title pinned to bottom */}
-                <div className="absolute inset-x-0 bottom-0 p-6 z-10 transition-opacity duration-300 group-hover:opacity-0">
+                <div className="absolute inset-x-0 bottom-0 p-6 z-10 transition-all duration-400 group-hover:opacity-0 group-hover:translate-y-2">
                   <p className="text-[9px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.industry} — {cs.client}</p>
                   <h3 className="text-[18px] font-semibold text-white leading-snug line-clamp-2">{cs.title}</h3>
                 </div>
 
-                {/* HOVER STATE: full panel slides up from below */}
-                <div className="absolute inset-x-0 bottom-0 p-6 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                  <p className="text-[9px] uppercase tracking-[0.18em] font-semibold text-white/40 mb-2">{cs.industry} — {cs.client}</p>
-                  <h3 className="text-[18px] font-semibold text-white leading-snug mb-3">{cs.title}</h3>
-                  <p className="text-[13px] text-white/70 leading-relaxed mb-5 line-clamp-3">{cs.description}</p>
-                  <span className="inline-flex items-center gap-2 text-[13px] font-medium text-white">Read the story <ChevronRight size={14} /></span>
+                {/* HOVER STATE: panel slides up with semi-transparent gradient */}
+                <div className="absolute inset-x-0 bottom-0 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"
+                  style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.72) 55%, rgba(0,0,0,0.35) 100%)', padding: '28px 24px 24px' }}>
+                  <p className="text-[9px] uppercase tracking-[0.18em] font-semibold text-white/35 mb-2">{cs.industry} — {cs.client}</p>
+                  <h3 className="text-[17px] font-semibold text-white leading-snug mb-3">{cs.title}</h3>
+                  <p className="text-[13px] text-white/60 leading-relaxed mb-5 line-clamp-3">{cs.description}</p>
+                  <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-white/70 group-hover:text-white transition-colors duration-300">
+                    Read the story <ChevronRight size={13} />
+                  </span>
                 </div>
               </div>
             ))}

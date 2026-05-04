@@ -43,7 +43,7 @@ export const CASE_STUDIES: CaseStudyFull[] = [
       name: 'Chief Technology Officer',
       title: 'Myanmar Banking Corp',
     },
-    relatedService: { title: 'Workplace Security', slug: 'workplace-security' },
+    relatedService: { title: 'Workforce Security', slug: 'workforce-security' },
   },
 
   {
@@ -87,7 +87,7 @@ export const CASE_STUDIES: CaseStudyFull[] = [
       name: 'Chief People Officer',
       title: 'Professional Services Firm, APAC',
     },
-    relatedService: { title: 'Workplace AI', slug: 'workplace-ai' },
+    relatedService: { title: 'Workforce AI', slug: 'workforce-ai' },
   },
 
   {
@@ -170,7 +170,7 @@ export const CASE_STUDIES: CaseStudyFull[] = [
       { value: '3', label: 'country compliance reviews passed without material findings' },
       { value: '100', suffix: '%', label: 'of patient record repositories classified and labelled with Purview' },
     ],
-    relatedService: { title: 'Workplace Security', slug: 'workplace-security' },
+    relatedService: { title: 'Workforce Security', slug: 'workforce-security' },
   },
 
   {
@@ -258,7 +258,7 @@ export const CASE_STUDIES: CaseStudyFull[] = [
       name: 'Head of Retail Banking Operations',
       title: 'Regional Bank, Myanmar',
     },
-    relatedService: { title: 'Workplace Automation', slug: 'workplace-automation' },
+    relatedService: { title: 'Workforce Automation', slug: 'workforce-automation' },
   },
 
   {
@@ -297,7 +297,7 @@ export const CASE_STUDIES: CaseStudyFull[] = [
       { value: '340', label: 'Teams groups consolidated to 76 well-governed, active groups' },
       { value: '450', label: 'users successfully migrated to the new information architecture' },
     ],
-    relatedService: { title: 'Workplace Productivity', slug: 'workplace-productivity' },
+    relatedService: { title: 'Workforce Productivity', slug: 'workforce-productivity' },
   },
 
   {
@@ -341,7 +341,7 @@ export const CASE_STUDIES: CaseStudyFull[] = [
       name: 'Head of Digital Banking',
       title: 'Regional Bank, Thailand',
     },
-    relatedService: { title: 'Workplace AI', slug: 'workplace-ai' },
+    relatedService: { title: 'Workforce AI', slug: 'workforce-ai' },
   },
 ];
 

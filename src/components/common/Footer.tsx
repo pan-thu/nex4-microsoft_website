@@ -4,21 +4,33 @@ import { ASSETS } from '@/lib/assets';
 
 const SERVICES_TREE = [
   {
-    label: 'Digital Workplace',
-    href: '/services/digital-workplace',
+    label: 'AI Workforce Experience',
+    href: '/services/ai-workforce-experience',
     children: [
-      { label: 'Workplace Productivity', href: '/services/workplace-productivity' },
-      { label: 'Workplace Security', href: '/services/workplace-security' },
-      { label: 'Workplace AI', href: '/services/workplace-ai' },
-      { label: 'Workplace Automation', href: '/services/workplace-automation' },
-      { label: 'Workplace Backup', href: '/services/workplace-backup' },
+      { label: 'Workforce Productivity', href: '/services/ai-workforce-experience/workforce-productivity' },
+      { label: 'Workforce AI', href: '/services/ai-workforce-experience/workforce-ai' },
+      { label: 'Workforce Backup & Recovery', href: '/services/ai-workforce-experience/workforce-backup-recovery' },
     ],
   },
   {
-    label: 'Cloud',
-    href: '/services/cloud',
+    label: 'AI Workforce Process',
+    href: '/services/ai-workforce-process',
     children: [
-      { label: 'Cloud Migration', href: '/services/cloud-migration' },
+      { label: 'Workforce Automation', href: '/services/ai-workforce-process/workforce-automation' },
+    ],
+  },
+  {
+    label: 'AI Workforce Security',
+    href: '/services/ai-workforce-security',
+    children: [
+      { label: 'Workforce Security', href: '/services/ai-workforce-security/workforce-security' },
+    ],
+  },
+  {
+    label: 'AI Workforce Data & Cloud',
+    href: '/services/ai-workforce-data-cloud',
+    children: [
+      { label: 'Cloud Migration', href: '/services/ai-workforce-data-cloud/cloud-migration' },
     ],
   },
 ];
@@ -52,7 +64,7 @@ function TreeSection({ items }: { items: typeof SERVICES_TREE }) {
           {/* Parent link */}
           <Link
             to={item.href}
-            className="flex items-center gap-2 py-1.5 text-[14px] font-medium text-white/70 hover:text-white transition-colors duration-150"
+            className="flex items-center gap-2 py-1.5 text-[15px] font-medium text-white/70 hover:text-white transition-colors duration-150"
           >
             {item.label}
           </Link>
@@ -65,7 +77,7 @@ function TreeSection({ items }: { items: typeof SERVICES_TREE }) {
                 <li key={child.label}>
                   <Link
                     to={child.href}
-                    className="flex items-center gap-2 py-1 text-[13px] text-white/35 hover:text-white/80 transition-colors duration-150"
+                    className="flex items-center gap-2 py-1 text-[14px] text-white/35 hover:text-white/80 transition-colors duration-150"
                   >
                     <span className="w-1 h-1 rounded-full bg-white/20 shrink-0" />
                     {child.label}

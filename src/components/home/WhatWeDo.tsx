@@ -15,23 +15,23 @@ interface Card {
 const CARDS: Card[] = [
   {
     num: '01',
-    category: 'Workplace Security',
+    category: 'Workforce Security',
     body: 'Zero Trust frameworks, endpoint protection, and identity management — built for the modern hybrid workforce.',
-    href: '/services/workplace-security',
+    href: '/services/ai-workforce-security/workforce-security',
     image: ASSETS.cardBg2,
   },
   {
     num: '02',
-    category: 'Workplace AI',
+    category: 'Workforce AI',
     body: 'AI and data intelligence help your business adapt, innovate, and lead. From deployment to adoption.',
-    href: '/services/workplace-ai',
+    href: '/services/ai-workforce-experience/workforce-ai',
     image: ASSETS.cardBg4,
   },
   {
     num: '03',
-    category: 'Workplace Automation',
+    category: 'Workforce Automation',
     body: 'Intelligent Power Platform workflows connect your apps, data, and teams — eliminating repetitive manual processes.',
-    href: '/services/workplace-automation',
+    href: '/services/ai-workforce-process/workforce-automation',
     image: ASSETS.cardBg1,
   },
   {

@@ -195,7 +195,7 @@ export function BlogPost() {
               </div>
             ) : (
               <div
-                className="border border-white/[0.06] py-16 flex items-center justify-center"
+                className="border border-white/[0.06] rounded-xl py-16 flex items-center justify-center"
                 style={{
                   backgroundImage: 'radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)',
                   backgroundSize: '20px 20px',
@@ -287,7 +287,7 @@ export function BlogPost() {
                         <img
                           src={r.hero_image_url}
                           alt={r.title}
-                          className="w-16 h-12 object-cover shrink-0 border border-white/[0.06] group-hover:opacity-80 transition-opacity"
+                          className="w-16 h-12 object-cover shrink-0 border border-white/[0.06] rounded group-hover:opacity-80 transition-opacity"
                         />
                       )}
                       <div className="min-w-0">

@@ -23,7 +23,7 @@ function applyDateFilter(events: Event[], date: UIFilters['date']): Event[] {
 }
 
 function SkeletonCard() {
-  return <div className="aspect-[4/5] bg-white/[0.04] animate-pulse" />;
+  return <div className="aspect-[4/5] bg-white/[0.04] animate-pulse rounded-2xl" />;
 }
 
 export function Events() {
@@ -156,7 +156,7 @@ export function Events() {
             {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="py-20 text-center border border-white/[0.06]">
+          <div className="py-20 text-center border border-white/[0.06] rounded-2xl">
             <p className="text-white/20 text-[14px] mb-1">No upcoming events match your filters.</p>
             <button
               onClick={() => setFilters(EMPTY_FILTERS)}
@@ -191,7 +191,7 @@ export function Events() {
               <div className="mt-8 flex justify-center">
                 <button
                   onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
-                  className="px-8 py-3 border border-white/[0.12] text-[13px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 transition-all duration-200"
+                  className="px-8 py-3 rounded-full border border-white/[0.12] text-[13px] uppercase tracking-[0.18em] text-white/50 hover:text-white hover:border-white/30 hover:bg-white/[0.04] transition-all duration-200"
                 >
                   Load more events
                 </button>
@@ -212,7 +212,7 @@ export function Events() {
 
           {/* Placeholder */}
           <div
-            className="relative overflow-hidden border border-white/[0.06] py-20 flex flex-col items-center justify-center gap-4"
+            className="relative overflow-hidden border border-white/[0.06] rounded-2xl py-20 flex flex-col items-center justify-center gap-4"
             style={{
               backgroundImage: 'radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px)',
               backgroundSize: '20px 20px',

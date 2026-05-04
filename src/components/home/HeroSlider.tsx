@@ -17,22 +17,22 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    eyebrow: 'Workplace AI',
+    eyebrow: 'Workforce AI',
     headlinePre: 'Empower Your People with a Smarter',
     headlineAccent: 'Digital Workplace',
     headlinePost: '',
-    cta: 'Explore Workplace AI',
-    ctaHref: '/services/workplace-ai',
+    cta: 'Explore Workforce AI',
+    ctaHref: '/services/ai-workforce-experience/workforce-ai',
     image: ASSETS.hero1,
     imageAlt: 'Abstract holographic visualization representing AI-powered workplace transformation',
   },
   {
-    eyebrow: 'Workplace Security',
+    eyebrow: 'Workforce Security',
     headlinePre: 'Protect What Matters. Secure',
     headlineAccent: 'Every Endpoint.',
     headlinePost: '',
     cta: 'Explore Security',
-    ctaHref: '/services/workplace-security',
+    ctaHref: '/services/ai-workforce-security/workforce-security',
     image: ASSETS.hero2,
     imageAlt: 'Dynamic light streams representing enterprise security and data protection',
   },

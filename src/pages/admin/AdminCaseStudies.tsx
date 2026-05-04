@@ -16,11 +16,11 @@ type ApproachStep = { title: string; body: string };
 type ResultItem   = { value: string; suffix: string; label: string };
 
 const CATEGORIES: { value: CaseStudyCategory; label: string }[] = [
-  { value: 'workplace-productivity', label: 'Workplace Productivity' },
-  { value: 'workplace-security',     label: 'Workplace Security' },
-  { value: 'workplace-ai',           label: 'Workplace AI' },
-  { value: 'workplace-automation',   label: 'Workplace Automation' },
-  { value: 'workplace-backup',       label: 'Workplace Backup' },
+  { value: 'workplace-productivity', label: 'Workforce Productivity' },
+  { value: 'workplace-security',     label: 'Workforce Security' },
+  { value: 'workplace-ai',           label: 'Workforce AI' },
+  { value: 'workplace-automation',   label: 'Workforce Automation' },
+  { value: 'workplace-backup',       label: 'Workforce Backup & Recovery' },
   { value: 'cloud-migration',        label: 'Cloud Migration' },
 ];
 
@@ -493,7 +493,7 @@ function CaseStudyFormModal({
                 <FormInput
                   value={form.related_service_title}
                   onChange={v => field('related_service_title', v)}
-                  placeholder="e.g. Workplace Security"
+                  placeholder="e.g. Workforce Security"
                 />
               </div>
               <div>

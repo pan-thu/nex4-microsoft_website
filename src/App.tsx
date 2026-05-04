@@ -38,12 +38,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:slug" element={<EventRegistration />} />
-          <Route path="/services/workplace-productivity" element={<WorkplaceProductivity />} />
-          <Route path="/services/workplace-security" element={<WorkplaceSecurity />} />
-          <Route path="/services/workplace-ai" element={<WorkplaceAI />} />
-          <Route path="/services/workplace-automation" element={<WorkplaceAutomation />} />
-          <Route path="/services/workplace-backup" element={<WorkplaceBackup />} />
-          <Route path="/services/cloud-migration" element={<CloudMigration />} />
+          <Route path="/services/ai-workforce-experience/workforce-productivity" element={<WorkplaceProductivity />} />
+          <Route path="/services/ai-workforce-security/workforce-security" element={<WorkplaceSecurity />} />
+          <Route path="/services/ai-workforce-experience/workforce-ai" element={<WorkplaceAI />} />
+          <Route path="/services/ai-workforce-process/workforce-automation" element={<WorkplaceAutomation />} />
+          <Route path="/services/ai-workforce-experience/workforce-backup-recovery" element={<WorkplaceBackup />} />
+          <Route path="/services/ai-workforce-data-cloud/cloud-migration" element={<CloudMigration />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/news" element={<News />} />

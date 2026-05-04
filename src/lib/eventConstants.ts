@@ -1,11 +1,11 @@
 import type { EventCategory, EventType, DateFilter } from '@/types/events';
 
 export const EVENT_CATEGORIES: { value: EventCategory; label: string }[] = [
-  { value: 'workplace-productivity', label: 'Workplace Productivity' },
-  { value: 'workplace-security',     label: 'Workplace Security' },
-  { value: 'workplace-ai',           label: 'Workplace AI' },
-  { value: 'workplace-automation',   label: 'Workplace Automation' },
-  { value: 'workplace-backup',       label: 'Workplace Backup' },
+  { value: 'workplace-productivity', label: 'Workforce Productivity' },
+  { value: 'workplace-security',     label: 'Workforce Security' },
+  { value: 'workplace-ai',           label: 'Workforce AI' },
+  { value: 'workplace-automation',   label: 'Workforce Automation' },
+  { value: 'workplace-backup',       label: 'Workforce Backup & Recovery' },
   { value: 'cloud-migration',        label: 'Cloud Migration' },
 ];
 

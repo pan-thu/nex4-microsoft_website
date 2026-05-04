@@ -43,6 +43,7 @@ export interface CaseStudy {
 
 export interface ServiceData {
   slug: string;
+  name: string;
   category: string;
   title: string;
   tagline: string;
@@ -62,9 +63,10 @@ export interface ServiceData {
 
 export const SERVICES: Record<string, ServiceData> = {
 
-  'workplace-productivity': {
-    slug: 'workplace-productivity',
-    category: 'Digital Workplace',
+  'workforce-productivity': {
+    slug: 'workforce-productivity',
+    name: 'Workforce Productivity',
+    category: 'AI Workforce Experience',
     title: 'Unlock the Full Power of Your Microsoft 365 Investment',
     tagline: 'NEX4 helps organisations eliminate friction, connect teams, and build the productivity stack that modern work demands.',
     heroImage: ASSETS.hero1,
@@ -95,9 +97,9 @@ export const SERVICES: Record<string, ServiceData> = {
     ctaHeadline: 'Ready to Get More from Microsoft 365?',
     ctaBody: 'Talk to a NEX4 specialist about a no-cost M365 assessment for your organisation.',
     related: [
-      { title: 'Workplace AI', slug: 'workplace-ai', tagline: 'Add AI to your productivity stack with Microsoft Copilot.', image: ASSETS.cardBg4 },
-      { title: 'Workplace Automation', slug: 'workplace-automation', tagline: 'Automate repetitive processes across your M365 environment.', image: ASSETS.cardBg1 },
-      { title: 'Workplace Security', slug: 'workplace-security', tagline: 'Secure the productivity environment you have built.', image: ASSETS.cardBg2 },
+      { title: 'Workforce AI', slug: 'workforce-ai', tagline: 'Add AI to your productivity stack with Microsoft Copilot.', image: ASSETS.cardBg4 },
+      { title: 'Workforce Automation', slug: 'workforce-automation', tagline: 'Automate repetitive processes across your M365 environment.', image: ASSETS.cardBg1 },
+      { title: 'Workforce Security', slug: 'workforce-security', tagline: 'Secure the productivity environment you have built.', image: ASSETS.cardBg2 },
     ],
     caseStudies: [
       { client: 'Regional Law Firm, Yangon', industry: 'Legal', title: 'Cutting internal email by 35% with Microsoft Teams governance', description: 'A 450-user legal practice replaced siloed email workflows with structured Teams channels and SharePoint document libraries — reducing internal email volume in the first quarter.', image: ASSETS.hero1 },
@@ -106,9 +108,10 @@ export const SERVICES: Record<string, ServiceData> = {
     ],
   },
 
-  'workplace-security': {
-    slug: 'workplace-security',
-    category: 'Digital Workplace',
+  'workforce-security': {
+    slug: 'workforce-security',
+    name: 'Workforce Security',
+    category: 'AI Workforce Security',
     title: 'Zero Trust Security for the Modern Hybrid Workforce',
     tagline: 'Protect every identity, device, and access point — regardless of where your people work. NEX4 designs and deploys enterprise-grade security on Microsoft\'s platform.',
     heroImage: ASSETS.hero2,
@@ -140,8 +143,8 @@ export const SERVICES: Record<string, ServiceData> = {
     ctaHeadline: "Let's Assess Your Security Posture",
     ctaBody: 'Book a complimentary Microsoft Secure Score review with a NEX4 security architect.',
     related: [
-      { title: 'Workplace Backup', slug: 'workplace-backup', tagline: 'Recover fast when the worst happens.', image: ASSETS.cardBg1 },
-      { title: 'Workplace AI', slug: 'workplace-ai', tagline: 'AI-powered threat intelligence with Microsoft Security Copilot.', image: ASSETS.cardBg4 },
+      { title: 'Workforce Backup & Recovery', slug: 'workforce-backup-recovery', tagline: 'Recover fast when the worst happens.', image: ASSETS.cardBg1 },
+      { title: 'Workforce AI', slug: 'workforce-ai', tagline: 'AI-powered threat intelligence with Microsoft Security Copilot.', image: ASSETS.cardBg4 },
       { title: 'Cloud Migration', slug: 'cloud-migration', tagline: 'Secure your Azure environment from day one.', image: ASSETS.cardBg3 },
     ],
     caseStudies: [
@@ -151,9 +154,10 @@ export const SERVICES: Record<string, ServiceData> = {
     ],
   },
 
-  'workplace-ai': {
-    slug: 'workplace-ai',
-    category: 'Digital Workplace',
+  'workforce-ai': {
+    slug: 'workforce-ai',
+    name: 'Workforce AI',
+    category: 'AI Workforce Experience',
     title: 'Put AI to Work Across Your Organisation',
     tagline: 'From Microsoft 365 Copilot to custom Azure AI solutions, NEX4 guides every stage of your enterprise AI journey — strategy, deployment, and adoption.',
     heroImage: ASSETS.scene1,
@@ -184,8 +188,8 @@ export const SERVICES: Record<string, ServiceData> = {
     ctaHeadline: 'Start Your AI Journey with a Clear Plan',
     ctaBody: 'Talk to our AI specialists about a structured readiness assessment and deployment roadmap.',
     related: [
-      { title: 'Workplace Productivity', slug: 'workplace-productivity', tagline: 'The M365 foundation that Copilot runs on.', image: ASSETS.cardBg1 },
-      { title: 'Workplace Automation', slug: 'workplace-automation', tagline: 'Combine AI with Power Platform for intelligent automation.', image: ASSETS.cardBg1 },
+      { title: 'Workforce Productivity', slug: 'workforce-productivity', tagline: 'The M365 foundation that Copilot runs on.', image: ASSETS.cardBg1 },
+      { title: 'Workforce Automation', slug: 'workforce-automation', tagline: 'Combine AI with Power Platform for intelligent automation.', image: ASSETS.cardBg1 },
       { title: 'Cloud Migration', slug: 'cloud-migration', tagline: 'Move to Azure — where enterprise AI lives.', image: ASSETS.cardBg3 },
     ],
     caseStudies: [
@@ -195,9 +199,10 @@ export const SERVICES: Record<string, ServiceData> = {
     ],
   },
 
-  'workplace-automation': {
-    slug: 'workplace-automation',
-    category: 'Digital Workplace',
+  'workforce-automation': {
+    slug: 'workforce-automation',
+    name: 'Workforce Automation',
+    category: 'AI Workforce Process',
     title: 'Automate the Work That Slows Your Business Down',
     tagline: 'Power Platform, Power Automate, and intelligent workflows — designed, built, and maintained by NEX4 so your teams can focus on the work that matters.',
     heroImage: ASSETS.scene2,
@@ -228,8 +233,8 @@ export const SERVICES: Record<string, ServiceData> = {
     ctaHeadline: 'Identify Your First Automation Win',
     ctaBody: 'Start with a 2-hour process discovery workshop — we will map your top candidates and estimate the impact.',
     related: [
-      { title: 'Workplace AI', slug: 'workplace-ai', tagline: 'Add AI intelligence to your automation workflows.', image: ASSETS.cardBg4 },
-      { title: 'Workplace Productivity', slug: 'workplace-productivity', tagline: 'The M365 platform your automations run on.', image: ASSETS.cardBg1 },
+      { title: 'Workforce AI', slug: 'workforce-ai', tagline: 'Add AI intelligence to your automation workflows.', image: ASSETS.cardBg4 },
+      { title: 'Workforce Productivity', slug: 'workforce-productivity', tagline: 'The M365 platform your automations run on.', image: ASSETS.cardBg1 },
       { title: 'Cloud Migration', slug: 'cloud-migration', tagline: 'Move the data your automations depend on to Azure.', image: ASSETS.cardBg3 },
     ],
     caseStudies: [
@@ -239,9 +244,10 @@ export const SERVICES: Record<string, ServiceData> = {
     ],
   },
 
-  'workplace-backup': {
-    slug: 'workplace-backup',
-    category: 'Digital Workplace',
+  'workforce-backup-recovery': {
+    slug: 'workforce-backup-recovery',
+    name: 'Workforce Backup & Recovery',
+    category: 'AI Workforce Experience',
     title: 'Protect and Recover Your Microsoft 365 Data',
     tagline: 'Ransomware, accidental deletion, and service outages are not hypothetical risks. NEX4 ensures your Microsoft 365 data is protected, compliant, and recoverable — always.',
     heroImage: ASSETS.scene3,
@@ -272,9 +278,9 @@ export const SERVICES: Record<string, ServiceData> = {
     ctaHeadline: 'Is Your M365 Data Actually Protected?',
     ctaBody: 'Book a complimentary data protection assessment — we will show you exactly where the gaps are.',
     related: [
-      { title: 'Workplace Security', slug: 'workplace-security', tagline: 'Prevent the incidents that trigger recovery scenarios.', image: ASSETS.cardBg2 },
+      { title: 'Workforce Security', slug: 'workforce-security', tagline: 'Prevent the incidents that trigger recovery scenarios.', image: ASSETS.cardBg2 },
       { title: 'Cloud Migration', slug: 'cloud-migration', tagline: 'Extend data protection to your Azure workloads.', image: ASSETS.cardBg3 },
-      { title: 'Workplace Productivity', slug: 'workplace-productivity', tagline: 'The M365 environment your backup strategy protects.', image: ASSETS.cardBg1 },
+      { title: 'Workforce Productivity', slug: 'workforce-productivity', tagline: 'The M365 environment your backup strategy protects.', image: ASSETS.cardBg1 },
     ],
     caseStudies: [
       { client: 'Legal Firm, Singapore', industry: 'Legal', title: 'M365 Backup deployed within 48 hours following a near-miss ransomware event', description: 'After detecting lateral movement on their network, a 300-user law firm engaged NEX4 for emergency backup deployment. Full M365 coverage with immutable storage was achieved in under two days.', image: ASSETS.hero2 },
@@ -285,7 +291,8 @@ export const SERVICES: Record<string, ServiceData> = {
 
   'cloud-migration': {
     slug: 'cloud-migration',
-    category: 'Cloud',
+    name: 'Cloud Migration',
+    category: 'AI Workforce Data & Cloud',
     title: 'Your Azure Migration, Done Right the First Time',
     tagline: 'NEX4 takes the guesswork out of cloud migration — from initial assessment through to a fully optimised, secure Azure environment ready for what comes next.',
     heroImage: ASSETS.hero3,
@@ -317,9 +324,9 @@ export const SERVICES: Record<string, ServiceData> = {
     ctaHeadline: 'Plan Your Cloud Migration with Confidence',
     ctaBody: 'Start with a no-obligation cloud readiness assessment — we will map your current environment and build your business case.',
     related: [
-      { title: 'Workplace Security', slug: 'workplace-security', tagline: 'Secure your Azure environment with Zero Trust principles.', image: ASSETS.cardBg2 },
-      { title: 'Workplace AI', slug: 'workplace-ai', tagline: 'Azure is the platform for enterprise AI — we make it ready.', image: ASSETS.cardBg4 },
-      { title: 'Workplace Backup', slug: 'workplace-backup', tagline: 'Protect Azure workloads with cloud-native backup.', image: ASSETS.cardBg1 },
+      { title: 'Workforce Security', slug: 'workforce-security', tagline: 'Secure your Azure environment with Zero Trust principles.', image: ASSETS.cardBg2 },
+      { title: 'Workforce AI', slug: 'workforce-ai', tagline: 'Azure is the platform for enterprise AI — we make it ready.', image: ASSETS.cardBg4 },
+      { title: 'Workforce Backup & Recovery', slug: 'workforce-backup-recovery', tagline: 'Protect Azure workloads with cloud-native backup.', image: ASSETS.cardBg1 },
     ],
     caseStudies: [
       { client: 'Myanmar Telecom', industry: 'Telecommunications', title: '120 on-premises servers migrated to Azure in 4 months with zero production downtime', description: 'A structured Azure migration using the Cloud Adoption Framework moved all production workloads in phased waves, with each server validated against performance baselines before the next phase began.', image: ASSETS.hero3 },

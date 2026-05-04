@@ -192,7 +192,7 @@ function FormCheckbox({
       <span
         onClick={() => onChange(!checked)}
         className={cn(
-          'shrink-0 w-5 h-5 border mt-0.5 transition-all duration-150 flex items-center justify-center',
+          'shrink-0 w-5 h-5 rounded border mt-0.5 transition-all duration-150 flex items-center justify-center',
           checked ? 'border-white bg-white' : 'border-white/25 group-hover:border-white/50',
         )}
       >
