@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, startTransition } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ASSETS } from '@/lib/assets';
 import { supabase } from '@/lib/supabase';
@@ -267,13 +269,26 @@ function useNavbarData(): { insightCats: InsightCategory[]; serviceCards: Record
   return { insightCats, serviceCards: data?.serviceCards ?? {} };
 }
 
+// ─── Featured card animation variants ─────────────────────────────────────────
+
+const cardGridVariants: Variants = {
+  hidden: { opacity: 0 },
+  show:   { opacity: 1, transition: { staggerChildren: 0.07, duration: 0 } },
+  exit:   { opacity: 0, y: -6, transition: { duration: 0.14, ease: 'easeIn' as const } },
+};
+
+const cardItemVariants: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  show:   { opacity: 1, y: 0,  transition: { duration: 0.24, ease: 'easeOut' as const } },
+};
+
 // ─── Story Card ────────────────────────────────────────────────────────────────
 
 function StoryCard({ card }: { card: StoryCard }) {
   return (
     <Link
       to={card.href}
-      className="relative flex flex-col justify-end overflow-hidden group rounded-xl"
+      className="relative flex flex-col justify-end overflow-hidden group rounded-xl h-full"
       style={{ minHeight: 240 }}
     >
       <img
@@ -461,15 +476,33 @@ function ServicesMegaMenu({ visible, serviceCards }: { visible: boolean; service
                 </div>
               )}
             </div>
-            {visibleCards.length > 0 ? (
-              <div key={`${activeSub.id}-${pairIndex}`} className="grid grid-cols-2 gap-4 h-[calc(100%-36px)] animate-fade-in">
-                {visibleCards.map((card, i) => <StoryCard key={i} card={card} />)}
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]">
-                {[0, 1].map(i => <div key={i} className="bg-white/[0.03] animate-pulse rounded-xl" style={{ minHeight: 240 }} />)}
-              </div>
-            )}
+            <AnimatePresence mode="wait">
+              {visibleCards.length > 0 ? (
+                <motion.div
+                  key={`${activeSub.id}-${pairIndex}`}
+                  variants={cardGridVariants}
+                  initial="hidden"
+                  animate="show"
+                  exit="exit"
+                  className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]"
+                >
+                  {visibleCards.map((card, i) => (
+                    <motion.div key={i} variants={cardItemVariants} className="h-full">
+                      <StoryCard card={card} />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="skeleton"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]"
+                >
+                  {[0, 1].map(i => <div key={i} className="bg-white/[0.03] animate-pulse rounded-xl" style={{ minHeight: 240 }} />)}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
         </div>
@@ -621,19 +654,35 @@ function InsightsMegaMenu({ visible }: { visible: boolean }) {
                 </div>
               )}
             </div>
-            {visibleCards.length > 0 ? (
-              <div key={`${activeCatId}-${pairIndex}`} className="grid grid-cols-2 gap-4 h-[calc(100%-36px)] animate-fade-in">
-                {visibleCards.map((card, i) => (
-                  <StoryCard key={i} card={card} />
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]">
-                {[0, 1].map(i => (
-                  <div key={i} className="bg-white/[0.03] animate-pulse rounded-xl" style={{ minHeight: 240 }} />
-                ))}
-              </div>
-            )}
+            <AnimatePresence mode="wait">
+              {visibleCards.length > 0 ? (
+                <motion.div
+                  key={`${activeCatId}-${pairIndex}`}
+                  variants={cardGridVariants}
+                  initial="hidden"
+                  animate="show"
+                  exit="exit"
+                  className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]"
+                >
+                  {visibleCards.map((card, i) => (
+                    <motion.div key={i} variants={cardItemVariants} className="h-full">
+                      <StoryCard card={card} />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="skeleton"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="grid grid-cols-2 gap-4 h-[calc(100%-36px)]"
+                >
+                  {[0, 1].map(i => (
+                    <div key={i} className="bg-white/[0.03] animate-pulse rounded-xl" style={{ minHeight: 240 }} />
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
         </div>
@@ -696,6 +745,10 @@ export function Navbar() {
       setMobileOpen(false);
     });
   }, [location]);
+
+  useEffect(() => {
+    return () => { if (closeTimer.current) clearTimeout(closeTimer.current); };
+  }, []);
 
   const open = (key: MenuKey) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);

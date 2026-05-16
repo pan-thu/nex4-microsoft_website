@@ -3,6 +3,7 @@ import { Navbar } from '@/components/common/Navbar';
 import { Footer } from '@/components/common/Footer';
 import { ScrollProgress } from '@/components/common/ScrollProgress';
 import { BackToTop } from '@/components/common/BackToTop';
+import { ScrollToTop } from '@/components/common/ScrollToTop';
 import { Home } from '@/pages/Home';
 import { Events } from '@/pages/Events';
 import { EventRegistration } from '@/pages/EventRegistration';
@@ -12,6 +13,7 @@ import { WorkplaceAI } from '@/pages/services/WorkplaceAI';
 import { WorkplaceAutomation } from '@/pages/services/WorkplaceAutomation';
 import { WorkplaceBackup } from '@/pages/services/WorkplaceBackup';
 import { CloudMigration } from '@/pages/services/CloudMigration';
+import { CapabilityDetail } from '@/pages/services/CapabilityDetail';
 import { Blog } from '@/pages/Blog';
 import { BlogPost } from '@/pages/BlogPost';
 import { News } from '@/pages/News';
@@ -31,6 +33,7 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#060606]">
+      <ScrollToTop />
       <ScrollProgress />
       {!isAdmin && <Navbar />}
       <main className="flex-grow">
@@ -44,6 +47,7 @@ function App() {
           <Route path="/services/ai-workforce-process/workforce-automation" element={<WorkplaceAutomation />} />
           <Route path="/services/ai-workforce-experience/workforce-backup-recovery" element={<WorkplaceBackup />} />
           <Route path="/services/ai-workforce-data-cloud/cloud-migration" element={<CloudMigration />} />
+          <Route path="/services/capabilities/:serviceSlug/:capabilitySlug" element={<CapabilityDetail />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/news" element={<News />} />
