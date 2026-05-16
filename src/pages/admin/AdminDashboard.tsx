@@ -30,57 +30,57 @@ export function AdminDashboard() {
   return (
     <div className="min-h-screen bg-[#080808] text-white flex flex-col">
       {/* Top bar */}
-      <header className="fixed top-0 left-0 right-0 z-30 h-[56px] border-b border-white/[0.06] bg-[#080808]/95 backdrop-blur-md flex items-center px-6 justify-between">
+      <header className="fixed top-0 left-0 right-0 z-30 h-[64px] border-b border-white/[0.06] bg-[#080808]/95 backdrop-blur-md flex items-center px-6 justify-between">
         <div className="flex items-center gap-4">
-          <img src={ASSETS.logo} alt="NEX4" className="h-7 w-auto object-contain" />
+          <img src={ASSETS.logo} alt="NEX4" className="h-8 w-auto object-contain" />
           <div className="w-px h-4 bg-white/[0.08]" />
-          <span className="text-[12px] uppercase tracking-[0.2em] text-white/25 font-semibold">Admin</span>
+          <span className="text-[13px] uppercase tracking-[0.2em] text-white/25 font-semibold">Admin</span>
         </div>
         <div className="flex items-center gap-4">
           <a
             href="/events"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-[13px] text-white/30 hover:text-white/60 transition-colors"
+            className="flex items-center gap-1.5 text-[14px] text-white/30 hover:text-white/60 transition-colors"
           >
-            View site <ExternalLink size={13} />
+            View site <ExternalLink size={14} />
           </a>
           <button
             onClick={handleSignOut}
-            className="flex items-center gap-1.5 text-[13px] text-white/30 hover:text-white/60 transition-colors"
+            className="flex items-center gap-1.5 text-[14px] text-white/30 hover:text-white/60 transition-colors"
           >
-            <LogOut size={15} /> Sign out
+            <LogOut size={16} /> Sign out
           </button>
         </div>
       </header>
 
-      <div className="flex flex-1 pt-[56px]">
+      <div className="flex flex-1 pt-[64px]">
         {/* Sidebar */}
-        <aside className="w-52 shrink-0 border-r border-white/[0.06] flex flex-col pt-8 px-3 pb-6 fixed top-[56px] bottom-0">
+        <aside className="w-60 shrink-0 border-r border-white/[0.06] flex flex-col pt-8 px-3 pb-6 fixed top-[64px] bottom-0">
           <nav className="flex flex-col gap-0.5">
             {NAV.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}
                 to={`/admin/${to}`}
                 className={({ isActive }) => cn(
-                  'flex items-center gap-2.5 px-3 py-2.5 text-[14px] font-medium rounded transition-colors duration-150',
+                  'flex items-center gap-3 px-3 py-3 text-[15px] font-medium rounded transition-colors duration-150',
                   isActive
                     ? 'bg-white/[0.08] text-white'
                     : 'text-white/35 hover:text-white/65 hover:bg-white/[0.04]',
                 )}
               >
-                <Icon size={16} />
+                <Icon size={18} />
                 {label}
               </NavLink>
             ))}
           </nav>
-          <p className="mt-auto px-1 text-[11px] text-white/15 leading-relaxed">
+          <p className="mt-auto px-1 text-[12px] text-white/15 leading-relaxed">
             © {new Date().getFullYear()} NEX4 ICT Solutions.<br />All rights reserved.
           </p>
         </aside>
 
         {/* Content */}
-        <main className="flex-1 ml-52 px-10 py-10 min-h-full">
+        <main className="flex-1 ml-60 px-10 py-10 min-h-full">
           <Routes>
             <Route index element={<Navigate to="events" replace />} />
             <Route path="events" element={<AdminEvents />} />

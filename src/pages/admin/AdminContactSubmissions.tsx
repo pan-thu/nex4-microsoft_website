@@ -48,8 +48,8 @@ function SubmissionDetail({ s }: { s: ContactSubmission }) {
           <Field label="Newsletter" value={s.subscribed ? 'Yes' : 'No'} />
           {s.message && (
             <div className="col-span-2 lg:col-span-3">
-              <p className="text-[10px] uppercase tracking-[0.12em] text-white/25 mb-1">Message</p>
-              <p className="text-[13px] text-white/60 leading-relaxed">{s.message}</p>
+              <p className="text-[11px] uppercase tracking-[0.12em] text-white/25 mb-1">Message</p>
+              <p className="text-[14px] text-white/60 leading-relaxed">{s.message}</p>
             </div>
           )}
         </div>
@@ -61,8 +61,8 @@ function SubmissionDetail({ s }: { s: ContactSubmission }) {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-[0.12em] text-white/25 mb-1">{label}</p>
-      <p className="text-[13px] text-white/65">{value}</p>
+      <p className="text-[11px] uppercase tracking-[0.12em] text-white/25 mb-1">{label}</p>
+      <p className="text-[14px] text-white/65">{value}</p>
     </div>
   );
 }
@@ -116,11 +116,11 @@ export function AdminContactSubmissions() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
-          <h1 className="text-[22px] font-semibold text-white">Contact Submissions</h1>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
+          <h1 className="text-[24px] font-semibold text-white">Contact Submissions</h1>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[11px] text-white/25 tabular-nums">{submissions.length} total</span>
+          <span className="text-[12px] text-white/25 tabular-nums">{submissions.length} total</span>
           {/* Filter by inquiry type */}
           <select
             value={filter}
@@ -142,8 +142,8 @@ export function AdminContactSubmissions() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="py-20 text-center border border-white/[0.06]">
-          <Mail size={20} className="text-white/15 mx-auto mb-3" />
-          <p className="text-white/20 text-[13px]">
+          <Mail size={24} className="text-white/15 mx-auto mb-3" />
+          <p className="text-white/20 text-[14px]">
             {submissions.length === 0 ? 'No submissions yet.' : 'No submissions match your filter.'}
           </p>
         </div>
@@ -153,7 +153,7 @@ export function AdminContactSubmissions() {
             <thead>
               <tr className="border-b border-white/[0.06] bg-white/[0.02]">
                 {['Name', 'Email', 'Inquiry', 'Country', 'Date', ''].map(h => (
-                  <th key={h} className="text-left text-[10px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
+                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3.5">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -168,28 +168,28 @@ export function AdminContactSubmissions() {
                     )}
                     onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}
                   >
-                    <td className="px-4 py-3.5">
+                    <td className="px-4 py-4">
                       <span className="text-white font-medium">{s.first_name} {s.last_name}</span>
-                      {s.company && <span className="text-white/30 ml-2 text-[11px]">{s.company}</span>}
+                      {s.company && <span className="text-white/30 ml-2 text-[12px]">{s.company}</span>}
                     </td>
-                    <td className="px-4 py-3.5 text-white/50">{s.email}</td>
-                    <td className="px-4 py-3.5">
-                      <span className="text-white/40 text-[11px] px-2 py-1 border border-white/[0.08] rounded-full whitespace-nowrap">
+                    <td className="px-4 py-4 text-white/50">{s.email}</td>
+                    <td className="px-4 py-4">
+                      <span className="text-white/40 text-[12px] px-2 py-1 border border-white/[0.08] rounded-full whitespace-nowrap">
                         {s.inquiry_type}
                       </span>
                     </td>
-                    <td className="px-4 py-3.5 text-white/35">{s.country ?? '—'}</td>
-                    <td className="px-4 py-3.5 text-white/25 font-mono whitespace-nowrap">
+                    <td className="px-4 py-4 text-white/35">{s.country ?? '—'}</td>
+                    <td className="px-4 py-4 text-white/25 font-mono whitespace-nowrap">
                       {new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </td>
-                    <td className="px-4 py-3.5">
+                    <td className="px-4 py-4">
                       <div className={cn('flex items-center gap-1 justify-end', deletingId === s.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100')}>
                         {expandedId === s.id
-                          ? <ChevronUp size={13} className="text-white/30 mr-1" />
-                          : <ChevronDown size={13} className="text-white/30 mr-1" />
+                          ? <ChevronUp size={15} className="text-white/30 mr-1" />
+                          : <ChevronDown size={15} className="text-white/30 mr-1" />
                         }
                         {deletingId === s.id ? (
-                          <span className="flex items-center gap-1.5 text-[11px]">
+                          <span className="flex items-center gap-1.5 text-[12px]">
                             <button
                               onClick={e => { e.stopPropagation(); handleDelete(s.id); }}
                               className="text-red-400 hover:text-red-300 font-medium transition-colors"
@@ -209,7 +209,7 @@ export function AdminContactSubmissions() {
                             className="p-1.5 text-white/30 hover:text-red-400/70 transition-colors"
                             title="Delete"
                           >
-                            <Trash2 size={13} />
+                            <Trash2 size={15} />
                           </button>
                         )}
                       </div>

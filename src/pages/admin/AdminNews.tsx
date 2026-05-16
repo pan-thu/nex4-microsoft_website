@@ -120,19 +120,19 @@ function NewsFormModal({
       {/* Header */}
       <div className="flex justify-between items-center px-8 py-4 border-b border-white/[0.07] shrink-0 bg-[#0a0a0a]">
         <div>
-          <h2 className="text-[17px] font-semibold text-white">
+          <h2 className="text-[19px] font-semibold text-white">
             {editingId ? 'Edit Article' : 'New Article'}
           </h2>
-          <p className="text-[11px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
+          <p className="text-[12px] text-white/25 mt-0.5">Ctrl+Enter to save · Esc to close</p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={onClose} className="px-5 py-2 text-[13px] text-white/40 hover:text-white/70 transition-colors">
+          <button onClick={onClose} className="px-5 py-2.5 text-[14px] text-white/40 hover:text-white/70 transition-colors">
             Cancel
           </button>
           <button
             onClick={handleSave}
             disabled={saving || uploading}
-            className="px-6 py-2 bg-white text-black text-[13px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2.5 bg-white text-black text-[14px] font-semibold hover:bg-white/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'Saving…' : editingId ? 'Save changes' : 'Create article'}
           </button>
@@ -375,14 +375,14 @@ export function AdminNews() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
+          <p className="text-[12px] uppercase tracking-[0.2em] text-white/25 font-semibold mb-1">Manage</p>
           <h1 className="text-[24px] font-semibold text-white">News Articles</h1>
         </div>
         <button
           onClick={openCreate}
-          className="flex items-center gap-2 bg-white text-black text-[13px] font-semibold px-5 py-2.5 hover:bg-white/90 transition-colors"
+          className="flex items-center gap-2 bg-white text-black text-[14px] font-semibold px-5 py-3 hover:bg-white/90 transition-colors"
         >
-          <Plus size={15} /> New Article
+          <Plus size={16} /> New Article
         </button>
       </div>
 
@@ -393,8 +393,8 @@ export function AdminNews() {
         </div>
       ) : articles.length === 0 ? (
         <div className="py-20 text-center border border-white/[0.06]">
-          <p className="text-white/20 text-[13px] mb-3">No news articles yet.</p>
-          <button onClick={openCreate} className="text-[11px] text-white/35 hover:text-white/60 transition-colors underline">
+          <p className="text-white/20 text-[14px] mb-3">No news articles yet.</p>
+          <button onClick={openCreate} className="text-[12px] text-white/35 hover:text-white/60 transition-colors underline">
             Create your first article
           </button>
         </div>
@@ -404,14 +404,14 @@ export function AdminNews() {
             <thead>
               <tr className="border-b border-white/[0.06] bg-white/[0.02]">
                 {['Title', 'Category', 'Published', ''].map(h => (
-                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3">{h}</th>
+                  <th key={h} className="text-left text-[11px] uppercase tracking-[0.15em] text-white/25 font-semibold px-4 py-3.5">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {articles.map(article => (
                 <tr key={article.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors group">
-                  <td className="px-4 py-3.5">
+                  <td className="px-4 py-4">
                     <div className="flex items-center gap-2.5">
                       {article.hero_image_url && (
                         <img src={article.hero_image_url} alt="" className="w-8 h-8 object-cover border border-white/[0.06] shrink-0" />
@@ -419,22 +419,22 @@ export function AdminNews() {
                       <span className="text-white font-medium truncate max-w-[280px]">{article.title}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3.5">
+                  <td className="px-4 py-4">
                     <span className={cn('text-[10px] font-medium uppercase tracking-[0.1em] px-2 py-0.5 border', CATEGORY_STYLE[article.category] ?? 'bg-white/[0.05] text-white/40 border-white/10')}>
                       {article.category}
                     </span>
                   </td>
-                  <td className="px-4 py-3.5 text-white/30 font-mono whitespace-nowrap">
+                  <td className="px-4 py-4 text-white/30 font-mono whitespace-nowrap">
                     {new Date(article.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </td>
-                  <td className="px-4 py-3.5">
+                  <td className="px-4 py-4">
                     <div className={cn('flex gap-1 justify-end transition-opacity', deletingId === article.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100')}>
                       <a href={`/news/${article.slug}`} target="_blank" rel="noopener noreferrer"
                         className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="View">
-                        <Link2 size={15} />
+                        <Link2 size={16} />
                       </a>
                       <button onClick={() => openEdit(article)} className="p-1.5 text-white/30 hover:text-white/70 transition-colors" title="Edit">
-                        <Pencil size={15} />
+                        <Pencil size={16} />
                       </button>
                       {deletingId === article.id ? (
                         <span className="flex items-center gap-1.5 ml-1 text-[13px]">
@@ -447,7 +447,7 @@ export function AdminNews() {
                         </span>
                       ) : (
                         <button onClick={() => setDeletingId(article.id)} className="p-1.5 text-white/30 hover:text-red-400/70 transition-colors" title="Delete">
-                          <Trash2 size={15} />
+                          <Trash2 size={16} />
                         </button>
                       )}
                     </div>

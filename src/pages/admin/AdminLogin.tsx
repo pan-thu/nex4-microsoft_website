@@ -34,11 +34,11 @@ export function AdminLogin() {
   return (
     <div className="min-h-screen bg-[#080808] flex flex-col">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-10 py-5 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between px-10 py-6 border-b border-white/[0.06]">
         <Link to="/">
-          <img src={ASSETS.logo} alt="NEX4" className="h-8 w-auto object-contain" />
+          <img src={ASSETS.logo} alt="NEX4" className="h-9 w-auto object-contain" />
         </Link>
-        <span className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-semibold">
+        <span className="text-[11px] uppercase tracking-[0.2em] text-white/20 font-semibold">
           Admin Portal
         </span>
       </div>
@@ -47,16 +47,16 @@ export function AdminLogin() {
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-sm">
           <div className="mb-10">
-            <p className="text-[9px] uppercase tracking-[0.22em] text-white/25 font-semibold mb-3">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-white/25 font-semibold mb-3">
               NEX4 Admin
             </p>
-            <h1 className="text-[28px] font-semibold text-white">Sign in.</h1>
+            <h1 className="text-[34px] font-semibold text-white">Sign in.</h1>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-7">
             {/* Email */}
             <div>
-              <label className="block text-[10px] uppercase tracking-[0.15em] text-white/30 font-medium mb-2">
+              <label className="block text-[12px] uppercase tracking-[0.15em] text-white/30 font-medium mb-2">
                 Email
               </label>
               <input
@@ -64,16 +64,16 @@ export function AdminLogin() {
                 type="email"
                 autoComplete="email"
                 className={cn(
-                  'w-full bg-transparent border-0 border-b pb-2 text-white text-[14px] outline-none transition-colors duration-200 placeholder:text-white/15',
+                  'w-full bg-transparent border-0 border-b pb-2.5 text-white text-[16px] outline-none transition-colors duration-200 placeholder:text-white/15',
                   errors.email ? 'border-red-400/50' : 'border-white/10 focus:border-white/40',
                 )}
               />
-              {errors.email && <p className="mt-1.5 text-[11px] text-red-400/70">{errors.email.message}</p>}
+              {errors.email && <p className="mt-1.5 text-[12px] text-red-400/70">{errors.email.message}</p>}
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-[10px] uppercase tracking-[0.15em] text-white/30 font-medium mb-2">
+              <label className="block text-[12px] uppercase tracking-[0.15em] text-white/30 font-medium mb-2">
                 Password
               </label>
               <input
@@ -81,21 +81,21 @@ export function AdminLogin() {
                 type="password"
                 autoComplete="current-password"
                 className={cn(
-                  'w-full bg-transparent border-0 border-b pb-2 text-white text-[14px] outline-none transition-colors duration-200',
+                  'w-full bg-transparent border-0 border-b pb-2.5 text-white text-[16px] outline-none transition-colors duration-200',
                   errors.password ? 'border-red-400/50' : 'border-white/10 focus:border-white/40',
                 )}
               />
-              {errors.password && <p className="mt-1.5 text-[11px] text-red-400/70">{errors.password.message}</p>}
+              {errors.password && <p className="mt-1.5 text-[12px] text-red-400/70">{errors.password.message}</p>}
             </div>
 
             {error && (
-              <p className="text-[12px] text-red-400/70 -mt-2">{error}</p>
+              <p className="text-[13px] text-red-400/70 -mt-2">{error}</p>
             )}
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-2 w-full bg-white text-black text-[13px] font-semibold py-3.5 hover:bg-white/90 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-2 w-full bg-white text-black text-[15px] font-semibold py-4 hover:bg-white/90 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Signing in…' : 'Sign in'}
             </button>

@@ -27,7 +27,7 @@ export function FieldLabel({
 }) {
   return (
     <label className={cn(
-      'block text-[12px] uppercase tracking-[0.15em] font-medium mb-2 transition-colors',
+      'block text-[13px] uppercase tracking-[0.15em] font-medium mb-2 transition-colors',
       error ? 'text-red-400/80' : 'text-white/30',
     )}>
       {children}
@@ -37,7 +37,7 @@ export function FieldLabel({
 }
 
 const inputBase =
-  'w-full bg-white/[0.04] border px-3 py-3 text-white text-[14px] outline-none transition-colors placeholder:text-white/15';
+  'w-full bg-white/[0.04] border px-3.5 py-3.5 text-white text-[15px] outline-none transition-colors placeholder:text-white/15';
 
 export function FormInput({
   value,
@@ -87,7 +87,7 @@ export function FormSelect({
       value={value}
       onChange={e => onChange(e.target.value)}
       className={cn(
-        'w-full bg-[#111] border px-3 py-3 text-white text-[14px] outline-none transition-colors',
+        'w-full bg-[#111] border px-3.5 py-3.5 text-white text-[15px] outline-none transition-colors',
         error
           ? 'border-red-500/40 focus:border-red-500/60'
           : 'border-white/[0.08] focus:border-white/25',
@@ -149,7 +149,7 @@ export function AutoTextarea({
       />
       {maxChars && (
         <p className={cn(
-          'mt-1 text-[10px] text-right transition-colors',
+          'mt-1 text-[11px] text-right transition-colors',
           pct >= 1 ? 'text-red-400/60' : pct >= 0.8 ? 'text-amber-400/60' : 'text-white/20',
         )}>
           {value.length} / {maxChars}
@@ -165,7 +165,7 @@ export function FormSection({ title, children }: { title: string; children: Reac
   return (
     <div>
       <div className="flex items-center gap-3 mb-4">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-white/20 font-semibold whitespace-nowrap">{title}</p>
+        <p className="text-[12px] uppercase tracking-[0.2em] text-white/20 font-semibold whitespace-nowrap">{title}</p>
         <div className="flex-1 h-px bg-white/[0.05]" />
       </div>
       <div className="flex flex-col gap-4">{children}</div>
@@ -195,9 +195,9 @@ export function SlugField({
         <button
           type="button"
           onClick={onRegenerate}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[10px] text-white/25 hover:text-white/55 transition-colors"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[11px] text-white/25 hover:text-white/55 transition-colors"
         >
-          <RefreshCw size={10} /> Regenerate
+          <RefreshCw size={11} /> Regenerate
         </button>
       )}
     </div>
@@ -225,21 +225,21 @@ export function ImageUploadField({
         <div className="flex items-center gap-4">
           {value && (
             <div className="relative shrink-0 group">
-              <img src={value} alt="preview" className="w-14 h-14 rounded-full object-cover border border-white/[0.12]" />
+              <img src={value} alt="preview" className="w-16 h-16 rounded-full object-cover border border-white/[0.12]" />
               <button
                 type="button"
                 onClick={() => onChange('')}
-                className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-black/80 border border-white/10 text-white/50 hover:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-black/80 border border-white/10 text-white/50 hover:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                <X size={9} />
+                <X size={11} />
               </button>
             </div>
           )}
           <label className={cn(
-            'flex items-center gap-2 px-4 py-2 border border-white/[0.08] text-[12px] text-white/40 cursor-pointer hover:border-white/25 hover:text-white/70 transition-colors',
+            'flex items-center gap-2 px-4 py-2.5 border border-white/[0.08] text-[13px] text-white/40 cursor-pointer hover:border-white/25 hover:text-white/70 transition-colors',
             uploading && 'opacity-50 pointer-events-none',
           )}>
-            {uploading ? <span className="animate-pulse">Uploading…</span> : <><Upload size={13} /> {value ? 'Change photo' : 'Upload photo'}</>}
+            {uploading ? <span className="animate-pulse">Uploading…</span> : <><Upload size={14} /> {value ? 'Change photo' : 'Upload photo'}</>}
             <input
               type="file"
               accept="image/*"
@@ -251,10 +251,10 @@ export function ImageUploadField({
       ) : (
         <>
           <label className={cn(
-            'flex items-center gap-2 px-4 py-2.5 border border-dashed border-white/[0.08] text-[12px] text-white/40 cursor-pointer hover:border-white/25 hover:text-white/70 transition-colors w-full justify-center',
+            'flex items-center gap-2 px-4 py-3 border border-dashed border-white/[0.08] text-[13px] text-white/40 cursor-pointer hover:border-white/25 hover:text-white/70 transition-colors w-full justify-center',
             uploading && 'opacity-50 pointer-events-none',
           )}>
-            {uploading ? <span className="animate-pulse">Uploading…</span> : <><Upload size={13} /> {value ? 'Replace image' : 'Upload image'}</>}
+            {uploading ? <span className="animate-pulse">Uploading…</span> : <><Upload size={14} /> {value ? 'Replace image' : 'Upload image'}</>}
             <input
               type="file"
               accept="image/*"
@@ -263,14 +263,14 @@ export function ImageUploadField({
             />
           </label>
           {value && (
-            <div className="mt-2 relative h-28 overflow-hidden border border-white/[0.06] group">
+            <div className="mt-2 relative h-36 overflow-hidden border border-white/[0.06] group">
               <img src={value} alt="preview" className="w-full h-full object-cover" />
               <button
                 type="button"
                 onClick={() => onChange('')}
                 className="absolute top-2 right-2 p-1 bg-black/60 text-white/50 hover:text-white opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                <X size={12} />
+                <X size={14} />
               </button>
             </div>
           )}
@@ -297,13 +297,13 @@ export function TagsInput({ tags, onChange }: { tags: string[]; onChange: (tags:
 
   return (
     <div className={cn(
-      'flex flex-wrap gap-1.5 min-h-[42px] p-2 border border-white/[0.08] bg-white/[0.04] focus-within:border-white/25 transition-colors',
+      'flex flex-wrap gap-1.5 min-h-[50px] p-2.5 border border-white/[0.08] bg-white/[0.04] focus-within:border-white/25 transition-colors',
     )}>
       {tags.map((t, i) => (
-        <span key={i} className="flex items-center gap-1 bg-white/[0.08] text-white/60 text-[13px] px-2 py-0.5 rounded-sm">
+        <span key={i} className="flex items-center gap-1 bg-white/[0.08] text-white/60 text-[14px] px-2.5 py-1 rounded-sm">
           {t}
           <button type="button" onClick={() => removeTag(i)} className="text-white/30 hover:text-white/70 transition-colors leading-none">
-            <X size={10} />
+            <X size={11} />
           </button>
         </span>
       ))}
@@ -316,7 +316,7 @@ export function TagsInput({ tags, onChange }: { tags: string[]; onChange: (tags:
         }}
         onBlur={() => input && addTag(input)}
         placeholder={tags.length === 0 ? 'Type a tag and press Enter…' : ''}
-        className="flex-1 min-w-[120px] bg-transparent text-white text-[12px] outline-none placeholder:text-white/15"
+        className="flex-1 min-w-[120px] bg-transparent text-white text-[13px] outline-none placeholder:text-white/15"
       />
     </div>
   );
@@ -348,7 +348,7 @@ export function TakeawayEditor({
           <select
             value={item.icon}
             onChange={e => update(i, 'icon', e.target.value)}
-            className="w-28 shrink-0 bg-[#111] border border-white/[0.08] px-2 py-2 text-white text-[12px] outline-none focus:border-white/25 transition-colors"
+            className="w-28 shrink-0 bg-[#111] border border-white/[0.08] px-2 py-2.5 text-white text-[13px] outline-none focus:border-white/25 transition-colors"
           >
             {TAKEAWAY_ICONS.map(icon => <option key={icon} value={icon}>{icon}</option>)}
           </select>
@@ -356,23 +356,23 @@ export function TakeawayEditor({
             value={item.text}
             onChange={e => update(i, 'text', e.target.value)}
             placeholder="Takeaway text…"
-            className="flex-1 bg-white/[0.04] border border-white/[0.08] px-3 py-2 text-white text-[12px] outline-none focus:border-white/25 transition-colors placeholder:text-white/15"
+            className="flex-1 bg-white/[0.04] border border-white/[0.08] px-3 py-2.5 text-white text-[13px] outline-none focus:border-white/25 transition-colors placeholder:text-white/15"
           />
           <button
             type="button"
             onClick={() => remove(i)}
             className="shrink-0 p-2 text-white/25 hover:text-red-400/70 transition-colors"
           >
-            <Trash2 size={13} />
+            <Trash2 size={14} />
           </button>
         </div>
       ))}
       <button
         type="button"
         onClick={add}
-        className="flex items-center gap-1.5 text-[11px] text-white/30 hover:text-white/60 transition-colors self-start mt-1"
+        className="flex items-center gap-1.5 text-[12px] text-white/30 hover:text-white/60 transition-colors self-start mt-1"
       >
-        <Plus size={12} /> Add takeaway
+        <Plus size={13} /> Add takeaway
       </button>
     </div>
   );
@@ -387,8 +387,8 @@ export function Toast({ message, onDone }: { message: string; onDone: () => void
   }, [onDone]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-[60] flex items-center gap-2.5 bg-[#111] border border-emerald-500/25 text-white text-[12px] px-4 py-3 shadow-xl">
-      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+    <div className="fixed bottom-6 right-6 z-[60] flex items-center gap-2.5 bg-[#111] border border-emerald-500/25 text-white text-[14px] px-5 py-3.5 shadow-xl">
+      <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
       {message}
     </div>
   );
