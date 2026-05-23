@@ -14,6 +14,7 @@ import { WorkplaceAutomation } from '@/pages/services/WorkplaceAutomation';
 import { WorkplaceBackup } from '@/pages/services/WorkplaceBackup';
 import { CloudMigration } from '@/pages/services/CloudMigration';
 import { CapabilityDetail } from '@/pages/services/CapabilityDetail';
+import { SolutionAssessment } from '@/pages/services/SolutionAssessment';
 import { Blog } from '@/pages/Blog';
 import { BlogPost } from '@/pages/BlogPost';
 import { News } from '@/pages/News';
@@ -47,6 +48,7 @@ function App() {
           <Route path="/services/ai-workforce-process/workforce-automation" element={<WorkplaceAutomation />} />
           <Route path="/services/ai-workforce-experience/workforce-backup-recovery" element={<WorkplaceBackup />} />
           <Route path="/services/ai-workforce-data-cloud/cloud-migration" element={<CloudMigration />} />
+          <Route path="/services/solution-assessment" element={<SolutionAssessment />} />
           <Route path="/services/capabilities/:serviceSlug/:capabilitySlug" element={<CapabilityDetail />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />

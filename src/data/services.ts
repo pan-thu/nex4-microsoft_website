@@ -18,6 +18,7 @@ export interface ServiceBenefit {
 export interface ServiceCapability {
   title: string;
   body: string;
+  link?: string;
 }
 
 export interface ServiceStat {
@@ -82,7 +83,7 @@ export const SERVICES: Record<string, ServiceData> = {
     ],
     capabilitiesHeading: 'What We Deliver',
     capabilities: [
-      { title: 'M365 Tenant Assessment & Roadmap', body: 'Audit your current M365 configuration and licence usage, identify gaps, and build a phased deployment roadmap aligned to business outcomes.' },
+      { title: 'M365 Tenant Assessment & Roadmap', body: 'Audit your current M365 configuration and licence usage, identify gaps, and build a phased deployment roadmap aligned to business outcomes.', link: '/services/solution-assessment' },
       { title: 'Microsoft Teams Deployment & Governance', body: 'Deploy Teams with a governance framework that controls channel sprawl, guest access, and data retention — without restricting collaboration.' },
       { title: 'SharePoint Intranet & Document Management', body: 'Design and build a SharePoint environment that becomes your organisation\'s digital home — searchable, structured, and role-aware.' },
       { title: 'Microsoft Viva Employee Experience', body: 'Implement Viva Insights, Viva Learning, and Viva Connections to improve wellbeing, skill development, and company-wide communication.' },
@@ -127,7 +128,7 @@ export const SERVICES: Record<string, ServiceData> = {
     ],
     capabilitiesHeading: 'What We Deliver',
     capabilities: [
-      { title: 'Zero Trust Framework Design', body: 'Assess your current security posture and design a phased Zero Trust architecture aligned to NIST and Microsoft\'s security benchmark.' },
+      { title: 'Zero Trust Framework Design', body: 'Assess your current security posture and design a phased Zero Trust architecture aligned to NIST and Microsoft\'s security benchmark.', link: '/services/solution-assessment' },
       { title: 'Microsoft Entra ID & Conditional Access', body: 'Deploy identity governance, MFA, and risk-based conditional access policies that stop credential-based attacks before they escalate.' },
       { title: 'Microsoft Defender for Endpoint', body: 'Deploy, configure, and tune Defender across all devices — with 24/7 monitoring and automated response to high-fidelity alerts.' },
       { title: 'Microsoft Purview Data Governance', body: 'Classify, label, and protect sensitive information across M365, Azure, and third-party data sources — with audit trails for compliance.' },
@@ -173,7 +174,7 @@ export const SERVICES: Record<string, ServiceData> = {
     ],
     capabilitiesHeading: 'What We Deliver',
     capabilities: [
-      { title: 'AI Readiness Assessment', body: 'Evaluate your Microsoft 365 environment, data governance posture, and licence position to determine deployment readiness and risk.' },
+      { title: 'AI Readiness Assessment', body: 'Evaluate your Microsoft 365 environment, data governance posture, and licence position to determine deployment readiness and risk.', link: '/services/solution-assessment' },
       { title: 'Microsoft 365 Copilot Deployment', body: 'End-to-end Copilot rollout including licence provisioning, sensitivity label configuration, use-case prioritisation, and user enablement.' },
       { title: 'Copilot Studio & Custom Agent Development', body: 'Build custom AI agents grounded in your organisation\'s data — automating queries, workflows, and decisions without writing complex code.' },
       { title: 'Azure OpenAI Integration', body: 'Design and deploy custom AI solutions using Azure OpenAI Service, integrated with your existing systems and governed by your security policies.' },
@@ -308,7 +309,7 @@ export const SERVICES: Record<string, ServiceData> = {
     ],
     capabilitiesHeading: 'What We Deliver',
     capabilities: [
-      { title: 'Cloud Readiness Assessment', body: 'Inventory your on-premises environment, assess workload dependencies, score migration complexity, and produce a business case with TCO analysis.' },
+      { title: 'Cloud Readiness Assessment', body: 'Inventory your on-premises environment, assess workload dependencies, score migration complexity, and produce a business case with TCO analysis.', link: '/services/solution-assessment' },
       { title: 'Azure Landing Zone Design', body: 'Design and deploy an Azure landing zone — networking, identity, governance, and security controls — that scales with your organisation\'s growth.' },
       { title: 'Workload Migration & Modernisation', body: 'Migrate servers, databases, and applications using the right strategy for each workload: rehost, replatform, or refactor to cloud-native services.' },
       { title: 'Azure Security & Compliance Configuration', body: 'Apply Microsoft Defender for Cloud, Azure Policy, and network security controls during migration — not as an afterthought.' },

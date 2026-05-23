@@ -288,7 +288,7 @@ function Capabilities({ data }: { data: ServiceData }) {
                 </h3>
                 <p className="text-[16px] text-white/55 leading-relaxed mb-8 transition-colors duration-300 group-hover:text-white/70">{cap.body}</p>
                 <Link
-                  to={`/services/capabilities/${data.slug}/${toSlug(cap.title)}`}
+                  to={cap.link ?? `/services/capabilities/${data.slug}/${toSlug(cap.title)}`}
                   className="inline-flex items-center gap-2 border border-white/30 rounded-full px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-white hover:bg-white hover:text-black transition-all duration-200"
                 >
                   Explore More <ChevronRight size={13} />
