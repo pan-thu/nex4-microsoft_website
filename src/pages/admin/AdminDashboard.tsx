@@ -1,5 +1,5 @@
 import { Routes, Route, NavLink, useNavigate, Navigate } from 'react-router-dom';
-import { Calendar, LogOut, ExternalLink, BookOpen, Newspaper, Briefcase, Mail, FolderOpen } from 'lucide-react';
+import { Calendar, LogOut, ExternalLink, BookOpen, Newspaper, Briefcase, Mail, FolderOpen, ClipboardList } from 'lucide-react';
 import { Auth } from '@/lib/auth';
 import { ASSETS } from '@/lib/assets';
 import { cn } from '@/lib/utils';
@@ -9,6 +9,7 @@ import { AdminNews } from './AdminNews';
 import { AdminCareers } from './AdminCareers';
 import { AdminCaseStudies } from './AdminCaseStudies';
 import { AdminContactSubmissions } from './AdminContactSubmissions';
+import { AdminSolutionAssessments } from './AdminSolutionAssessments';
 
 const NAV = [
   { to: 'events',       label: 'Events',       icon: Calendar },
@@ -17,6 +18,7 @@ const NAV = [
   { to: 'case-studies', label: 'Case Studies', icon: FolderOpen },
   { to: 'careers',      label: 'Careers',      icon: Briefcase },
   { to: 'contacts',     label: 'Contacts',     icon: Mail },
+  { to: 'assessments',  label: 'Assessments',  icon: ClipboardList },
 ];
 
 export function AdminDashboard() {
@@ -89,6 +91,7 @@ export function AdminDashboard() {
             <Route path="case-studies" element={<AdminCaseStudies />} />
             <Route path="careers" element={<AdminCareers />} />
             <Route path="contacts" element={<AdminContactSubmissions />} />
+            <Route path="assessments" element={<AdminSolutionAssessments />} />
           </Routes>
         </main>
       </div>

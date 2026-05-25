@@ -27,6 +27,7 @@ import { ContactUs } from '@/pages/ContactUs';
 import { AdminLogin } from '@/pages/admin/AdminLogin';
 import { AdminDashboard } from '@/pages/admin/AdminDashboard';
 import { ProtectedRoute } from '@/components/admin/ProtectedRoute';
+import { PartnerLogos } from '@/components/common/PartnerLogos';
 
 function App() {
   const location = useLocation();
@@ -63,6 +64,7 @@ function App() {
           <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
         </Routes>
       </main>
+      {!isAdmin && <PartnerLogos />}
       {!isAdmin && <Footer />}
       {!isAdmin && <BackToTop />}
     </div>
