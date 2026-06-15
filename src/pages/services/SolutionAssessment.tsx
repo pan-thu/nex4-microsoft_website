@@ -219,7 +219,7 @@ function SideTableOfContents() {
   return (
     <aside className="hidden lg:block w-[260px] shrink-0">
       <div className="sticky top-[76px] flex flex-col pt-14 pb-10 pl-10 pr-4">
-        <nav className="flex flex-col gap-0.5">
+        <nav className="flex flex-col gap-2">
           {TOC_ITEMS.map(({ label, id }) => (
             <button
               key={id}
@@ -443,8 +443,6 @@ function DigitalTransformationSection() {
                   </motion.div>
                 ))}
               </div>
-
-              <div className="h-px bg-white/[0.07] mb-8" />
 
               <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/32 mb-6">
                 Migrate with confidence with expert help along the way
